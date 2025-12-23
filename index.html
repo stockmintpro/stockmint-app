@@ -694,94 +694,130 @@
         });
         
         // ===== ACTIVE MENU TOGGLE =====
+        const initialDashboardHTML = document.getElementById('content-area').innerHTML;
+
         menuItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
+        item.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+                // 1. Update menu aktif
                 menuItems.forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
-                
-                // Tutup sidebar setelah memilih menu (di HP)
+        
+                // 2. Tutup sidebar di HP
                 if (window.innerWidth <= 768) {
-                    sidebar.classList.remove('active');
-                    sidebarOverlay.classList.remove('active');
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
                 }
-                
-                // Simulasi ganti konten berdasarkan menu
+        
+                // 3. Ambil teks menu yang diklik
                 const menuText = this.querySelector('.menu-text').textContent;
+        
+                // 4. Panggil fungsi ganti konten DENGAN PARAMETER
                 updateContent(menuText);
-            });
+             });
         });
         
         // ===== CONTENT UPDATER =====
         function updateContent(page) {
-            const contentArea = document.getElementById('content-area');
-            const pages = {
-                'Dashboard': `
-                    <h1>Dashboard Overview</h1>
-                    <p>Selamat datang di <strong>StockMint</strong>. Dashboard menampilkan ringkasan performa bisnis Anda.</p>
-                    ${contentArea.querySelector('.stats-container').outerHTML}
-                    ${contentArea.querySelector('.data-table').outerHTML}
-                `,
-                'Products': `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                        <h1>Products Management</h1>
-                        <button class="btn btn-primary"><i class="fas fa-plus"></i> Add New Product</button>
+    const contentArea = document.getElementById('content-area');
+    
+    // Definisikan konten untuk setiap halaman
+    const pageContents = {
+        'Dashboard': initialDashboardHTML,
+        'Master Data': `
+            <h1>Master Data Management</h1>
+            <p>Kelola data referensi dasar sistem seperti kategori produk, satuan, supplier, dan pelanggan.</p>
+            <div class="stat-card">
+                <h3>Fitur yang akan tersedia:</h3>
+                <ul style="padding-left: 20px;">
+                    <li>Kategori Produk</li>
+                    <li>Daftar Supplier / Pemasok</li>
+                    <li>Daftar Pelanggan</li>
+                    <li>Satuan Barang (pcs, kg, liter, dll)</li>
+                </ul>
+                <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
+            </div>
+        `,
+        'Products': `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h1>Products Management</h1>
+                <button class="btn btn-primary" id="btnAddProduct"><i class="fas fa-plus"></i> Add New Product</button>
+            </div>
+            <p>Kelola seluruh produk dalam inventaris. Tambah, edit, atau non-aktifkan produk.</p>
+            <div class="data-table">
+                <div style="padding: 15px; border-bottom: 1px solid #eee; display: flex; gap: 10px;">
+                    <input type="text" placeholder="Search product..." style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; flex-grow: 1;">
+                    <select style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;">
+                        <option>All Categories</option>
+                        <option>Beverage</option>
+                        <option>Grocery</option>
+                    </select>
+                </div>
+                <table style="width: 100%;">
+                    <thead>
+                        <tr><th>ID</th><th>Product Name</th><th>Category</th><th>Stock</th><th>Price</th><th>Action</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>P001</td><td>Kopi Arabica 250g</td><td>Beverage</td><td>45</td><td>Rp 75.000</td><td><button class="btn-action-edit">Edit</button></td></tr>
+                        <tr><td>P002</td><td>Gula Pasir 1kg</td><td>Grocery</td><td>28</td><td>Rp 15.000</td><td><button class="btn-action-edit">Edit</button></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <script>
+                // Script untuk halaman products
+                document.getElementById('btnAddProduct')?.addEventListener('click', function() {
+                    alert('Fitur "Add New Product" akan membuka form input.');
+                });
+                document.querySelectorAll('.btn-action-edit').forEach(btn => {
+                    btn.addEventListener('click', function() { alert('Fitur edit produk akan dibuka.'); });
+                });
+            </script>
+        `,
+        'Price Calculator': `
+            <h1>Price Calculator</h1>
+            <p>Hitung harga jual optimal berdasarkan margin yang diinginkan.</p>
+            <div class="stat-card">
+                <h3>Profit Margin Calculator</h3>
+                <div style="margin: 20px 0;">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 600;">Harga Beli (Cost):</label>
+                        <input type="number" id="costPrice" placeholder="Rp" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 300px; font-size: 16px;">
                     </div>
-                    <p>Kelola produk, stok, dan harga.</p>
-                    <div class="data-table">
-                        <table style="width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>ID</th><th>Product Name</th><th>Category</th><th>Stock</th><th>Price</th><th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>P001</td><td>Kopi Arabica 250g</td><td>Beverage</td><td>45</td><td>Rp 75.000</td><td><button class="btn btn-primary" style="padding: 5px 15px; font-size: 13px;">Edit</button></td></tr>
-                                <tr><td>P002</td><td>Gula Pasir 1kg</td><td>Grocery</td><td>28</td><td>Rp 15.000</td><td><button class="btn btn-primary" style="padding: 5px 15px; font-size: 13px;">Edit</button></td></tr>
-                                <tr><td>P003</td><td>Teh Celup 25s</td><td>Beverage</td><td>12</td><td>Rp 25.000</td><td><button class="btn btn-primary" style="padding: 5px 15px; font-size: 13px;">Edit</button></td></tr>
-                            </tbody>
-                        </table>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: 600;">Margin yang Diinginkan (%):</label>
+                        <input type="number" id="margin" placeholder="30" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 300px; font-size: 16px;">
                     </div>
-                `,
-                'Price Calculator': `
-                    <h1>Price Calculator</h1>
-                    <p>Hitung harga jual berdasarkan margin yang diinginkan.</p>
-                    <div class="stat-card">
-                        <h3>Profit Margin Calculator</h3>
-                        <div style="margin: 20px 0;">
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Cost Price (Harga Beli):</label>
-                                <input type="number" id="costPrice" placeholder="Rp" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 300px; font-size: 16px;">
-                            </div>
-                            <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Desired Margin (%):</label>
-                                <input type="number" id="margin" placeholder="30" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 300px; font-size: 16px;">
-                            </div>
-                            <button onclick="calculatePrice()" class="btn btn-primary" style="font-size: 16px; padding: 12px 25px;">
-                                <i class="fas fa-calculator"></i> Calculate Selling Price
-                            </button>
-                            <div id="result" style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #19BEBB; display: none;">
-                                <h4 style="margin-bottom: 10px; color: #19BEBB;">💰 Result:</h4>
-                                <div style="font-size: 24px; font-weight: bold; color: #333;" id="priceResult"></div>
-                                <div style="margin-top: 10px; color: #666;" id="profitResult"></div>
-                            </div>
-                        </div>
+                    <button onclick="calculatePrice()" class="btn btn-primary" style="font-size: 16px; padding: 12px 25px;">
+                        <i class="fas fa-calculator"></i> Calculate Selling Price
+                    </button>
+                    <div id="result" style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #19BEBB; display: none;">
+                        <h4 style="margin-bottom: 10px; color: #19BEBB;">💰 Hasil Perhitungan:</h4>
+                        <div style="font-size: 24px; font-weight: bold; color: #333;" id="priceResult"></div>
+                        <div style="margin-top: 10px; color: #666;" id="profitResult"></div>
                     </div>
-                `
-            };
-            
-            if (pages[page]) {
-                contentArea.innerHTML = pages[page];
-            } else {
-                contentArea.innerHTML = `
-                    <h1>${page}</h1>
-                    <p>Halaman <strong>${page}</strong> sedang dalam pengembangan. Fitur akan segera tersedia.</p>
-                    <div class="stat-card">
-                        <p>🚧 Under Construction 🚧</p>
-                    </div>
-                `;
-            }
-        }
+                </div>
+            </div>
+        `
+        // Tambahkan halaman lain sesuai kebutuhan...
+    };
+    
+    // 5. Tampilkan konten, atau tampilkan "dalam pengembangan"
+    if (pageContents[page]) {
+        contentArea.innerHTML = pageContents[page];
+    } else {
+        contentArea.innerHTML = `
+            <h1>${page}</h1>
+            <p>Halaman <strong>${page}</strong> sedang dalam pengembangan aktif.</p>
+            <div class="stat-card">
+                <p><i class="fas fa-tools"></i> Fitur akan segera hadir dalam update berikutnya.</p>
+            </div>
+        `;
+    }
+    
+    // 6. Scroll ke atas konten
+    contentArea.scrollTo(0, 0);
+}
         
         // ===== PRICE CALCULATOR FUNCTION =====
         window.calculatePrice = function() {
