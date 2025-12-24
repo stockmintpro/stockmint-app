@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockMint - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --mint-green: #19BEBB;
+            --mint-dark: #0fa8a6;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --bg-content: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--bg-content);
+            transition: all 0.3s ease;
+        }
+        
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--mint-green) 0%, var(--mint-dark) 100%);
+            color: var(--text-light);
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            width: 45px;
+            height: 45px;
+            margin-right: 12px;
+            border-radius: 10px;
+            object-fit: contain;
+            background-color: white;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-title {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-subtitle {
+            font-size: 11px;
+            opacity: 0.9;
+            font-weight: 400;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+        
+        .menu {
+            flex: 1;
+            padding: 0 15px;
+            overflow-y: auto;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            margin-bottom: 6px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .menu-item i {
+            width: 24px;
+            margin-right: 14px;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        .menu-text {
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .user-section {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--mint-green);
+            font-weight: bold;
+        }
+        
+        .user-info h4 {
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+        
+        .user-info p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        /* ===== HAMBURGER MENU (HP) ===== */
+        .hamburger-menu {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1100;
+            background: var(--mint-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 45px;
+            height: 45px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .content {
+            flex: 1;
+            padding: 30px;
+            margin-left: 260px;
+            transition: margin-left 0.3s ease;
+        }
+        
+        h1 {
+            color: #1a5f7a;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: var(--mint-dark);
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eef2f7;
+        }
+        
+        p {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        /* ===== STATS CARDS ===== */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--mint-green);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--mint-dark);
+            margin-bottom: 5px;
+        }
+        
+        .stat-change {
+            font-size: 14px;
+            color: #28a745;
+        }
+        
+        .stat-change.danger {
+            color: #dc3545;
+        }
+        
+        /* ===== TABLE STYLING ===== */
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+        
+        .data-table th {
+            background-color: #f1f8ff;
+            padding: 15px;
+            text-align: left;
+            color: var(--mint-dark);
+            font-weight: 600;
+            border-bottom: 2px solid #eef2f7;
+        }
+        
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--mint-green);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--mint-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* ===== RESPONSIVE DESIGN ===== */
+        /* Tablet (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 230px;
+            }
+            .content {
+                margin-left: 230px;
+            }
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* HP & Tablet Kecil (max 768px) */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .hamburger-menu {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .content {
+                margin-left: 0;
+                padding-top: 80px;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 999;
+            }
+            
+            .sidebar-overlay.active {
+                display: block;
+            }
+            
+            .data-table {
+                overflow-x: auto;
+                display: block;
+            }
+        }
+        
+        /* HP Kecil (max 480px) */
+        @media (max-width: 480px) {
+            .content {
+                padding: 20px;
+                padding-top: 70px;
+            }
+            
+            .stat-card {
+                padding: 20px;
+            }
+            
+            .stat-value {
+                font-size: 24px;
+            }
+            
+            .logo-title {
+                font-size: 20px;
+            }
+        }
+        
+        /* Landscape HP */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .sidebar {
+                padding-top: 15px;
+            }
+            
+            .logo-container {
+                padding: 0 15px 15px 15px;
+                margin-bottom: 15px;
+            }
+            
+            .menu-item {
+                padding: 10px 14px;
+                margin-bottom: 4px;
+            }
+            
+            .user-section {
+                padding: 15px;
+            }
+        }
+        
+        /* ===== LOADING STATE ===== */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ===== LOGO FALLBACK ===== */
+        .logo-fallback {
+            display: none;
+            width: 45px;
+            height: 45px;
+            margin-right: 12px;
+            border-radius: 10px;
+            background: white;
+            align-items: center;
+            justify-content: center;
+            color: var(--mint-green);
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+	<!-- Navbar untuk logout -->
+	<div class="top-navbar" id="topNavbar" style="display: none;">
+		<div style="display: flex; align-items: center; gap: 15px;">
+			<img id="userAvatar" src="" alt="User" style="width: 35px; height: 35px; border-radius: 50%;">
+			<span id="userName" style="font-weight: 600;"></span>
+		</div>
+		<button id="logoutBtn" class="btn" style="background: #dc3545; color: white;">
+			<i class="fas fa-sign-out-alt"></i> Logout
+		</button>
+	</div>
+
+	<!-- CSS untuk navbar -->
+	<style>
+    .top-navbar {
+        position: fixed;
+        top: 0;
+        left: 260px;
+        right: 0;
+        height: 60px;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+        z-index: 999;
+        transition: left 0.3s ease;
+    }
+    
+    @media (max-width: 768px) {
+        .top-navbar {
+            left: 0;
+        }
+    }
+    
+    .content {
+        margin-top: 60px; /* Beri space untuk navbar */
+    }
+	</style>
+
+    <!-- Hamburger Menu untuk HP -->
+    <button class="hamburger-menu" id="hamburgerBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Overlay untuk menutup sidebar di HP -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <!-- Logo Section dengan IMGBB DIRECT LINK -->
+        <div class="logo-container">
+            <!-- PRIMARY LOGO LINK - PASTI BEKERJA -->
+            <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
+                 alt="StockMint Logo" 
+                 class="logo"
+                 id="mainLogo"
+                 onerror="enableFallbackLogo()">
+            
+            <!-- FALLBACK LOGO (jika primary gagal) -->
+            <div class="logo-fallback" id="fallbackLogo">
+                SM
+            </div>
+            
+            <div class="logo-text">
+                <div class="logo-title">StockMint</div>
+                <div class="logo-subtitle">Precision Inventory & Profit Tracking</div>
+            </div>
+        </div>
+
+        <!-- Menu -->
+        <div class="menu">
+            <a data-page="dashboard" class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span class="menu-text">Dashboard</span>
+            </a>
+            <a data-page="master-data" class="menu-item">
+                <i class="fas fa-database"></i>
+                <span class="menu-text">Master Data</span>
+            </a>
+            <a data-page="products" class="menu-item">
+                <i class="fas fa-boxes"></i>
+                <span class="menu-text">Products</span>
+            </a>
+            <a data-page="purchases" class="menu-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="menu-text">Purchases</span>
+            </a>
+            <a data-page="sales" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span class="menu-text">Sales</span>
+            </a>
+            <a data-page="calculator" class="menu-item">
+                <i class="fas fa-calculator"></i>
+                <span class="menu-text">Price Calculator</span>
+            </a>
+            <a data-page="reports" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span class="menu-text">Reports</span>
+            </a>
+            <a data-page="settings" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span class="menu-text">Settings</span>
+            </a>
+            <a data-page="contacts" class="menu-item">
+                <i class="fas fa-address-book"></i>
+                <span class="menu-text">Contacts</span>
+            </a>
+            <a data-page="help" class="menu-item">
+                <i class="fas fa-question-circle"></i>
+                <span class="menu-text">Help</span>
+            </a>
+        </div>
+
+        <!-- User Section -->
+        <div class="user-section">
+            <div class="user-avatar">AJ</div>
+            <div class="user-info">
+                <h4>Admin Joko</h4>
+                <p>Administrator</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content" id="content-area">
+        <!-- Konten default (Dashboard) akan diisi oleh JavaScript -->
+    </div>
+
+    <script>
+        // ===== CEK LOGIN =====
+		function checkAuth() {
+			const token = localStorage.getItem('stockmint_token');
+			const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
+    
+			if (!token || !user.email) {
+				// Redirect ke halaman login
+				window.location.href = 'index.html';
+				return false;
+			}
+    
+			// Tampilkan user info di navbar
+			document.getElementById('userName').textContent = user.name || user.email;
+			if (user.picture) {
+				document.getElementById('userAvatar').src = user.picture;
+			}
+			document.getElementById('topNavbar').style.display = 'flex';
+    
+			return true;
+		}
+
+		// ===== LOGOUT FUNCTION =====
+		function handleLogout() {
+			localStorage.removeItem('stockmint_token');
+			localStorage.removeItem('stockmint_user');
+			localStorage.removeItem('stockmint_sheet_id');
+			window.location.href = 'index.html';
+		}
+
+		// ===== INIT AUTH =====
+		document.addEventListener('DOMContentLoaded', function() {
+			// Cek login
+			if (!checkAuth()) {
+				return;
+			}
+    
+			// Attach logout event
+			document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    
+			// ... sisa kode dashboard Anda yang sudah berfungsi ...
+		});
+		
+		// ===== INISIALISASI VARIABEL GLOBAL =====
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const menuItems = document.querySelectorAll('.menu-item');
+        const contentArea = document.getElementById('content-area');
+        
+        // ===== LOGO HANDLING =====
+        function enableFallbackLogo() {
+            console.log("Primary logo failed, enabling fallback...");
+            document.getElementById('mainLogo').style.display = 'none';
+            document.getElementById('fallbackLogo').style.display = 'flex';
+        }
+        
+        // Test logo on load
+        window.addEventListener('load', function() {
+            const logo = document.getElementById('mainLogo');
+            const img = new Image();
+            img.onload = function() {
+                console.log("✅ Logo loaded successfully from ImgBB");
+            };
+            img.onerror = function() {
+                console.log("❌ ImgBB logo failed, trying alternative...");
+                logo.src = "https://i.ibb.co.com/DfSP2YGL/logo-stockmint-png.png";
+                
+                const img2 = new Image();
+                img2.onerror = function() {
+                    console.log("❌ All logo sources failed, using fallback");
+                    enableFallbackLogo();
+                };
+                img2.src = logo.src;
+            };
+            img.src = logo.src;
+        });
+        
+        // ===== TOGGLE SIDEBAR DI HP =====
+        hamburgerBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+        });
+        
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+        
+        // ===== SISTEM NAVIGASI MENU =====
+        // Data konten untuk setiap halaman
+        const pageContents = {
+            'dashboard': `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h1>Dashboard Overview</h1>
+                    <button class="btn btn-primary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh Data
+                    </button>
+                </div>
+                
+                <p>Selamat datang di <strong style="color: #19BEBB;">StockMint</strong> — sistem pelacakan inventaris dan profit dengan presisi tinggi.</p>
+                
+                <h2>Quick Stats</h2>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3>Total Products</h3>
+                        <div class="stat-value">142</div>
+                        <div class="stat-change">↑ 12% from last month</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Today's Sales</h3>
+                        <div class="stat-value">Rp 3.250.000</div>
+                        <div class="stat-change">↑ 8% from yesterday</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Low Stock Alert</h3>
+                        <div class="stat-value">8 Items</div>
+                        <div class="stat-change danger">⚠️ Need restock</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Monthly Profit</h3>
+                        <div class="stat-value">Rp 48.500.000</div>
+                        <div class="stat-change">↑ 15% from last month</div>
+                    </div>
+                </div>
+                
+                <h2>Recent Activities</h2>
+                <div class="stat-card">
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-check-circle" style="color: #28a745; margin-right: 10px;"></i>
+                            <strong>Product "Kopi Arabica"</strong> added to inventory
+                            <span style="float: right; color: #888; font-size: 13px;">Today, 10:30</span>
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-money-bill-wave" style="color: #17a2b8; margin-right: 10px;"></i>
+                            <strong>Sale completed</strong> - Rp 450.000
+                            <span style="float: right; color: #888; font-size: 13px;">2 hours ago</span>
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                            <i class="fas fa-shopping-cart" style="color: #ffc107; margin-right: 10px;"></i>
+                            <strong>Purchase order</strong> #PO-2345 confirmed
+                            <span style="float: right; color: #888; font-size: 13px;">Yesterday</span>
+                        </li>
+                        <li style="padding: 8px 0;">
+                            <i class="fas fa-chart-bar" style="color: #19BEBB; margin-right: 10px;"></i>
+                            <strong>Monthly report</strong> generated for October 2023
+                            <span style="float: right; color: #888; font-size: 13px;">2 days ago</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <h2>Low Stock Products</h2>
+                <div class="data-table">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Current Stock</th>
+                                <th>Min. Stock</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Kopi Arabica 250g</td>
+                                <td>Beverage</td>
+                                <td>5</td>
+                                <td>20</td>
+                                <td><span style="color: #dc3545; font-weight: bold;">⚠️ Low</span></td>
+                            </tr>
+                            <tr>
+                                <td>Gula Pasir 1kg</td>
+                                <td>Grocery</td>
+                                <td>8</td>
+                                <td>15</td>
+                                <td><span style="color: #dc3545; font-weight: bold;">⚠️ Low</span></td>
+                            </tr>
+                            <tr>
+                                <td>Teh Celup 25s</td>
+                                <td>Beverage</td>
+                                <td>12</td>
+                                <td>25</td>
+                                <td><span style="color: #ffc107; font-weight: bold;">⚠️ Warning</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #19BEBB;">
+                    <h3 style="color: #19BEBB; margin-bottom: 10px;">📊 Quick Tips</h3>
+                    <p>Gunakan <strong>Price Calculator</strong> untuk menghitung profit margin. Akses <strong>Reports</strong> untuk laporan bulanan. Update stok di <strong>Products</strong> section.</p>
+                </div>
+            `,
+            'master-data': `
+                <h1>Master Data Management</h1>
+                <p>Kelola data referensi dasar sistem seperti kategori produk, satuan, supplier, dan pelanggan.</p>
+                <div class="stat-card">
+                    <h3>Fitur yang akan tersedia:</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>Kategori Produk</li>
+                        <li>Daftar Supplier / Pemasok</li>
+                        <li>Daftar Pelanggan</li>
+                        <li>Satuan Barang (pcs, kg, liter, dll)</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
+                </div>
+            `,
+            'products': `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h1>Products Management</h1>
+                    <button class="btn btn-primary" id="btnAddProduct"><i class="fas fa-plus"></i> Add New Product</button>
+                </div>
+                <p>Kelola seluruh produk dalam inventaris. Tambah, edit, atau non-aktifkan produk.</p>
+                <div class="data-table">
+                    <div style="padding: 15px; border-bottom: 1px solid #eee; display: flex; gap: 10px;">
+                        <input type="text" placeholder="Search product..." style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; flex-grow: 1;">
+                        <select style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;">
+                            <option>All Categories</option>
+                            <option>Beverage</option>
+                            <option>Grocery</option>
+                        </select>
+                    </div>
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr><th>ID</th><th>Product Name</th><th>Category</th><th>Stock</th><th>Price</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>P001</td><td>Kopi Arabica 250g</td><td>Beverage</td><td>45</td><td>Rp 75.000</td><td><button class="btn-action-edit">Edit</button></td></tr>
+                            <tr><td>P002</td><td>Gula Pasir 1kg</td><td>Grocery</td><td>28</td><td>Rp 15.000</td><td><button class="btn-action-edit">Edit</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            'purchases': `
+                <h1>Purchases Management</h1>
+                <p>Kelola pembelian barang dari supplier. Setiap pembelian akan otomatis menambah stok.</p>
+                <div class="stat-card">
+                    <h3>Fitur yang akan tersedia:</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>Input pembelian baru</li>
+                        <li>Histori pembelian</li>
+                        <li>Laporan pembelian per supplier</li>
+                        <li>Otomatis update stok produk</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
+                </div>
+            `,
+            'sales': `
+                <h1>Sales Management</h1>
+                <p>Kelola penjualan barang ke pelanggan. Hitung profit otomatis dari setiap transaksi.</p>
+                <div class="stat-card">
+                    <h3>Fitur yang akan tersedia:</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>Input penjualan baru</li>
+                        <li>Histori penjualan</li>
+                        <li>Laporan penjualan harian/bulanan</li>
+                        <li>Analisis produk terlaris</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
+                </div>
+            `,
+            'calculator': `
+                <h1>Price Calculator</h1>
+                <p>Hitung harga jual optimal berdasarkan margin yang diinginkan.</p>
+                <div class="stat-card">
+                    <h3>Profit Margin Calculator (Basic)</h3>
+                    <div style="margin: 20px 0;">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Harga Beli (Cost):</label>
+                            <input type="number" id="costPrice" placeholder="Rp" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 300px; font-size: 16px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Margin yang Diinginkan (%):</label>
+                            <input type="number" id="margin" placeholder="30" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 300px; font-size: 16px;">
+                        </div>
+                        <button onclick="calculatePrice()" class="btn btn-primary" style="font-size: 16px; padding: 12px 25px;">
+                            <i class="fas fa-calculator"></i> Calculate Selling Price
+                        </button>
+                        <div id="result" style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #19BEBB; display: none;">
+                            <h4 style="margin-bottom: 10px; color: #19BEBB;">💰 Hasil Perhitungan:</h4>
+                            <div style="font-size: 24px; font-weight: bold; color: #333;" id="priceResult"></div>
+                            <div style="margin-top: 10px; color: #666;" id="profitResult"></div>
+                        </div>
+                    </div>
+                    <p><em>Catatan: Fitur kalkulator lengkap dengan potongan marketplace akan segera hadir.</em></p>
+                </div>
+            `,
+            'reports': `
+                <h1>Reports & Analytics</h1>
+                <p>Akses berbagai laporan untuk analisis bisnis yang mendalam.</p>
+                <div class="stat-card">
+                    <h3>Jenis Laporan yang akan tersedia:</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>Laporan Penjualan Harian/Bulanan</li>
+                        <li>Laporan Profit Margin</li>
+                        <li>Laporan Stok Barang</li>
+                        <li>Laporan Produk Terlaris</li>
+                        <li>Laporan Pembelian</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
+                </div>
+            `,
+            'settings': `
+                <h1>System Settings</h1>
+                <p>Pengaturan sistem dan konfigurasi aplikasi.</p>
+                <div class="stat-card">
+                    <h3>Pengaturan yang akan tersedia:</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>Profil Perusahaan</li>
+                        <li>Manajemen User & Hak Akses</li>
+                        <li>Pengaturan Notifikasi</li>
+                        <li>Backup & Restore Data</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
+                </div>
+            `,
+            'contacts': `
+                <h1>Contacts Management</h1>
+                <p>Kelola kontak supplier dan pelanggan.</p>
+                <div class="stat-card">
+                    <h3>Fitur yang akan tersedia:</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>Daftar Supplier</li>
+                        <li>Daftar Pelanggan</li>
+                        <li>Riwayat Transaksi per Kontak</li>
+                        <li>Import/Export Kontak</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
+                </div>
+            `,
+            'help': `
+                <h1>Help & Support</h1>
+                <p>Pusat bantuan dan panduan penggunaan StockMint.</p>
+                <div class="stat-card">
+                    <h3>Resources:</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>Panduan Pengguna</li>
+                        <li>Video Tutorial</li>
+                        <li>FAQ (Pertanyaan Umum)</li>
+                        <li>Kontak Support</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
+                </div>
+            `
+        };
+        
+        // Fungsi untuk memuat halaman
+        function loadPage(pageId) {
+            // 1. Update menu aktif
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-page') === pageId) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // 2. Tutup sidebar di HP
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+            
+            // 3. Muat konten
+            if (pageContents[pageId]) {
+                contentArea.innerHTML = pageContents[pageId];
+                
+                // Jika halaman dashboard, attach event listener untuk refresh button
+                if (pageId === 'dashboard') {
+                    attachDashboardEvents();
+                }
+                
+                // Jika halaman products, attach event listener
+                if (pageId === 'products') {
+                    attachProductsEvents();
+                }
+            } else {
+                contentArea.innerHTML = `
+                    <h1>Halaman Tidak Ditemukan</h1>
+                    <p>Halaman yang Anda cari tidak tersedia.</p>
+                    <div class="stat-card">
+                        <p><i class="fas fa-exclamation-triangle"></i> Kembali ke <a href="#" onclick="loadPage('dashboard')" style="color: #19BEBB;">Dashboard</a></p>
+                    </div>
+                `;
+            }
+            
+            // 4. Scroll ke atas
+            contentArea.scrollTo(0, 0);
+        }
+        
+        // Event listener untuk menu
+        menuItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const pageId = this.getAttribute('data-page');
+                loadPage(pageId);
+            });
+        });
+        
+        // ===== FUNGSI BANTUAN UNTUK HALAMAN SPESIFIK =====
+        function attachDashboardEvents() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    const originalClass = icon.className;
+                    
+                    icon.className = 'fas fa-spinner loading';
+                    this.disabled = true;
+                    
+                    setTimeout(() => {
+                        icon.className = originalClass;
+                        this.disabled = false;
+                        
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check"></i> Data Updated!';
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                        }, 1500);
+                        
+                        // Update random data
+                        document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = 
+                            'Rp ' + (Math.floor(Math.random() * 500000) + 3000000).toLocaleString('id-ID');
+                    }, 1000);
+                });
+            }
+        }
+        
+        function attachProductsEvents() {
+            // Add Product button
+            document.getElementById('btnAddProduct')?.addEventListener('click', function() {
+                alert('Fitur "Add New Product" akan membuka form input.');
+            });
+            
+            // Edit buttons
+            document.querySelectorAll('.btn-action-edit').forEach(btn => {
+                btn.addEventListener('click', function() { 
+                    alert('Fitur edit produk akan dibuka.'); 
+                });
+            });
+        }
+        
+        // ===== PRICE CALCULATOR FUNCTION =====
+        window.calculatePrice = function() {
+            const cost = parseFloat(document.getElementById('costPrice')?.value);
+            const margin = parseFloat(document.getElementById('margin')?.value);
+            
+            if (cost && margin) {
+                const sellingPrice = cost * (1 + margin/100);
+                const profit = sellingPrice - cost;
+                
+                document.getElementById('priceResult').innerHTML = 
+                    `Harga Jual: <strong style="color: #19BEBB;">Rp ${sellingPrice.toLocaleString('id-ID')}</strong>`;
+                
+                document.getElementById('profitResult').innerHTML = 
+                    `Profit per item: Rp ${profit.toLocaleString('id-ID')} (${margin}% margin)`;
+                
+                document.getElementById('result').style.display = 'block';
+            } else {
+                alert('Mohon isi semua field');
+            }
+        };
+        
+        // ===== DETEKSI UKURAN LAYAR =====
+        function handleResize() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+        }
+        
+        window.addEventListener('resize', handleResize);
+        
+        // ===== INISIALISASI AWAL =====
+        // Load halaman dashboard saat pertama kali
+        loadPage('dashboard');
+    </script>
+</body>
+</html>
