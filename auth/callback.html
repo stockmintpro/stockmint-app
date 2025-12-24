@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Callback Page</title>
+</head>
+<body>
+    <h1>Auth Callback Page</h1>
+    <p>This is the callback page for authentication.</p>
+    
+    <script>
+        // Jika butuh OAuth callback handler
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        
+        if (code) {
+            console.log('Authorization code:', code);
+            // Kirim code ke backend Anda
+        }
+    </script>
+</body>
+</html>
