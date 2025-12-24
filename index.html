@@ -300,7 +300,7 @@
     <script>
         // ===== KONFIGURASI GOOGLE OAUTH =====
         // GANTI dengan Client ID Anda dari Google Cloud Console
-        const GOOGLE_CLIENT_ID = 'GANTI_DENGAN_CLIENT_ID_ANDA';
+        const GOOGLE_CLIENT_ID = '381159845906-0qpf642gg5uv4dhr8lapmr6dqgqepmnp.apps.googleusercontent.com';
         const GOOGLE_SCOPES = [
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/userinfo.profile',
@@ -322,7 +322,7 @@
             const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
             const params = {
                 client_id: GOOGLE_CLIENT_ID,
-                redirect_uri: window.location.origin + '/stockmint-app/auth/callback.html',
+                redirect_uri: 'https://stockmintpro.github.io/stockmint-app/auth/callback.html',
                 response_type: 'token',
                 scope: GOOGLE_SCOPES,
                 include_granted_scopes: 'true',
