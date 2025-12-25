@@ -293,6 +293,150 @@
         .btn-primary:hover {
             background-color: var(--mint-dark);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(25, 190, 187, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #555;
+            cursor: pointer;
+            font-size: 13px;
+            margin: 0 3px;
+        }
+        
+        .btn-small:hover {
+            background: #f8f9fa;
+        }
+        
+        /* ===== SUB-MENU NAVIGATION (Master Data) ===== */
+        .submenu-nav {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .submenu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .submenu-item:hover {
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .submenu-item.active {
+            background-color: #f0f9ff;
+            border-left: 4px solid var(--mint-green);
+        }
+        
+        .submenu-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--mint-green);
+            font-size: 18px;
+        }
+        
+        .submenu-content {
+            flex: 1;
+        }
+        
+        .submenu-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .submenu-desc {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        /* ===== STEP CARDS ===== */
+        .step-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--mint-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        
+        .step-card h4 {
+            color: var(--mint-dark);
+            margin-bottom: 10px;
+        }
+        
+        .step-card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        /* ===== BADGES ===== */
+        .badge-retail {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-wholesale {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #388e3c;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
         }
         
         /* ===== RESPONSIVE DESIGN ===== */
@@ -352,6 +496,16 @@
             .data-table {
                 overflow-x: auto;
                 display: block;
+            }
+            
+            /* Responsive untuk sub-menu */
+            .master-data-layout {
+                flex-direction: column !important;
+            }
+            
+            .submenu-nav {
+                width: 100%;
+                margin-bottom: 20px;
             }
         }
         
@@ -753,17 +907,363 @@
                 </div>
             `,
             'master-data': `
-                <h1>Master Data Management</h1>
-                <p>Kelola data referensi dasar sistem seperti kategori produk, satuan, supplier, dan pelanggan.</p>
+                <div class="master-data-layout" style="display: flex; gap: 30px;">
+                    <!-- LEFT COLUMN: Sub-menu Navigation -->
+                    <div style="width: 280px; flex-shrink: 0;">
+                        <h2 style="color: var(--mint-dark); margin-bottom: 20px;">
+                            <i class="fas fa-database"></i> Master Data
+                        </h2>
+                        
+                        <div class="submenu-nav">
+                            <a href="#" class="submenu-item" data-subpage="categories">
+                                <div class="submenu-icon">
+                                    <i class="fas fa-tags"></i>
+                                </div>
+                                <div class="submenu-content">
+                                    <div class="submenu-title">Kategori Produk</div>
+                                    <div class="submenu-desc">Kelola kategori produk</div>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="submenu-item" data-subpage="suppliers">
+                                <div class="submenu-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="submenu-content">
+                                    <div class="submenu-title">Supplier / Pemasok</div>
+                                    <div class="submenu-desc">Kelola data pemasok</div>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="submenu-item" data-subpage="customers">
+                                <div class="submenu-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="submenu-content">
+                                    <div class="submenu-title">Pelanggan</div>
+                                    <div class="submenu-desc">Kelola data pelanggan</div>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="submenu-item active" data-subpage="migration">
+                                <div class="submenu-icon">
+                                    <i class="fas fa-file-excel"></i>
+                                </div>
+                                <div class="submenu-content">
+                                    <div class="submenu-title">Migrasi Data</div>
+                                    <div class="submenu-desc">Import/Export data Excel</div>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="submenu-item" data-subpage="units">
+                                <div class="submenu-icon">
+                                    <i class="fas fa-balance-scale"></i>
+                                </div>
+                                <div class="submenu-content">
+                                    <div class="submenu-title">Satuan & Ukuran</div>
+                                    <div class="submenu-desc">Kelola satuan produk</div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="stat-card" style="margin-top: 25px; background: #f8f9fa;">
+                            <h4><i class="fas fa-info-circle"></i> Tips</h4>
+                            <p style="font-size: 13px; margin-top: 10px;">
+                                Gunakan <strong>Migrasi Data</strong> untuk import data dalam jumlah besar dari Excel.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- RIGHT COLUMN: Content Area -->
+                    <div style="flex: 1; min-width: 0;">
+                        <div id="masterDataContent">
+                            <!-- Konten default (Migrasi Data) akan dimuat di sini -->
+                        </div>
+                    </div>
+                </div>
+            `,
+            'migration': `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h1 style="color: var(--mint-dark);">
+                        <i class="fas fa-file-excel"></i> Migrasi Data
+                    </h1>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" id="btnDownloadFullTemplate">
+                            <i class="fas fa-download"></i> Download Template Lengkap
+                        </button>
+                    </div>
+                </div>
+                
+                <p>Gunakan fitur ini untuk migrasi data dari file Excel ke sistem StockMint.</p>
+                
                 <div class="stat-card">
-                    <h3>Fitur yang akan tersedia:</h3>
-                    <ul style="padding-left: 20px;">
-                        <li>Kategori Produk</li>
-                        <li>Daftar Supplier / Pemasok</li>
-                        <li>Daftar Pelanggan</li>
-                        <li>Satuan Barang (pcs, kg, liter, dll)</li>
+                    <h3><i class="fas fa-info-circle" style="color: var(--mint-green);"></i> Apa itu Migrasi Data?</h3>
+                    <p>Migrasi data memungkinkan Anda mengimpor data dalam jumlah besar dari file Excel ke sistem StockMint. Cocok untuk:</p>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>Pindah dari sistem lama ke StockMint</li>
+                        <li>Import data awal (master data, produk, dll)</li>
+                        <li>Backup dan restore data</li>
+                        <li>Update massal data</li>
                     </ul>
-                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
+                </div>
+                
+                <h2>Langkah Migrasi Data</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin: 25px 0;">
+                    <div class="step-card" style="flex: 1; min-width: 200px;">
+                        <div class="step-number">1</div>
+                        <h4>Download Template</h4>
+                        <p>Download template Excel dengan format yang sudah disesuaikan</p>
+                        <div style="margin-top: 15px;">
+                            <button class="btn btn-primary" id="btnDownloadTemplate">
+                                <i class="fas fa-download"></i> Download Template
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card" style="flex: 1; min-width: 200px;">
+                        <div class="step-number">2</div>
+                        <h4>Isi Data</h4>
+                        <p>Isi data Anda ke dalam template Excel yang sudah didownload</p>
+                        <div style="margin-top: 15px;">
+                            <button class="btn" id="btnViewGuide">
+                                <i class="fas fa-book"></i> Lihat Panduan
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card" style="flex: 1; min-width: 200px;">
+                        <div class="step-number">3</div>
+                        <h4>Upload Data</h4>
+                        <p>Upload file Excel yang sudah diisi ke sistem StockMint</p>
+                        <input type="file" id="fileUpload" accept=".xlsx, .xls" style="display: none;">
+                        <button class="btn btn-primary" id="btnUploadExcel" style="margin-top: 15px;">
+                            <i class="fas fa-upload"></i> Upload Excel
+                        </button>
+                    </div>
+                </div>
+                
+                <h2>Template Excel Tersedia</h2>
+                <div class="data-table">
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Jenis Template</th>
+                                <th>Deskripsi</th>
+                                <th>Sheet Included</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Template Lengkap</strong></td>
+                                <td>Semua sheet dengan contoh data untuk semua tabel</td>
+                                <td>12 sheet</td>
+                                <td>
+                                    <button class="btn-small btn-primary" data-template="full">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn-small" data-preview="full">
+                                        <i class="fas fa-eye"></i> Preview
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Master Data Saja</strong></td>
+                                <td>Hanya data master: perusahaan, supplier, pelanggan, kategori</td>
+                                <td>5 sheet</td>
+                                <td>
+                                    <button class="btn-small btn-primary" data-template="master">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn-small" data-preview="master">
+                                        <i class="fas fa-eye"></i> Preview
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Template Kosong</strong></td>
+                                <td>Semua sheet tanpa contoh data (hanya header)</td>
+                                <td>12 sheet</td>
+                                <td>
+                                    <button class="btn-small btn-secondary" data-template="empty">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn-small" data-preview="empty">
+                                        <i class="fas fa-eye"></i> Preview
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="stat-card" style="margin-top: 25px; background: #fff3cd; border-left-color: #ffc107;">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Penting!</h3>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>Backup data</strong> sebelum melakukan migrasi</li>
+                        <li>Pastikan format data sesuai dengan template</li>
+                        <li>Jangan ubah nama sheet atau header kolom</li>
+                        <li>ID harus unik untuk setiap record</li>
+                        <li>Format tanggal: YYYY-MM-DD HH:MM:SS</li>
+                    </ul>
+                </div>
+                
+                <div id="previewSection" style="display: none; margin-top: 30px;">
+                    <!-- Preview akan ditampilkan di sini -->
+                </div>
+            `,
+            'categories': `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h1 style="color: var(--mint-dark);">
+                        <i class="fas fa-tags"></i> Kategori Produk
+                    </h1>
+                    <button class="btn btn-primary" id="btnAddCategory">
+                        <i class="fas fa-plus"></i> Tambah Kategori
+                    </button>
+                </div>
+                
+                <p>Kelola kategori produk untuk mengorganisir inventaris Anda.</p>
+                
+                <div class="data-table">
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>ID Kategori</th>
+                                <th>Nama Kategori</th>
+                                <th>Jumlah Produk</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CAT-001</td>
+                                <td>Beverage</td>
+                                <td>8 produk</td>
+                                <td><button class="btn-small btn-edit-category">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>CAT-002</td>
+                                <td>Grocery</td>
+                                <td>12 produk</td>
+                                <td><button class="btn-small btn-edit-category">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>CAT-003</td>
+                                <td>Household</td>
+                                <td>6 produk</td>
+                                <td><button class="btn-small btn-edit-category">Edit</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            'suppliers': `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h1 style="color: var(--mint-dark);">
+                        <i class="fas fa-truck"></i> Supplier / Pemasok
+                    </h1>
+                    <button class="btn btn-primary" id="btnAddSupplier">
+                        <i class="fas fa-plus"></i> Tambah Supplier
+                    </button>
+                </div>
+                
+                <p>Kelola data supplier atau pemasok produk Anda.</p>
+                
+                <div class="data-table">
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>ID Supplier</th>
+                                <th>Nama Supplier</th>
+                                <th>Kota</th>
+                                <th>Kontak Person</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Pangan Jaya</td>
+                                <td>Bekasi</td>
+                                <td>Joko</td>
+                                <td><button class="btn-small btn-edit-supplier">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Subur Makmur</td>
+                                <td>Depok</td>
+                                <td>Tini</td>
+                                <td><button class="btn-small btn-edit-supplier">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Pasar Cuan</td>
+                                <td>Jakarta</td>
+                                <td>Bambang</td>
+                                <td><button class="btn-small btn-edit-supplier">Edit</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            'customers': `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h1 style="color: var(--mint-dark);">
+                        <i class="fas fa-users"></i> Pelanggan
+                    </h1>
+                    <button class="btn btn-primary" id="btnAddCustomer">
+                        <i class="fas fa-plus"></i> Tambah Pelanggan
+                    </button>
+                </div>
+                
+                <p>Kelola data pelanggan atau customer Anda.</p>
+                
+                <div class="data-table">
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>ID Pelanggan</th>
+                                <th>Nama Pelanggan</th>
+                                <th>Tipe</th>
+                                <th>Kota</th>
+                                <th>Telepon</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Adipati Dolken</td>
+                                <td><span class="badge-retail">RETAIL</span></td>
+                                <td>Bogor</td>
+                                <td>08889191919</td>
+                                <td><button class="btn-small btn-edit-customer">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Resto Pagi Siang</td>
+                                <td><span class="badge-wholesale">WHOLESALE</span></td>
+                                <td>Bandung</td>
+                                <td>08783113085</td>
+                                <td><button class="btn-small btn-edit-customer">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Warung Emak</td>
+                                <td><span class="badge-retail">RETAIL</span></td>
+                                <td>Bekasi</td>
+                                <td>021-30517510</td>
+                                <td><button class="btn-small btn-edit-customer">Edit</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            'units': `
+                <div style="text-align: center; padding: 40px;">
+                    <i class="fas fa-cogs" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
+                    <h3 style="color: #666;">Halaman dalam pengembangan</h3>
+                    <p>Fitur Satuan & Ukuran akan segera hadir.</p>
                 </div>
             `,
             'products': `
@@ -905,6 +1405,246 @@
             `
         };
         
+        // ===== MASTER DATA SUB-MENU HANDLING =====
+        let currentMasterSubpage = 'migration';
+        
+        function loadMasterDataSubpage(subpageId) {
+            // Update active state di sub-menu
+            document.querySelectorAll('.submenu-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-subpage') === subpageId) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Update konten
+            const contentArea = document.getElementById('masterDataContent');
+            
+            if (pageContents[subpageId]) {
+                contentArea.innerHTML = pageContents[subpageId];
+                
+                // Attach event listeners berdasarkan subpage
+                if (subpageId === 'migration') {
+                    attachMigrationEvents();
+                }
+                if (subpageId === 'categories') {
+                    attachCategoriesEvents();
+                }
+                if (subpageId === 'suppliers') {
+                    attachSuppliersEvents();
+                }
+                if (subpageId === 'customers') {
+                    attachCustomersEvents();
+                }
+            } else {
+                contentArea.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fas fa-cogs" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
+                        <h3 style="color: #666;">Halaman dalam pengembangan</h3>
+                        <p>Fitur ini akan segera hadir.</p>
+                    </div>
+                `;
+            }
+            
+            // Simpan state
+            currentMasterSubpage = subpageId;
+        }
+        
+        function attachMasterDataEvents() {
+            // Event listeners untuk sub-menu items
+            document.querySelectorAll('.submenu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const subpageId = this.getAttribute('data-subpage');
+                    loadMasterDataSubpage(subpageId);
+                });
+            });
+            
+            // Load default subpage (Migrasi Data)
+            loadMasterDataSubpage('migration');
+        }
+        
+        // Fungsi untuk halaman Migration
+        function attachMigrationEvents() {
+            // Download template buttons
+            document.querySelectorAll('[data-template]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const templateType = this.getAttribute('data-template');
+                    downloadExcelTemplate(templateType);
+                });
+            });
+            
+            // Preview buttons
+            document.querySelectorAll('[data-preview]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const previewType = this.getAttribute('data-preview');
+                    showTemplatePreview(previewType);
+                });
+            });
+            
+            // Download template button utama
+            document.getElementById('btnDownloadTemplate')?.addEventListener('click', function() {
+                downloadExcelTemplate('full');
+            });
+            
+            document.getElementById('btnDownloadFullTemplate')?.addEventListener('click', function() {
+                downloadExcelTemplate('full');
+            });
+            
+            // View guide button
+            document.getElementById('btnViewGuide')?.addEventListener('click', function() {
+                showMigrationGuide();
+            });
+            
+            // Upload Excel button
+            document.getElementById('btnUploadExcel')?.addEventListener('click', function() {
+                document.getElementById('fileUpload').click();
+            });
+            
+            // File upload handler
+            document.getElementById('fileUpload')?.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileUpload(e.target.files[0]);
+                }
+            });
+        }
+        
+        // Fungsi untuk download template
+        function downloadExcelTemplate(type) {
+            // Buka halaman template.html di tab baru dengan parameter type
+            window.open(`template.html?type=${type}`, '_blank');
+        }
+        
+        // Fungsi untuk preview template
+        function showTemplatePreview(type) {
+            const previewSection = document.getElementById('previewSection');
+            
+            let previewHTML = `
+                <div class="stat-card">
+                    <h3><i class="fas fa-eye"></i> Preview Template: ${type === 'full' ? 'Lengkap' : type === 'master' ? 'Master Data' : 'Kosong'}</h3>
+                    <p>Template ini berisi:</p>
+                    <ul style="padding-left: 20px;">
+            `;
+            
+            if (type === 'full') {
+                previewHTML += `
+                    <li>12 sheet lengkap dengan contoh data</li>
+                    <li>Semua tabel: Master data, produk, harga, dll</li>
+                    <li>Cocok untuk migrasi data lengkap</li>
+                `;
+            } else if (type === 'master') {
+                previewHTML += `
+                    <li>5 sheet untuk data master</li>
+                    <li>Perusahaan, supplier, pelanggan, kategori, gudang</li>
+                    <li>Cocok untuk setup awal</li>
+                `;
+            } else {
+                previewHTML += `
+                    <li>12 sheet kosong (hanya header)</li>
+                    <li>Tanpa contoh data</li>
+                    <li>Cocok untuk data import</li>
+                `;
+            }
+            
+            previewHTML += `
+                    </ul>
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="downloadExcelTemplate('${type}')">
+                            <i class="fas fa-download"></i> Download Template Ini
+                        </button>
+                        <button class="btn" onclick="document.getElementById('previewSection').style.display='none'" style="margin-left: 10px;">
+                            <i class="fas fa-times"></i> Tutup Preview
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            previewSection.innerHTML = previewHTML;
+            previewSection.style.display = 'block';
+            previewSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Fungsi untuk show migration guide
+        function showMigrationGuide() {
+            const guide = `
+📋 **PANDUAN MIGRASI DATA STOCKMINT**
+
+**1. STRUKTUR TEMPLATE:**
+- Template terdiri dari 12 sheet yang saling terhubung
+- Setiap sheet memiliki nama dan struktur kolom yang tetap
+- Jangan ubah nama sheet atau header kolom
+
+**2. LANGKAH-LANGKAH:**
+1. Download template sesuai kebutuhan
+2. Isi data Anda ke dalam template
+3. Upload file Excel ke sistem
+4. Validasi data sebelum proses import
+
+**3. FORMAT DATA YANG DIPERLUKAN:**
+- Tanggal: YYYY-MM-DD HH:MM:SS
+- ID: Harus unik (contoh: P001, CAT-001)
+- Angka: Tanpa pemisah ribuan (120000)
+- Boolean: 1 (true) atau 0 (false)
+
+**4. TIPS:**
+- Backup data sebelum migrasi
+- Test dengan data kecil terlebih dahulu
+- Periksa konsistensi ID antar tabel
+            `;
+            
+            alert(guide);
+        }
+        
+        // Fungsi untuk handle file upload
+        function handleFileUpload(file) {
+            if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                alert('Hanya file Excel (.xlsx, .xls) yang diizinkan!');
+                return;
+            }
+            
+            if (confirm(`Upload file "${file.name}"? Pastikan format sudah sesuai template.`)) {
+                // Simulasi proses upload
+                alert('🚧 Fitur upload dalam pengembangan. Untuk saat ini, gunakan template untuk migrasi data manual.');
+            }
+        }
+        
+        // Fungsi untuk sub-pages lainnya
+        function attachCategoriesEvents() {
+            document.getElementById('btnAddCategory')?.addEventListener('click', function() {
+                alert('Fitur "Tambah Kategori" akan membuka form input.');
+            });
+            
+            document.querySelectorAll('.btn-edit-category').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('Fitur edit kategori akan dibuka.');
+                });
+            });
+        }
+        
+        function attachSuppliersEvents() {
+            document.getElementById('btnAddSupplier')?.addEventListener('click', function() {
+                alert('Fitur "Tambah Supplier" akan membuka form input.');
+            });
+            
+            document.querySelectorAll('.btn-edit-supplier').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('Fitur edit supplier akan dibuka.');
+                });
+            });
+        }
+        
+        function attachCustomersEvents() {
+            document.getElementById('btnAddCustomer')?.addEventListener('click', function() {
+                alert('Fitur "Tambah Pelanggan" akan membuka form input.');
+            });
+            
+            document.querySelectorAll('.btn-edit-customer').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('Fitur edit pelanggan akan dibuka.');
+                });
+            });
+        }
+        
         // Fungsi untuk memuat halaman
         function loadPage(pageId) {
             // 1. Update menu aktif
@@ -924,6 +1664,13 @@
             // 3. Muat konten
             if (pageContents[pageId]) {
                 contentArea.innerHTML = pageContents[pageId];
+                
+                // Jika halaman master-data, attach event listeners dan load default subpage
+                if (pageId === 'master-data') {
+                    setTimeout(() => {
+                        attachMasterDataEvents();
+                    }, 100);
+                }
                 
                 // Jika halaman dashboard, attach event listener untuk refresh button
                 if (pageId === 'dashboard') {
