@@ -20,34 +20,57 @@
         }
         
         body {
-            background: #f5f7fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
             min-height: 100vh;
             padding: 20px;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
         }
         
         .header {
             background: linear-gradient(135deg, var(--mint-green) 0%, var(--mint-dark) 100%);
             color: white;
             padding: 30px;
-            text-align: center;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
         
-        .header h1 {
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .header-content h1 {
             font-size: 32px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .header-content p {
+            opacity: 0.9;
         }
         
         .main-content {
+            background: white;
             padding: 30px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
         .btn {
@@ -71,24 +94,176 @@
         .btn-primary:hover {
             background-color: var(--mint-dark);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(25, 190, 187, 0.2);
         }
         
-        .info-box {
-            background: #f0f9ff;
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .btn-back {
+            background-color: transparent;
+            color: var(--mint-green);
+            border: 2px solid var(--mint-green);
+        }
+        
+        .btn-back:hover {
+            background-color: var(--mint-green);
+            color: white;
+        }
+        
+        .template-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .option-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 5px solid var(--mint-green);
+            transition: transform 0.3s ease;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        
+        .option-card h3 {
+            color: var(--mint-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .option-card ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .option-card li {
+            margin-bottom: 8px;
+        }
+        
+        .sheets-table {
+            width: 100%;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+        }
+        
+        .sheets-table th {
+            background-color: var(--mint-green);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .sheets-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .sheets-table tr:hover {
+            background-color: #f0f9ff;
+        }
+        
+        .sheet-tag {
+            display: inline-block;
+            background: var(--mint-green);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .preview-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
             border-left: 4px solid var(--mint-green);
+        }
+        
+        .preview-table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .preview-table th {
+            background: #e9ecef;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .preview-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
             padding: 20px;
             border-radius: 8px;
-            margin: 20px 0;
+            margin: 25px 0;
         }
         
-        .info-box h3 {
-            color: var(--mint-dark);
+        .instructions h3 {
+            color: #856404;
             margin-bottom: 10px;
         }
         
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         @media (max-width: 768px) {
+            .template-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            
             .main-content {
                 padding: 20px;
+            }
+            
+            .sheets-table {
+                font-size: 14px;
             }
         }
     </style>
@@ -96,80 +271,131 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-file-excel"></i> Excel Template</h1>
-            <p>Download template untuk migrasi data StockMint</p>
+            <div class="logo">
+                <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
+                     alt="StockMint Logo"
+                     onerror="this.onerror=null; this.src='https://via.placeholder.com/70/19BEBB/FFFFFF?text=SM'">
+            </div>
+            <div class="header-content">
+                <h1>Excel Template Manager</h1>
+                <p>Download template Excel untuk sistem StockMint</p>
+            </div>
         </div>
         
         <div class="main-content">
-            <div class="info-box">
-                <h3><i class="fas fa-info-circle"></i> Informasi Template</h3>
-                <p>Template ini berisi 12 sheet dengan format yang sudah disesuaikan untuk sistem StockMint.</p>
-                <p>Kolom ID bisa diisi dengan angka atau teks. Jika dikosongkan, sistem akan generate otomatis.</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <div>
+                    <h2 style="color: var(--mint-dark);">Template Options</h2>
+                    <p style="color: #666;">Pilih jenis template yang sesuai dengan kebutuhan Anda</p>
+                </div>
+                <button class="btn btn-back" onclick="window.close()">
+                    <i class="fas fa-times"></i> Tutup Window
+                </button>
             </div>
             
-            <div style="text-align: center; margin: 30px 0;">
-                <button class="btn btn-primary" id="btnDownloadTemplate" style="padding: 15px 30px; font-size: 16px;">
-                    <i class="fas fa-download"></i> Download Template Excel
-                </button>
-                <p style="margin-top: 10px; color: #666; font-size: 14px;">
-                    Template berisi contoh data untuk membantu pemahaman
-                </p>
+            <div class="template-options">
+                <div class="option-card">
+                    <h3><i class="fas fa-file-excel" style="color: #28a745;"></i> Template dengan Contoh Data</h3>
+                    <p>Template ini sudah berisi contoh data untuk membantu Anda memahami struktur tabel.</p>
+                    <ul>
+                        <li>12 sheet lengkap dengan header</li>
+                        <li>Data contoh untuk setiap sheet</li>
+                        <li>Cocok untuk belajar dan testing</li>
+                        <li>Format sudah sesuai dengan sistem</li>
+                    </ul>
+                    <button class="btn btn-primary" id="btnWithExamples">
+                        <i class="fas fa-download"></i> Download with Examples
+                    </button>
+                </div>
+                
+                <div class="option-card">
+                    <h3><i class="fas fa-file" style="color: #6c757d;"></i> Template Kosong</h3>
+                    <p>Template kosong dengan struktur tabel siap diisi dengan data Anda.</p>
+                    <ul>
+                        <li>12 sheet dengan header saja</li>
+                        <li>Tidak ada data contoh</li>
+                        <li>Cocok untuk mulai dari awal</li>
+                        <li>Format siap untuk data import</li>
+                    </ul>
+                    <button class="btn btn-secondary" id="btnEmptyTemplate">
+                        <i class="fas fa-download"></i> Download Empty Template
+                    </button>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-lightbulb"></i> Panduan Penggunaan Template</h3>
+                <ol style="padding-left: 20px; margin-top: 10px;">
+                    <li>Download template sesuai kebutuhan (dengan contoh atau kosong)</li>
+                    <li>Buka file Excel di Microsoft Excel atau Google Sheets</li>
+                    <li>Isi data Anda sesuai dengan struktur yang sudah disediakan</li>
+                    <li><strong>Jangan hapus atau ubah nama sheet</strong></li>
+                    <li><strong>Jangan ubah urutan atau nama header kolom</strong></li>
+                    <li>Format tanggal harus: <code>YYYY-MM-DD HH:MM:SS</code></li>
+                    <li>Gunakan ID yang konsisten antar tabel relasi</li>
+                    <li>Simpan file dengan nama yang jelas, misal: <code>stockmint_data_[tanggal].xlsx</code></li>
+                </ol>
+            </div>
+            
+            <h3 style="color: var(--mint-dark); margin: 30px 0 15px 0;">Daftar Sheet dalam Template</h3>
+            <div class="sheets-table">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Sheet Name</th>
+                            <th>Description</th>
+                            <th>Contoh Data</th>
+                            <th>Kolom</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sheetsList">
+                        <!-- Data akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; padding-top: 25px; border-top: 1px solid #eee;">
+                <p style="color: #666; margin-bottom: 15px;">© 2025 StockMint - Precision Inventory & Profit Tracking</p>
+                <div style="display: flex; justify-content: center; gap: 15px;">
+                    <button class="btn btn-primary" id="btnDownloadBoth">
+                        <i class="fas fa-download"></i> Download Both Templates
+                    </button>
+                    <button class="btn btn-secondary" onclick="showInstructions()">
+                        <i class="fas fa-question-circle"></i> View Detailed Instructions
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // ===== DEFINISI SHEET TEMPLATE =====
         const templateSheets = [
-            { name: "dim_Company", headers: ["COMPANY_ID", "COMPANY_NAME", "STREET", "ZIP_CODE", "CITY", "COUNTRY", "ADDITIONAL_ADDRESS", "PHONE1", "PHONE2", "FAX", "EMAIL", "TAX_NO", "FISCAL_CODE", "WEBSITE", "LOGO_URL", "DEFAULT_WAREHOUSE_ID", "DEFAULT_CURRENCY", "DECIMAL_PLACES"] },
-            { name: "dim_Suppliers", headers: ["SUPPLIER_ID", "SUPPLIER_NAME", "STREET", "ZIP_CODE", "CITY", "COUNTRY", "ADDITIONAL_ADDRESS", "CONTACT_PERSON", "PHONE1", "PHONE2", "FAX", "EMAIL", "TAX_NO", "FISCAL_CODE", "WEBSITE", "ADDITIONAL_TEXT", "IS_ACTIVE"] },
-            { name: "dim_Customers", headers: ["CUSTOMER_ID", "CUSTOMER_NAME", "STREET", "ZIP_CODE", "CITY", "COUNTRY", "ADDITIONAL_ADDRESS", "CONTACT_PERSON", "PHONE1", "PHONE2", "FAX", "EMAIL", "TAX_NO", "FISCAL_CODE", "WEBSITE", "CUSTOMER_TYPE", "CREDIT_LIMIT", "IS_ACTIVE"] },
-            { name: "dim_Warehouses", headers: ["STORAGE_ID", "STORAGE_NAME", "STORAGE_AREA", "IS_PRIMARY"] },
-            { name: "dim_Categories", headers: ["CATEGORY_ID", "CATEGORY_NAME"] },
-            { name: "dim_Products", headers: ["PRODUCT_ID", "PRODUCT_NAME", "DESCRIPTION", "CATEGORY_ID", "UNIT", "SIZE", "COLOR", "HAS_EXPIRY", "ARCHIVE"] },
-            { name: "Product_Supplier_Warehouse", headers: ["LINK_ID", "PRODUCT_ID", "SUPPLIER_ID", "WAREHOUSE ID", "IS PRIMARY SUPPLIER", "IS PRIMARY WAREHOUSE"] },
-            { name: "Opening_Stock", headers: ["PRODUCT_ID", "WAREHOUSE_ID", "OPENING_QTY", "AS_OF_DATE"] },
-            { name: "Purchase_Price", headers: ["PURCHASE_PRICE_ID", "PRODUCT_ID", "SUPPLIER_ID", "EFFECTIVE_DATE", "END_DATE", "PURCHASE_PRICE", "MIN_PURCHASE_QTY"] },
-            { name: "Sale_Price", headers: ["SALE_PRICE_ID", "PRODUCT_ID", "CHANNEL", "PRICE_TIER", "EFFECTIVE_DATE", "END_DATE", "SALE_PRICE", "MIN_QTY"] },
-            { name: "dim_Marketplace", headers: ["MARKETPLACE_ID", "MARKETPLACE_NAME", "WEBSITE", "IS_ACTIVE"] },
-            { name: "marketplace_fee_components", headers: ["FEE_COMPONENT_ID", "MARKETPLACE_ID", "FEE_NAME", "FEE_TYPE", "CHARGE_TYPE", "CALCULATION_TYPE", "VALUE", "MAX_AMOUNT", "MIN_AMOUNT", "APPLIES_TO", "EFFECTIVE_DATE", "END_DATE", "IS_ACTIVE"] }
-        ];
-
-        function downloadExcelTemplate() {
-            try {
-                const wb = XLSX.utils.book_new();
-                
-                templateSheets.forEach(sheetDef => {
-                    let data = [];
-                    data.push(sheetDef.headers);
-                    
-                    // Add one empty row
-                    const emptyRow = sheetDef.headers.map(() => "");
-                    data.push(emptyRow);
-                    
-                    const ws = XLSX.utils.aoa_to_sheet(data);
-                    XLSX.utils.book_append_sheet(wb, ws, sheetDef.name);
-                });
-                
-                const fileName = `StockMint_Template_${new Date().toISOString().slice(0,10)}.xlsx`;
-                XLSX.writeFile(wb, fileName);
-                
-                alert(`✅ Template berhasil diunduh!\nNama file: ${fileName}`);
-                
-            } catch (error) {
-                console.error("Error generating Excel:", error);
-                alert("❌ Terjadi kesalahan saat membuat template.");
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('btnDownloadTemplate').addEventListener('click', function() {
-                this.innerHTML = '<div class="loading"></div> Generating...';
-                setTimeout(() => {
-                    downloadExcelTemplate();
-                    this.innerHTML = '<i class="fas fa-download"></i> Download Template Excel';
-                }, 500);
-            });
-        });
-    </script>
-</body>
-</html>
+            {
+                name: "dim_Company",
+                description: "Data perusahaan/perusahaan Anda",
+                exampleRows: 1,
+                columns: 18,
+                headers: ["COMPANY_ID", "COMPANY_NAME", "STREET", "ZIP_CODE", "CITY", "COUNTRY", "ADDITIONAL_ADDRESS", "PHONE1", "PHONE2", "FAX", "EMAIL", "TAX_NO", "FISCAL_CODE", "WEBSITE", "LOGO_URL", "DEFAULT_WAREHOUSE_ID", "DEFAULT_CURRENCY", "DECIMAL_PLACES"],
+                exampleData: [
+                    [1, "PT. Maju Terus", "Jl. Pantai Indah Kapuk No. 88", "12345", "Tangerang", "Indonesia", "", "021 8888 9999", "", "", "majuterus@gmail,com", "", "", "", "", 1, "Rp.", 0]
+                ]
+            },
+            {
+                name: "dim_Suppliers",
+                description: "Data supplier/pemasok",
+                exampleRows: 3,
+                columns: 16,
+                headers: ["SUPPLIER_ID", "SUPPLIER_NAME", "STREET", "ZIP_CODE", "CITY", "COUNTRY", "ADDITIONAL_ADDRESS", "CONTACT_PERSON", "PHONE1", "PHONE2", "FAX", "EMAIL", "TAX_NO", "FISCAL_CODE", "WEBSITE", "ADDITIONAL_TEXT", "IS_ACTIVE"],
+                exampleData: [
+                    [1, "Pangan Jaya", "", "", "Bekasi", "Indonesia", "", "Joko", "081248109415", "", "", "", "", "", "", "", 1],
+                    [2, "Subur Makmur", "", "", "Depok", "Indonesia", "", "Tini", "081534189381", "", "", "", "", "", "", "", 1],
+                    [3, "Pasar Cuan", "", "", "Jakarta", "Indonesia", "", "Bambang", "081843135155", "", "", "", "", "", "", "", 1]
+                ]
+            },
+            {
+                name: "dim_Customers",
+                description: "Data pelanggan",
+                exampleRows: 7,
+                columns: 18,
+                headers: ["CUSTOMER_ID", "CUSTOMER_NAME", "STREET", "ZIP_CODE", "CITY", "COUNTRY", "ADDITIONAL_ADDRESS", "CONTACT_PERSON", "PHONE1", "PHONE2", "FAX", "EMAIL", "TAX_NO", "FISCAL_CODE", "WEBSITE", "CUSTOMER_TYPE", "CREDIT_LIMIT", "IS_ACT
