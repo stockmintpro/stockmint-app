@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockMint - Excel Template</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png">
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
         :root {
             --mint-green: #19BEBB;
             --mint-dark: #0fa8a6;
+            --text-light: #ffffff;
+            --text-dark: #333333;
         }
         
         * {
@@ -288,8 +291,8 @@
                     <h2 style="color: var(--mint-dark);">Template Options</h2>
                     <p style="color: #666;">Pilih jenis template yang sesuai dengan kebutuhan Anda</p>
                 </div>
-                <button class="btn btn-back" onclick="window.close()">
-                    <i class="fas fa-times"></i> Tutup Window
+                <button class="btn btn-back" onclick="window.location.href='dashboard.html'">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
                 </button>
             </div>
             
@@ -354,6 +357,15 @@
                 </table>
             </div>
             
+            <div class="preview-section" id="previewSection" style="display: none;">
+                <h3 id="previewTitle">Preview Data</h3>
+                <div class="preview-table">
+                    <table style="width: 100%;" id="previewTable">
+                        <!-- Preview data akan diisi oleh JavaScript -->
+                    </table>
+                </div>
+            </div>
+            
             <div style="text-align: center; margin-top: 40px; padding-top: 25px; border-top: 1px solid #eee;">
                 <p style="color: #666; margin-bottom: 15px;">© 2025 StockMint - Precision Inventory & Profit Tracking</p>
                 <div style="display: flex; justify-content: center; gap: 15px;">
@@ -398,4 +410,366 @@
                 description: "Data pelanggan",
                 exampleRows: 7,
                 columns: 18,
-                headers: ["CUSTOMER_ID", "CUSTOMER_NAME", "STREET", "ZIP_CODE", "CITY", "COUNTRY", "ADDITIONAL_ADDRESS", "CONTACT_PERSON", "PHONE1", "PHONE2", "FAX", "EMAIL", "TAX_NO", "FISCAL_CODE", "WEBSITE", "CUSTOMER_TYPE", "CREDIT_LIMIT", "IS_ACT
+                headers: ["CUSTOMER_ID", "CUSTOMER_NAME", "STREET", "ZIP_CODE", "CITY", "COUNTRY", "ADDITIONAL_ADDRESS", "CONTACT_PERSON", "PHONE1", "PHONE2", "FAX", "EMAIL", "TAX_NO", "FISCAL_CODE", "WEBSITE", "CUSTOMER_TYPE", "CREDIT_LIMIT", "IS_ACTIVE"],
+                exampleData: [
+                    [1, "Adipati Dolken", "Jl. Backstreet 123", "15325", "Bogor", "Indonesia", "", "", "08889191919", "", "", "", "", "", "", "RETAIL", "", 1],
+                    [2, "Shopee Customers", "", "", "", "Indonesia", "", "", "", "", "", "", "", "", "", "RETAIL", "", 1],
+                    [3, "Tiktok Customers", "", "", "", "Indonesia", "", "", "", "", "", "", "", "", "", "RETAIL", "", 1],
+                    [4, "Tokopedia Customers", "", "", "", "Indonesia", "", "", "", "", "", "", "", "", "", "RETAIL", "", 1],
+                    [5, "Blibli Customers", "", "", "", "Indonesia", "", "", "", "", "", "", "", "", "", "RETAIL", "", 1],
+                    [6, "Resto Pagi Siang", "", "", "Bandung", "Indonesia", "", "James", "08783113085", "", "", "", "", "", "", "WHOLESALE", "", 1],
+                    [7, "Warung Emak", "", "", "Bekasi", "Indonesia", "", "Putri", "021-30517510", "", "", "", "", "", "", "RETAIL", 1000000, 1]
+                ]
+            },
+            {
+                name: "dim_Warehouses",
+                description: "Data gudang/penyimpanan",
+                exampleRows: 3,
+                columns: 4,
+                headers: ["STORAGE_ID", "STORAGE_NAME", "STORAGE_AREA", "IS_PRIMARY"],
+                exampleData: [
+                    [1, "GUDANG 1", "KAPUK", 1],
+                    [2, "GUDANG 2", "KALIDERES", 0],
+                    [3, "GUDANG 3", "KRAMAT JATI", 0]
+                ]
+            },
+            {
+                name: "dim_Categories",
+                description: "Kategori produk",
+                exampleRows: 3,
+                columns: 2,
+                headers: ["CATEGORY_ID", "CATEGORY_NAME"],
+                exampleData: [
+                    ["CAT-001", "Beverage"],
+                    ["CAT-002", "Grocery"],
+                    ["CAT-003", "Household"]
+                ]
+            },
+            {
+                name: "dim_Products",
+                description: "Data produk/inventory",
+                exampleRows: 4,
+                columns: 9,
+                headers: ["PRODUCT_ID", "PRODUCT_NAME", "DESCRIPTION", "CATEGORY_ID", "UNIT", "SIZE", "COLOR", "HAS_EXPIRY", "ARCHIVE"],
+                exampleData: [
+                    ["P001", "Kopi Arabica 250 gr", "", "CAT-001", "Pcs", "250 gr", "", 1, 0],
+                    ["P002", "Gula Pasir 1 Kg", "Gula Putih", "CAT-002", "Pcs", "1 Kg", "Putih", 1, 0],
+                    ["P003", "Sapu Pengki Set Warna Hijau", "", "CAT-003", "Set", "", "Hijau", 0, 0],
+                    ["P004", "Sapu Pengki Set Warna Biru", "", "CAT-003", "Set", "", "Biru", 0, 0]
+                ]
+            },
+            {
+                name: "Product_Supplier_Warehouse",
+                description: "Relasi produk-supplier-gudang",
+                exampleRows: 4,
+                columns: 6,
+                headers: ["LINK_ID", "PRODUCT_ID", "SUPPLIER_ID", "WAREHOUSE ID", "IS PRIMARY SUPPLIER", "IS PRIMARY WAREHOUSE"],
+                exampleData: [
+                    ["LINK00001", "P001", 1, 1, 1, 1],
+                    ["LINK00002", "P002", 2, 1, 1, 1],
+                    ["LINK00003", "P003", 3, 2, 1, 1],
+                    ["LINK00004", "P004", 3, 2, 1, 1]
+                ]
+            },
+            {
+                name: "Opening_Stock",
+                description: "Stok awal produk",
+                exampleRows: 4,
+                columns: 4,
+                headers: ["PRODUCT_ID", "WAREHOUSE_ID", "OPENING_QTY", "AS_OF_DATE"],
+                exampleData: [
+                    ["P001", 1, 100, "2025-12-15 00:00:00"],
+                    ["P002", 1, 50, "2025-12-15 00:00:00"],
+                    ["P003", 2, 12, "2025-12-15 00:00:00"],
+                    ["P004", 2, 15, "2025-12-15 00:00:00"]
+                ]
+            },
+            {
+                name: "Purchase_Price",
+                description: "Harga pembelian dari supplier",
+                exampleRows: 10,
+                columns: 7,
+                headers: ["PURCHASE_PRICE_ID", "PRODUCT_ID", "SUPPLIER_ID", "EFFECTIVE_DATE", "END_DATE", "PURCHASE_PRICE", "MIN_PURCHASE_QTY"],
+                exampleData: [
+                    ["PCH00001", "P001", 1, "2025-12-01 00:00:00", null, 120000, 5],
+                    ["PCH00002", "P001", 1, "2025-12-01 00:00:00", null, 100000, 25],
+                    ["PCH00003", "P001", 1, "2025-12-01 00:00:00", null, 80000, 50],
+                    ["PCH00004", "P002", 2, "2025-12-09 00:00:00", null, 13000, 1],
+                    ["PCH00005", "P002", 2, "2025-12-09 00:00:00", null, 12500, 12],
+                    ["PCH00006", "P002", 2, "2025-12-09 00:00:00", null, 12000, 24],
+                    ["PCH00007", "P003", 3, "2025-12-12 00:00:00", null, 50000, 1],
+                    ["PCH00008", "P003", 3, "2025-12-12 00:00:00", null, 40000, 5],
+                    ["PCH00009", "P004", 3, "2025-12-12 00:00:00", null, 50000, 1],
+                    ["PCH00010", "P004", 3, "2025-12-12 00:00:00", null, 40000, 5]
+                ]
+            },
+            {
+                name: "Sale_Price",
+                description: "Harga jual ke customer",
+                exampleRows: 9,
+                columns: 8,
+                headers: ["SALE_PRICE_ID", "PRODUCT_ID", "CHANNEL", "PRICE_TIER", "EFFECTIVE_DATE", "END_DATE", "SALE_PRICE", "MIN_QTY"],
+                exampleData: [
+                    ["SAL000001", "P001", "DEFAULT", "RETAIL", "2025-12-01 00:00:00", null, 150000, 1],
+                    ["SAL000002", "P001", "DEFAULT", "GROSIR", "2025-12-01 00:00:00", null, 130000, 6],
+                    ["SAL000003", "P001", "BLIBLI", "RETAIL", "2025-12-01 00:00:00", null, 130000, 1],
+                    ["SAL000004", "P002", "DEFAULT", "RETAIL", "2025-12-01 00:00:00", null, 16000, 1],
+                    ["SAL000005", "P002", "DEFAULT", "GROSIR", "2025-12-01 00:00:00", null, 15500, 5],
+                    ["SAL000006", "P003", "DEFAULT", "RETAIL", "2025-12-01 00:00:00", null, 65000, 1],
+                    ["SAL000007", "P003", "SHOPEE", "RETAIL", "2025-12-01 00:00:00", null, 62500, 1],
+                    ["SAL000008", "P004", "DEFAULT", "RETAIL", "2025-12-01 00:00:00", null, 65000, 1],
+                    ["SAL000009", "P004", "SHOPEE", "RETAIL", "2025-12-01 00:00:00", null, 62500, 1]
+                ]
+            },
+            {
+                name: "dim_Marketplace",
+                description: "Data marketplace/platform",
+                exampleRows: 4,
+                columns: 4,
+                headers: ["MARKETPLACE_ID", "MARKETPLACE_NAME", "WEBSITE", "IS_ACTIVE"],
+                exampleData: [
+                    [1, "Shopee", "shopee.co.id", 1],
+                    [2, "Tokopedia", "tokopedia.com", 1],
+                    [3, "TikTok Shop", "tiktok.com", 1],
+                    [4, "Blibli", "blibli.com", 1]
+                ]
+            },
+            {
+                name: "marketplace_fee_components",
+                description: "Komisi/fee marketplace",
+                exampleRows: 12,
+                columns: 13,
+                headers: ["FEE_COMPONENT_ID", "MARKETPLACE_ID", "FEE_NAME", "FEE_TYPE", "CHARGE_TYPE", "CALCULATION_TYPE", "VALUE", "MAX_AMOUNT", "MIN_AMOUNT", "APPLIES_TO", "EFFECTIVE_DATE", "END_DATE", "IS_ACTIVE"],
+                exampleData: [
+                    [1, 1, "Biaya Administrasi", "STANDARD", "PER_ITEM", "PERCENTAGE", 0.08, null, null, "ALL_PRODUCTS", "2025-10-01 00:00:00", null, 1],
+                    [2, 1, "Biaya Layanan", "STANDARD", "PER_ITEM", "PERCENTAGE", 0.06, 40000, null, "ALL_PRODUCTS", "2025-10-01 00:00:00", null, 1],
+                    [3, 1, "Biaya Proses Pesanan", "STANDARD", "PER_INVOICE", "FIXED", 1250, null, null, "INVOICE", "2025-10-01 00:00:00", null, 1],
+                    [4, 2, "Platform Commission", "STANDARD", "PER_ITEM", "PERCENTAGE", 0.08, null, null, "ALL_PRODUCTS", "2025-10-01 00:00:00", null, 1],
+                    [5, 2, "Dynamic Commission", "STANDARD", "PER_ITEM", "PERCENTAGE", 0.06, 40000, null, "ALL_PRODUCTS", "2025-10-01 00:00:00", null, 1],
+                    [6, 2, "Order Processing Fee", "STANDARD", "PER_INVOICE", "FIXED", 1250, null, null, "INVOICE", "2025-10-01 00:00:00", null, 1],
+                    [7, 3, "Platform Commission", "STANDARD", "PER_ITEM", "PERCENTAGE", 0.08, null, null, "ALL_PRODUCTS", "2025-10-01 00:00:00", null, 1],
+                    [8, 3, "Dynamic Commission", "STANDARD", "PER_ITEM", "PERCENTAGE", 0.06, 40000, null, "ALL_PRODUCTS", "2025-10-01 00:00:00", null, 1],
+                    [9, 3, "Order Processing Fee", "STANDARD", "PER_INVOICE", "FIXED", 1250, null, null, "INVOICE", "2025-10-01 00:00:00", null, 1],
+                    [10, 4, "Reguler Margin", "STANDARD", "PER_ITEM", "PERCENTAGE", 0.08, null, null, "ALL_PRODUCTS", "2025-10-01 00:00:00", null, 1],
+                    [11, 4, "Biaya Layanan Pengiriman", "STANDARD", "PER_ITEM", "PERCENTAGE", 0.025, 10000, null, "ALL_PRODUCTS", "2025-10-01 00:00:00", null, 1],
+                    [12, 4, "Rebate Reguler Margin", "CASHBACK", "PER_ITEM", "PERCENTAGE", 0.5, null, null, "ALL_PRODUCTS", "2025-10-01 00:00:00", null, 1]
+                ]
+            }
+        ];
+
+        // ===== FUNGSI UTAMA =====
+        function downloadExcelTemplate(withExamples) {
+            try {
+                // Buat workbook baru
+                const wb = XLSX.utils.book_new();
+                
+                // Tambahkan setiap sheet
+                templateSheets.forEach(sheetDef => {
+                    let data = [];
+                    
+                    // Tambahkan header
+                    data.push(sheetDef.headers);
+                    
+                    // Tambahkan data contoh jika withExamples = true
+                    if (withExamples && sheetDef.exampleData) {
+                        sheetDef.exampleData.forEach(row => {
+                            data.push(row);
+                        });
+                    } else {
+                        // Tambahkan satu baris kosong untuk template kosong
+                        const emptyRow = sheetDef.headers.map(() => "");
+                        data.push(emptyRow);
+                    }
+                    
+                    // Buat worksheet
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    
+                    // Tambahkan ke workbook
+                    XLSX.utils.book_append_sheet(wb, ws, sheetDef.name);
+                });
+                
+                // Generate nama file
+                const fileName = withExamples 
+                    ? `StockMint_Template_With_Examples_${new Date().toISOString().slice(0,10)}.xlsx`
+                    : `StockMint_Template_Empty_${new Date().toISOString().slice(0,10)}.xlsx`;
+                
+                // Download file
+                XLSX.writeFile(wb, fileName);
+                
+                // Tampilkan pesan sukses
+                alert(`✅ Template berhasil diunduh!\nNama file: ${fileName}`);
+                
+            } catch (error) {
+                console.error("Error generating Excel:", error);
+                alert("❌ Terjadi kesalahan saat membuat template. Silakan coba lagi.");
+            }
+        }
+
+        // ===== TAMPILKAN DAFTAR SHEET =====
+        function displaySheetsList() {
+            const tbody = document.getElementById('sheetsList');
+            tbody.innerHTML = '';
+            
+            templateSheets.forEach((sheet, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${sheet.name}</strong></td>
+                    <td>${sheet.description}</td>
+                    <td>${sheet.exampleRows} baris contoh</td>
+                    <td>${sheet.columns} kolom</td>
+                `;
+                row.style.cursor = 'pointer';
+                row.onclick = () => previewSheet(index);
+                tbody.appendChild(row);
+            });
+        }
+
+        // ===== PREVIEW SHEET =====
+        function previewSheet(sheetIndex) {
+            const sheet = templateSheets[sheetIndex];
+            const previewSection = document.getElementById('previewSection');
+            const previewTitle = document.getElementById('previewTitle');
+            const previewTable = document.getElementById('previewTable');
+            
+            // Update title
+            previewTitle.innerHTML = `<i class="fas fa-table"></i> Preview: ${sheet.name}`;
+            
+            // Buat tabel preview
+            let tableHTML = '<thead><tr>';
+            
+            // Header
+            sheet.headers.forEach(header => {
+                tableHTML += `<th>${header}</th>`;
+            });
+            tableHTML += '</tr></thead><tbody>';
+            
+            // Data contoh (maksimal 5 baris)
+            const maxRows = Math.min(5, sheet.exampleData.length);
+            for (let i = 0; i < maxRows; i++) {
+                tableHTML += '<tr>';
+                sheet.exampleData[i].forEach(cell => {
+                    const cellValue = cell === null ? 'NULL' : cell;
+                    tableHTML += `<td>${cellValue}</td>`;
+                });
+                tableHTML += '</tr>';
+            }
+            
+            if (sheet.exampleData.length > 5) {
+                tableHTML += `<tr><td colspan="${sheet.headers.length}" style="text-align: center; font-style: italic;">
+                    ... dan ${sheet.exampleData.length - 5} baris lainnya
+                </td></tr>`;
+            }
+            
+            tableHTML += '</tbody>';
+            previewTable.innerHTML = tableHTML;
+            
+            // Tampilkan preview section
+            previewSection.style.display = 'block';
+            
+            // Scroll ke preview
+            previewSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ===== FUNGSI BANTUAN =====
+        function showInstructions() {
+            const instructions = `
+📋 **PANDUAN LENGKAP PENGGUNAAN TEMPLATE STOCKMINT**
+
+**1. STRUKTUR TEMPLATE:**
+- Template terdiri dari 12 sheet yang saling terhubung
+- Setiap sheet memiliki nama dan struktur kolom yang tetap
+- Jangan ubah nama sheet atau header kolom
+
+**2. TIPE DATA YANG DIREKOMENDASIKAN:**
+- ID: Angka atau teks (P001, CAT-001)
+- Tanggal: Format YYYY-MM-DD HH:MM:SS
+- Angka: Tanpa pemisah ribuan (120000 bukan 120.000)
+- Boolean: 1 (true) atau 0 (false)
+
+**3. ATURAN PENTING:**
+- ID harus unik dalam setiap tabel
+- ID yang digunakan di tabel relasi harus ada di tabel induk
+- Untuk nilai NULL/kosong, biarkan sel kosong
+- Format mata uang: Rp. di depan (opsional)
+
+**4. URUTAN PENGISIAN DATA (REKOMENDASI):**
+1. dim_Company (data perusahaan)
+2. dim_Warehouses (data gudang)
+3. dim_Categories (kategori produk)
+4. dim_Suppliers (data pemasok)
+5. dim_Customers (data pelanggan)
+6. dim_Products (data produk)
+7. Product_Supplier_Warehouse (relasi)
+8. Opening_Stock (stok awal)
+9. Purchase_Price (harga beli)
+10. Sale_Price (harga jual)
+11. dim_Marketplace (marketplace)
+12. marketplace_fee_components (fee)
+
+**5. VALIDASI DATA:**
+- Pastikan tidak ada ID duplikat
+- Pastikan format tanggal benar
+- Pastikan nilai angka valid (tidak negatif)
+- Pastikan relasi antar tabel konsisten
+
+**6. TROUBLESHOOTING:**
+- Jika ada error saat upload, periksa format data
+- Pastikan tidak ada karakter khusus di header
+- Periksa konsistensi ID antar tabel
+            `;
+            
+            alert(instructions);
+        }
+
+        // ===== DOWNLOAD BOTH TEMPLATES =====
+        function downloadBothTemplates() {
+            if (confirm("Unduh kedua template (dengan contoh dan kosong)?")) {
+                // Download template dengan contoh
+                setTimeout(() => {
+                    downloadExcelTemplate(true);
+                }, 500);
+                
+                // Download template kosong
+                setTimeout(() => {
+                    downloadExcelTemplate(false);
+                }, 1500);
+            }
+        }
+
+        // ===== INISIALISASI =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tampilkan daftar sheet
+            displaySheetsList();
+            
+            // Event listeners untuk tombol
+            document.getElementById('btnWithExamples').addEventListener('click', function() {
+                this.innerHTML = '<div class="loading"></div> Generating...';
+                setTimeout(() => {
+                    downloadExcelTemplate(true);
+                    this.innerHTML = '<i class="fas fa-download"></i> Download with Examples';
+                }, 500);
+            });
+            
+            document.getElementById('btnEmptyTemplate').addEventListener('click', function() {
+                this.innerHTML = '<div class="loading"></div> Generating...';
+                setTimeout(() => {
+                    downloadExcelTemplate(false);
+                    this.innerHTML = '<i class="fas fa-download"></i> Download Empty Template';
+                }, 500);
+            });
+            
+            document.getElementById('btnDownloadBoth').addEventListener('click', downloadBothTemplates);
+            
+            // Cek jika ada parameter preview di URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const previewSheet = urlParams.get('preview');
+            if (previewSheet) {
+                const sheetIndex = templateSheets.findIndex(s => s.name === previewSheet);
+                if (sheetIndex !== -1) {
+                    setTimeout(() => previewSheet(sheetIndex), 500);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
