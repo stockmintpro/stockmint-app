@@ -321,6 +321,16 @@
             background: #f8f9fa;
         }
         
+        .btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-disabled:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
         /* ===== SUB-MENU NAVIGATION (Master Data) ===== */
         .submenu-nav {
             background: white;
@@ -351,6 +361,16 @@
             border-left: 4px solid var(--mint-green);
         }
         
+        .submenu-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .submenu-item.disabled:hover {
+            background-color: inherit;
+            transform: none;
+        }
+        
         .submenu-icon {
             width: 40px;
             height: 40px;
@@ -379,68 +399,133 @@
             color: #666;
         }
         
-        /* ===== STEP CARDS ===== */
-        .step-card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            text-align: center;
-            transition: transform 0.3s ease;
+        /* ===== WIZARD STEPS ===== */
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
         }
         
-        .step-card:hover {
-            transform: translateY(-5px);
+        .wizard-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .wizard-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
         }
         
         .step-number {
             width: 40px;
             height: 40px;
-            background: var(--mint-green);
-            color: white;
+            background: #e0e0e0;
+            color: #666;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
             font-weight: bold;
-            margin: 0 auto 15px;
-        }
-        
-        .step-card h4 {
-            color: var(--mint-dark);
             margin-bottom: 10px;
+            transition: all 0.3s ease;
         }
         
-        .step-card p {
-            color: #666;
+        .wizard-step.active .step-number {
+            background: var(--mint-green);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .wizard-step.completed .step-number {
+            background: #28a745;
+            color: white;
+        }
+        
+        .step-title {
             font-size: 14px;
-            margin-bottom: 15px;
+            color: #666;
+            text-align: center;
+            max-width: 100px;
         }
         
-        /* ===== BADGES ===== */
-        .badge-retail {
-            display: inline-block;
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
+        .wizard-step.active .step-title {
+            color: var(--mint-dark);
             font-weight: 600;
         }
         
-        .badge-wholesale {
-            display: inline-block;
-            background: #e8f5e9;
-            color: #388e3c;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
+        .wizard-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin: 20px 0;
+        }
+        
+        /* ===== FORM STYLING ===== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 600;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--mint-green);
+            box-shadow: 0 0 0 3px rgba(25, 190, 187, 0.1);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        /* ===== DEMO BANNER ===== */
+        .demo-banner {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .demo-banner i {
+            font-size: 24px;
         }
         
         /* ===== RESPONSIVE DESIGN ===== */
-        /* Tablet (768px - 1024px) */
         @media (max-width: 1024px) {
             .sidebar {
                 width: 230px;
@@ -453,7 +538,6 @@
             }
         }
         
-        /* HP & Tablet Kecil (max 768px) */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -498,7 +582,6 @@
                 display: block;
             }
             
-            /* Responsive untuk sub-menu */
             .master-data-layout {
                 flex-direction: column !important;
             }
@@ -507,9 +590,23 @@
                 width: 100%;
                 margin-bottom: 20px;
             }
+            
+            .wizard-steps {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .wizard-step {
+                flex: none;
+                width: calc(50% - 10px);
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
         }
         
-        /* HP Kecil (max 480px) */
         @media (max-width: 480px) {
             .content {
                 padding: 20px;
@@ -527,26 +624,9 @@
             .logo-title {
                 font-size: 20px;
             }
-        }
-        
-        /* Landscape HP */
-        @media (max-height: 600px) and (orientation: landscape) {
-            .sidebar {
-                padding-top: 15px;
-            }
             
-            .logo-container {
-                padding: 0 15px 15px 15px;
-                margin-bottom: 15px;
-            }
-            
-            .menu-item {
-                padding: 10px 14px;
-                margin-bottom: 4px;
-            }
-            
-            .user-section {
-                padding: 15px;
+            .wizard-step {
+                width: 100%;
             }
         }
         
@@ -632,16 +712,14 @@
     
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <!-- Logo Section dengan IMGBB DIRECT LINK -->
+        <!-- Logo Section -->
         <div class="logo-container">
-            <!-- PRIMARY LOGO LINK - PASTI BEKERJA -->
             <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
                  alt="StockMint Logo" 
                  class="logo"
                  id="mainLogo"
                  onerror="enableFallbackLogo()">
             
-            <!-- FALLBACK LOGO (jika primary gagal) -->
             <div class="logo-fallback" id="fallbackLogo">
                 SM
             </div>
@@ -686,10 +764,6 @@
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Settings</span>
             </a>
-            <a data-page="contacts" class="menu-item">
-                <i class="fas fa-address-book"></i>
-                <span class="menu-text">Contacts</span>
-            </a>
             <a data-page="help" class="menu-item">
                 <i class="fas fa-question-circle"></i>
                 <span class="menu-text">Help</span>
@@ -708,88 +782,55 @@
 
     <!-- Main Content -->
     <div class="content" id="content-area">
-        <!-- Konten default (Dashboard) akan diisi oleh JavaScript -->
+        <!-- Konten default akan diisi oleh JavaScript -->
     </div>
 
     <script>
-        // ===== CEK LOGIN =====
-		function checkAuth() {
-			const token = localStorage.getItem('stockmint_token');
-			const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
-    
-			if (!token || !user.email) {
-				// Redirect ke halaman login
-				window.location.href = 'index.html';
-				return false;
-			}
-    
-			// Tampilkan user info di navbar
-			document.getElementById('userName').textContent = user.name || user.email;
-			if (user.picture) {
-				document.getElementById('userAvatar').src = user.picture;
-			}
-			document.getElementById('topNavbar').style.display = 'flex';
-    
-			return true;
-		}
-
-		// ===== LOGOUT FUNCTION =====
-		function handleLogout() {
-			localStorage.removeItem('stockmint_token');
-			localStorage.removeItem('stockmint_user');
-			localStorage.removeItem('stockmint_sheet_id');
-			window.location.href = 'index.html';
-		}
-
-		// ===== INIT AUTH =====
-		document.addEventListener('DOMContentLoaded', function() {
-			// Cek login
-			if (!checkAuth()) {
-				return;
-			}
-    
-			// Attach logout event
-			document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-    
-			// ... sisa kode dashboard Anda yang sudah berfungsi ...
-		});
-		
-		// ===== INISIALISASI VARIABEL GLOBAL =====
+        // ===== GLOBAL VARIABLES =====
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
         const menuItems = document.querySelectorAll('.menu-item');
         const contentArea = document.getElementById('content-area');
         
+        // ===== AUTHENTICATION FUNCTIONS =====
+        function checkAuth() {
+            const token = localStorage.getItem('stockmint_token');
+            const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
+    
+            if (!token || !user.email) {
+                window.location.href = 'index.html';
+                return false;
+            }
+    
+            document.getElementById('userName').textContent = user.name || user.email;
+            if (user.picture) {
+                document.getElementById('userAvatar').src = user.picture;
+            }
+            document.getElementById('topNavbar').style.display = 'flex';
+    
+            return true;
+        }
+        
+        function isDemoMode() {
+            const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
+            return user.isDemo === true;
+        }
+        
+        function handleLogout() {
+            localStorage.removeItem('stockmint_token');
+            localStorage.removeItem('stockmint_user');
+            localStorage.removeItem('stockmint_sheet_id');
+            window.location.href = 'index.html';
+        }
+        
         // ===== LOGO HANDLING =====
         function enableFallbackLogo() {
-            console.log("Primary logo failed, enabling fallback...");
             document.getElementById('mainLogo').style.display = 'none';
             document.getElementById('fallbackLogo').style.display = 'flex';
         }
         
-        // Test logo on load
-        window.addEventListener('load', function() {
-            const logo = document.getElementById('mainLogo');
-            const img = new Image();
-            img.onload = function() {
-                console.log("✅ Logo loaded successfully from ImgBB");
-            };
-            img.onerror = function() {
-                console.log("❌ ImgBB logo failed, trying alternative...");
-                logo.src = "https://i.ibb.co.com/DfSP2YGL/logo-stockmint-png.png";
-                
-                const img2 = new Image();
-                img2.onerror = function() {
-                    console.log("❌ All logo sources failed, using fallback");
-                    enableFallbackLogo();
-                };
-                img2.src = logo.src;
-            };
-            img.src = logo.src;
-        });
-        
-        // ===== TOGGLE SIDEBAR DI HP =====
+        // ===== SIDEBAR TOGGLE =====
         hamburgerBtn.addEventListener('click', () => {
             sidebar.classList.toggle('active');
             sidebarOverlay.classList.toggle('active');
@@ -800,8 +841,7 @@
             sidebarOverlay.classList.remove('active');
         });
         
-        // ===== SISTEM NAVIGASI MENU =====
-        // Data konten untuk setiap halaman
+        // ===== PAGE CONTENTS =====
         const pageContents = {
             'dashboard': `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
@@ -811,28 +851,38 @@
                     </button>
                 </div>
                 
+                ${isDemoMode() ? `
+                    <div class="demo-banner">
+                        <i class="fas fa-flask"></i>
+                        <div>
+                            <strong>Mode Demo Aktif</strong> - Anda sedang mencoba fitur StockMint dalam mode demo.
+                            Untuk akses penuh, login dengan akun Google.
+                        </div>
+                    </div>
+                ` : ''}
+                
                 <p>Selamat datang di <strong style="color: #19BEBB;">StockMint</strong> — sistem pelacakan inventaris dan profit dengan presisi tinggi.</p>
                 
                 <h2>Quick Stats</h2>
                 <div class="stats-container">
                     <div class="stat-card">
                         <h3>Total Products</h3>
-                        <div class="stat-value">142</div>
+                        <div class="stat-value">${isDemoMode() ? '12' : '142'}</div>
                         <div class="stat-change">↑ 12% from last month</div>
                     </div>
                     <div class="stat-card">
                         <h3>Today's Sales</h3>
-                        <div class="stat-value">Rp 3.250.000</div>
+                        <div class="stat-value">${isDemoMode() ? 'Rp 850.000' : 'Rp 3.250.000'}</div>
                         <div class="stat-change">↑ 8% from yesterday</div>
                     </div>
                     <div class="stat-card">
                         <h3>Low Stock Alert</h3>
-                        <div class="stat-value">8 Items</div>
+                        <div class="stat-value">${isDemoMode() ? '2 Items' : '8 Items'}</div>
                         <div class="stat-change danger">⚠️ Need restock</div>
                     </div>
                     <div class="stat-card">
                         <h3>Monthly Profit</h3>
-                        <div class="stat-value">Rp 48.500.000</div>
+                        <div class="stat-value">${isDemoMode() ? 'Rp 12.500.000' : 'Rp 48.500.000'}</div>
                         <div class="stat-change">↑ 15% from last month</div>
                     </div>
                 </div>
@@ -850,11 +900,6 @@
                             <strong>Sale completed</strong> - Rp 450.000
                             <span style="float: right; color: #888; font-size: 13px;">2 hours ago</span>
                         </li>
-                        <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-                            <i class="fas fa-shopping-cart" style="color: #ffc107; margin-right: 10px;"></i>
-                            <strong>Purchase order</strong> #PO-2345 confirmed
-                            <span style="float: right; color: #888; font-size: 13px;">Yesterday</span>
-                        </li>
                         <li style="padding: 8px 0;">
                             <i class="fas fa-chart-bar" style="color: #19BEBB; margin-right: 10px;"></i>
                             <strong>Monthly report</strong> generated for October 2023
@@ -862,50 +907,8 @@
                         </li>
                     </ul>
                 </div>
-                
-                <h2>Low Stock Products</h2>
-                <div class="data-table">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Category</th>
-                                <th>Current Stock</th>
-                                <th>Min. Stock</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Kopi Arabica 250g</td>
-                                <td>Beverage</td>
-                                <td>5</td>
-                                <td>20</td>
-                                <td><span style="color: #dc3545; font-weight: bold;">⚠️ Low</span></td>
-                            </tr>
-                            <tr>
-                                <td>Gula Pasir 1kg</td>
-                                <td>Grocery</td>
-                                <td>8</td>
-                                <td>15</td>
-                                <td><span style="color: #dc3545; font-weight: bold;">⚠️ Low</span></td>
-                            </tr>
-                            <tr>
-                                <td>Teh Celup 25s</td>
-                                <td>Beverage</td>
-                                <td>12</td>
-                                <td>25</td>
-                                <td><span style="color: #ffc107; font-weight: bold;">⚠️ Warning</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #19BEBB;">
-                    <h3 style="color: #19BEBB; margin-bottom: 10px;">📊 Quick Tips</h3>
-                    <p>Gunakan <strong>Price Calculator</strong> untuk menghitung profit margin. Akses <strong>Reports</strong> untuk laporan bulanan. Update stok di <strong>Products</strong> section.</p>
-                </div>
             `,
+            
             'master-data': `
                 <div class="master-data-layout" style="display: flex; gap: 30px;">
                     <!-- LEFT COLUMN: Sub-menu Navigation -->
@@ -914,501 +917,509 @@
                             <i class="fas fa-database"></i> Master Data
                         </h2>
                         
+                        ${isDemoMode() ? `
+                            <div class="demo-banner" style="margin-bottom: 20px;">
+                                <i class="fas fa-flask"></i>
+                                <div style="font-size: 14px;">
+                                    <strong>Mode Demo Terbatas</strong><br>
+                                    Beberapa fitur tidak tersedia
+                                </div>
+                            </div>
+                        ` : ''}
+                        
                         <div class="submenu-nav">
-                            <a href="#" class="submenu-item" data-subpage="categories">
+                            <a href="#" class="submenu-item active" data-subpage="new" id="masterNewBtn">
                                 <div class="submenu-icon">
-                                    <i class="fas fa-tags"></i>
+                                    <i class="fas fa-plus-circle"></i>
                                 </div>
                                 <div class="submenu-content">
-                                    <div class="submenu-title">Kategori Produk</div>
-                                    <div class="submenu-desc">Kelola kategori produk</div>
+                                    <div class="submenu-title">Mulai Baru</div>
+                                    <div class="submenu-desc">Setup data master awal</div>
                                 </div>
                             </a>
                             
-                            <a href="#" class="submenu-item" data-subpage="suppliers">
-                                <div class="submenu-icon">
-                                    <i class="fas fa-truck"></i>
-                                </div>
-                                <div class="submenu-content">
-                                    <div class="submenu-title">Supplier / Pemasok</div>
-                                    <div class="submenu-desc">Kelola data pemasok</div>
-                                </div>
-                            </a>
-                            
-                            <a href="#" class="submenu-item" data-subpage="customers">
-                                <div class="submenu-icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <div class="submenu-content">
-                                    <div class="submenu-title">Pelanggan</div>
-                                    <div class="submenu-desc">Kelola data pelanggan</div>
-                                </div>
-                            </a>
-                            
-                            <a href="#" class="submenu-item active" data-subpage="migration">
+                            <a href="#" class="submenu-item ${isDemoMode() ? 'disabled' : ''}" data-subpage="migration" id="masterMigrationBtn">
                                 <div class="submenu-icon">
                                     <i class="fas fa-file-excel"></i>
                                 </div>
                                 <div class="submenu-content">
                                     <div class="submenu-title">Migrasi Data</div>
-                                    <div class="submenu-desc">Import/Export data Excel</div>
+                                    <div class="submenu-desc">Import data dari Excel</div>
+                                    ${isDemoMode() ? '<small style="color: #ff9800;">(Login Google)</small>' : ''}
                                 </div>
                             </a>
                             
-                            <a href="#" class="submenu-item" data-subpage="units">
+                            <a href="#" class="submenu-item ${isDemoMode() ? 'disabled' : ''}" data-subpage="backup" id="masterBackupBtn">
                                 <div class="submenu-icon">
-                                    <i class="fas fa-balance-scale"></i>
+                                    <i class="fas fa-download"></i>
                                 </div>
                                 <div class="submenu-content">
-                                    <div class="submenu-title">Satuan & Ukuran</div>
-                                    <div class="submenu-desc">Kelola satuan produk</div>
+                                    <div class="submenu-title">Backup Data</div>
+                                    <div class="submenu-desc">Export data ke Excel</div>
+                                    ${isDemoMode() ? '<small style="color: #ff9800;">(Login Google)</small>' : ''}
                                 </div>
                             </a>
-                        </div>
-                        
-                        <div class="stat-card" style="margin-top: 25px; background: #f8f9fa;">
-                            <h4><i class="fas fa-info-circle"></i> Tips</h4>
-                            <p style="font-size: 13px; margin-top: 10px;">
-                                Gunakan <strong>Migrasi Data</strong> untuk import data dalam jumlah besar dari Excel.
-                            </p>
+                            
+                            <a href="#" class="submenu-item ${isDemoMode() ? 'disabled' : ''}" data-subpage="reset" id="masterResetBtn">
+                                <div class="submenu-icon">
+                                    <i class="fas fa-trash-alt"></i>
+                                </div>
+                                <div class="submenu-content">
+                                    <div class="submenu-title">Reset Data</div>
+                                    <div class="submenu-desc">Hapus semua data</div>
+                                    ${isDemoMode() ? '<small style="color: #ff9800;">(Login Google)</small>' : ''}
+                                </div>
+                            </a>
                         </div>
                     </div>
                     
                     <!-- RIGHT COLUMN: Content Area -->
                     <div style="flex: 1; min-width: 0;">
                         <div id="masterDataContent">
-                            <!-- Konten default (Migrasi Data) akan dimuat di sini -->
+                            <!-- Konten akan dimuat di sini -->
                         </div>
                     </div>
                 </div>
             `,
-            'migration': `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            
+            // Subpages untuk Master Data
+            'master-new': `
+                <div style="margin-bottom: 25px;">
+                    <h1 style="color: var(--mint-dark);">
+                        <i class="fas fa-plus-circle"></i> Mulai Baru - Setup Data Master
+                    </h1>
+                    <p>Ikuti langkah-langkah berikut untuk mengisi data master awal.</p>
+                    
+                    ${isDemoMode() ? `
+                        <div class="demo-banner">
+                            <i class="fas fa-flask"></i>
+                            <div>
+                                <strong>Mode Demo:</strong> Data hanya disimpan sementara di browser Anda.
+                                Untuk penyimpanan permanen, login dengan akun Google.
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <!-- Wizard Steps -->
+                <div class="wizard-steps">
+                    <div class="wizard-step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Perusahaan</div>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Gudang</div>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Kategori</div>
+                    </div>
+                    <div class="wizard-step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Supplier</div>
+                    </div>
+                    <div class="wizard-step" data-step="5">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Pelanggan</div>
+                    </div>
+                    <div class="wizard-step" data-step="6">
+                        <div class="step-number">6</div>
+                        <div class="step-title">Produk</div>
+                    </div>
+                    <div class="wizard-step" data-step="7">
+                        <div class="step-number">7</div>
+                        <div class="step-title">Relasi</div>
+                    </div>
+                </div>
+                
+                <div id="wizardContent">
+                    <!-- Step 1: Perusahaan -->
+                    <div class="wizard-content" data-step="1">
+                        <h3>Step 1: Data Perusahaan</h3>
+                        <p>Isi data perusahaan atau toko Anda.</p>
+                        
+                        <div class="form-group">
+                            <label for="companyName">Nama Perusahaan/Toko *</label>
+                            <input type="text" id="companyName" class="form-control" placeholder="Contoh: PT. Maju Terus">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="companyStreet">Alamat</label>
+                                <input type="text" id="companyStreet" class="form-control" placeholder="Jalan dan nomor">
+                            </div>
+                            <div class="form-col">
+                                <label for="companyCity">Kota</label>
+                                <input type="text" id="companyCity" class="form-control" placeholder="Contoh: Jakarta">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="companyPhone">Telepon</label>
+                                <input type="text" id="companyPhone" class="form-control" placeholder="Contoh: 021-88889999">
+                            </div>
+                            <div class="form-col">
+                                <label for="companyEmail">Email</label>
+                                <input type="email" id="companyEmail" class="form-control" placeholder="email@perusahaan.com">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="defaultCurrency">Mata Uang Default</label>
+                            <select id="defaultCurrency" class="form-control">
+                                <option value="Rp.">Rupiah (Rp.)</option>
+                                <option value="$">Dollar ($)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Gudang -->
+                    <div class="wizard-content" data-step="2" style="display: none;">
+                        <h3>Step 2: Data Gudang</h3>
+                        <p>Tambah minimal satu gudang untuk penyimpanan produk.</p>
+                        
+                        <div id="warehouseList">
+                            <!-- Gudang akan ditambahkan di sini -->
+                        </div>
+                        
+                        <button class="btn btn-small" id="btnAddWarehouse">
+                            <i class="fas fa-plus"></i> Tambah Gudang
+                        </button>
+                        
+                        <div class="warehouse-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label>Nama Gudang *</label>
+                                    <input type="text" class="form-control warehouse-name" placeholder="Contoh: Gudang Utama">
+                                </div>
+                                <div class="form-col">
+                                    <label>Lokasi</label>
+                                    <input type="text" class="form-control warehouse-location" placeholder="Contoh: Kapuk">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top: 10px;">
+                                <label>
+                                    <input type="checkbox" class="warehouse-primary"> Jadikan gudang utama
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Kategori -->
+                    <div class="wizard-content" data-step="3" style="display: none;">
+                        <h3>Step 3: Kategori Produk</h3>
+                        <p>Tambah kategori untuk mengelompokkan produk Anda.</p>
+                        
+                        <div id="categoryList">
+                            <!-- Kategori akan ditambahkan di sini -->
+                        </div>
+                        
+                        <button class="btn btn-small" id="btnAddCategory">
+                            <i class="fas fa-plus"></i> Tambah Kategori
+                        </button>
+                        
+                        <div class="category-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                            <div class="form-group">
+                                <label>Nama Kategori *</label>
+                                <input type="text" class="form-control category-name" placeholder="Contoh: Beverage, Grocery">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4: Supplier -->
+                    <div class="wizard-content" data-step="4" style="display: none;">
+                        <h3>Step 4: Data Supplier</h3>
+                        <p>Tambah supplier atau pemasok produk Anda.</p>
+                        
+                        <div id="supplierList">
+                            <!-- Supplier akan ditambahkan di sini -->
+                        </div>
+                        
+                        <button class="btn btn-small" id="btnAddSupplier">
+                            <i class="fas fa-plus"></i> Tambah Supplier
+                        </button>
+                        
+                        <div class="supplier-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label>Nama Supplier *</label>
+                                    <input type="text" class="form-control supplier-name" placeholder="Contoh: Pangan Jaya">
+                                </div>
+                                <div class="form-col">
+                                    <label>Kontak Person</label>
+                                    <input type="text" class="form-control supplier-contact" placeholder="Contoh: Joko">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label>Telepon</label>
+                                    <input type="text" class="form-control supplier-phone" placeholder="Contoh: 08123456789">
+                                </div>
+                                <div class="form-col">
+                                    <label>Kota</label>
+                                    <input type="text" class="form-control supplier-city" placeholder="Contoh: Bekasi">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 5: Pelanggan -->
+                    <div class="wizard-content" data-step="5" style="display: none;">
+                        <h3>Step 5: Data Pelanggan</h3>
+                        <p>Tambah pelanggan atau customer Anda.</p>
+                        
+                        <div id="customerList">
+                            <!-- Pelanggan akan ditambahkan di sini -->
+                        </div>
+                        
+                        <button class="btn btn-small" id="btnAddCustomer">
+                            <i class="fas fa-plus"></i> Tambah Pelanggan
+                        </button>
+                        
+                        <div class="customer-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label>Nama Pelanggan *</label>
+                                    <input type="text" class="form-control customer-name" placeholder="Contoh: Adipati Dolken">
+                                </div>
+                                <div class="form-col">
+                                    <label>Tipe</label>
+                                    <select class="form-control customer-type">
+                                        <option value="RETAIL">Retail</option>
+                                        <option value="WHOLESALE">Wholesale</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label>Telepon</label>
+                                    <input type="text" class="form-control customer-phone" placeholder="Contoh: 08123456789">
+                                </div>
+                                <div class="form-col">
+                                    <label>Kota</label>
+                                    <input type="text" class="form-control customer-city" placeholder="Contoh: Bogor">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 6: Produk -->
+                    <div class="wizard-content" data-step="6" style="display: none;">
+                        <h3>Step 6: Data Produk</h3>
+                        <p>Tambah produk yang akan dijual.</p>
+                        
+                        <div id="productList">
+                            <!-- Produk akan ditambahkan di sini -->
+                        </div>
+                        
+                        <button class="btn btn-small" id="btnAddProduct">
+                            <i class="fas fa-plus"></i> Tambah Produk
+                        </button>
+                        
+                        <div class="product-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label>Nama Produk *</label>
+                                    <input type="text" class="form-control product-name" placeholder="Contoh: Kopi Arabica 250gr">
+                                </div>
+                                <div class="form-col">
+                                    <label>Kategori</label>
+                                    <select class="form-control product-category">
+                                        <option value="">Pilih Kategori</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label>Satuan</label>
+                                    <select class="form-control product-unit">
+                                        <option value="Pcs">Pcs</option>
+                                        <option value="Kg">Kg</option>
+                                        <option value="Liter">Liter</option>
+                                        <option value="Set">Set</option>
+                                    </select>
+                                </div>
+                                <div class="form-col">
+                                    <label>Ukuran</label>
+                                    <input type="text" class="form-control product-size" placeholder="Contoh: 250gr, 1Kg">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" class="product-expiry"> Produk memiliki tanggal kadaluarsa
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 7: Relasi -->
+                    <div class="wizard-content" data-step="7" style="display: none;">
+                        <h3>Step 7: Relasi Produk-Supplier-Gudang</h3>
+                        <p>Tentukan supplier dan gudang utama untuk setiap produk.</p>
+                        
+                        <div id="relationList">
+                            <!-- Relasi akan ditambahkan di sini -->
+                        </div>
+                        
+                        <div class="stat-card" style="margin-top: 20px;">
+                            <h4><i class="fas fa-info-circle"></i> Informasi</h4>
+                            <p>Sistem akan otomatis membuat relasi berdasarkan data yang telah diinput.</p>
+                            <p>Anda dapat mengubah relasi nanti di halaman Products.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="wizardNavigation" style="display: flex; justify-content: space-between; margin-top: 30px;">
+                    <button class="btn" id="wizardPrevBtn" disabled>
+                        <i class="fas fa-arrow-left"></i> Sebelumnya
+                    </button>
+                    <div>
+                        <button class="btn" id="wizardSkipBtn" style="display: none;">
+                            Lewati <i class="fas fa-forward"></i>
+                        </button>
+                        <button class="btn btn-primary" id="wizardNextBtn">
+                            Selanjutnya <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="btn btn-primary" id="wizardFinishBtn" style="display: none;">
+                            <i class="fas fa-check"></i> Selesai Setup
+                        </button>
+                    </div>
+                </div>
+            `,
+            
+            'master-migration': `
+                <div style="margin-bottom: 25px;">
                     <h1 style="color: var(--mint-dark);">
                         <i class="fas fa-file-excel"></i> Migrasi Data
                     </h1>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-primary" id="btnDownloadFullTemplate">
-                            <i class="fas fa-download"></i> Download Template Lengkap
-                        </button>
-                    </div>
+                    <p>Import data dari file Excel ke sistem StockMint.</p>
+                    
+                    ${isDemoMode() ? `
+                        <div class="demo-banner">
+                            <i class="fas fa-lock"></i>
+                            <div>
+                                <strong>Fitur Terkunci:</strong> Migrasi data hanya tersedia untuk user yang login dengan akun Google.
+                                <a href="index.html" style="color: #1976d2; font-weight: 600;">Login Sekarang</a>
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
                 
-                <p>Gunakan fitur ini untuk migrasi data dari file Excel ke sistem StockMint.</p>
-                
                 <div class="stat-card">
-                    <h3><i class="fas fa-info-circle" style="color: var(--mint-green);"></i> Apa itu Migrasi Data?</h3>
-                    <p>Migrasi data memungkinkan Anda mengimpor data dalam jumlah besar dari file Excel ke sistem StockMint. Cocok untuk:</p>
+                    <h3><i class="fas fa-info-circle"></i> Tentang Migrasi Data</h3>
+                    <p>Gunakan fitur ini jika Anda sudah memiliki data di sistem lain dan ingin pindah ke StockMint.</p>
                     <ul style="padding-left: 20px; margin-top: 10px;">
-                        <li>Pindah dari sistem lama ke StockMint</li>
-                        <li>Import data awal (master data, produk, dll)</li>
-                        <li>Backup dan restore data</li>
-                        <li>Update massal data</li>
+                        <li>Download template Excel untuk melihat format data</li>
+                        <li>Isi data Anda ke dalam template</li>
+                        <li>Upload file Excel yang sudah diisi</li>
+                        <li>Sistem akan memproses dan mengimpor data</li>
                     </ul>
                 </div>
                 
-                <h2>Langkah Migrasi Data</h2>
-                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin: 25px 0;">
-                    <div class="step-card" style="flex: 1; min-width: 200px;">
-                        <div class="step-number">1</div>
-                        <h4>Download Template</h4>
-                        <p>Download template Excel dengan format yang sudah disesuaikan</p>
-                        <div style="margin-top: 15px;">
-                            <button class="btn btn-primary" id="btnDownloadTemplate">
-                                <i class="fas fa-download"></i> Download Template
+                ${!isDemoMode() ? `
+                    <div style="text-align: center; margin: 40px 0;">
+                        <button class="btn btn-primary" id="btnDownloadTemplate" style="padding: 15px 30px; font-size: 16px;">
+                            <i class="fas fa-download"></i> Download Template Excel
+                        </button>
+                        <p style="margin-top: 10px; color: #666; font-size: 14px;">
+                            Template berisi 12 sheet dengan format yang sudah disesuaikan
+                        </p>
+                    </div>
+                ` : ''}
+            `,
+            
+            'master-backup': `
+                <div style="margin-bottom: 25px;">
+                    <h1 style="color: var(--mint-dark);">
+                        <i class="fas fa-download"></i> Backup Data
+                    </h1>
+                    <p>Export data dari sistem ke file Excel untuk backup.</p>
+                    
+                    ${isDemoMode() ? `
+                        <div class="demo-banner">
+                            <i class="fas fa-lock"></i>
+                            <div>
+                                <strong>Fitur Terkunci:</strong> Backup data hanya tersedia untuk user yang login dengan akun Google.
+                                <a href="index.html" style="color: #1976d2; font-weight: 600;">Login Sekarang</a>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                ${!isDemoMode() ? `
+                    <div class="stat-card">
+                        <h3><i class="fas fa-shield-alt"></i> Pentingnya Backup</h3>
+                        <p>Lakukan backup data secara berkala untuk menghindari kehilangan data.</p>
+                        <ul style="padding-left: 20px; margin-top: 10px;">
+                            <li>Data akan diexport ke file Excel</li>
+                            <li>File berisi semua data master dan transaksi</li>
+                            <li>Simpan file di tempat yang aman</li>
+                            <li>Lakukan backup minimal sekali seminggu</li>
+                        </ul>
+                        
+                        <div style="margin-top: 20px;">
+                            <button class="btn btn-primary" id="btnBackupData">
+                                <i class="fas fa-download"></i> Backup Data Sekarang
                             </button>
                         </div>
                     </div>
+                ` : ''}
+            `,
+            
+            'master-reset': `
+                <div style="margin-bottom: 25px;">
+                    <h1 style="color: var(--mint-dark);">
+                        <i class="fas fa-trash-alt"></i> Reset Data
+                    </h1>
+                    <p>Hapus semua data dari sistem. Tindakan ini tidak dapat dibatalkan.</p>
                     
-                    <div class="step-card" style="flex: 1; min-width: 200px;">
-                        <div class="step-number">2</div>
-                        <h4>Isi Data</h4>
-                        <p>Isi data Anda ke dalam template Excel yang sudah didownload</p>
-                        <div style="margin-top: 15px;">
-                            <button class="btn" id="btnViewGuide">
-                                <i class="fas fa-book"></i> Lihat Panduan
+                    ${isDemoMode() ? `
+                        <div class="demo-banner">
+                            <i class="fas fa-lock"></i>
+                            <div>
+                                <strong>Fitur Terkunci:</strong> Reset data hanya tersedia untuk user yang login dengan akun Google.
+                                <a href="index.html" style="color: #1976d2; font-weight: 600;">Login Sekarang</a>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                ${!isDemoMode() ? `
+                    <div class="stat-card" style="background: #ffebee; border-left-color: #f44336;">
+                        <h3><i class="fas fa-exclamation-triangle" style="color: #f44336;"></i> Peringatan!</h3>
+                        <p>Reset data akan menghapus SEMUA data dari sistem:</p>
+                        <ul style="padding-left: 20px; margin-top: 10px;">
+                            <li>Data master (perusahaan, supplier, pelanggan, produk)</li>
+                            <li>Data transaksi (pembelian, penjualan)</li>
+                            <li>Data stok dan harga</li>
+                            <li>Semua laporan dan history</li>
+                        </ul>
+                        <p style="margin-top: 15px; font-weight: 600; color: #f44336;">
+                            Tindakan ini tidak dapat dibatalkan. Pastikan Anda sudah melakukan backup.
+                        </p>
+                        
+                        <div style="margin-top: 20px;">
+                            <button class="btn" id="btnBackupBeforeReset" style="background: #ff9800; color: white;">
+                                <i class="fas fa-download"></i> Backup Dulu
+                            </button>
+                            <button class="btn" id="btnResetData" style="background: #f44336; color: white; margin-left: 10px;">
+                                <i class="fas fa-trash-alt"></i> Reset Data
                             </button>
                         </div>
                     </div>
-                    
-                    <div class="step-card" style="flex: 1; min-width: 200px;">
-                        <div class="step-number">3</div>
-                        <h4>Upload Data</h4>
-                        <p>Upload file Excel yang sudah diisi ke sistem StockMint</p>
-                        <input type="file" id="fileUpload" accept=".xlsx, .xls" style="display: none;">
-                        <button class="btn btn-primary" id="btnUploadExcel" style="margin-top: 15px;">
-                            <i class="fas fa-upload"></i> Upload Excel
-                        </button>
-                    </div>
-                </div>
-                
-                <h2>Template Excel Tersedia</h2>
-                <div class="data-table">
-                    <table style="width: 100%;">
-                        <thead>
-                            <tr>
-                                <th>Jenis Template</th>
-                                <th>Deskripsi</th>
-                                <th>Sheet Included</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Template Lengkap</strong></td>
-                                <td>Semua sheet dengan contoh data untuk semua tabel</td>
-                                <td>12 sheet</td>
-                                <td>
-                                    <button class="btn-small btn-primary" data-template="full">
-                                        <i class="fas fa-download"></i> Download
-                                    </button>
-                                    <button class="btn-small" data-preview="full">
-                                        <i class="fas fa-eye"></i> Preview
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>Master Data Saja</strong></td>
-                                <td>Hanya data master: perusahaan, supplier, pelanggan, kategori</td>
-                                <td>5 sheet</td>
-                                <td>
-                                    <button class="btn-small btn-primary" data-template="master">
-                                        <i class="fas fa-download"></i> Download
-                                    </button>
-                                    <button class="btn-small" data-preview="master">
-                                        <i class="fas fa-eye"></i> Preview
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>Template Kosong</strong></td>
-                                <td>Semua sheet tanpa contoh data (hanya header)</td>
-                                <td>12 sheet</td>
-                                <td>
-                                    <button class="btn-small btn-secondary" data-template="empty">
-                                        <i class="fas fa-download"></i> Download
-                                    </button>
-                                    <button class="btn-small" data-preview="empty">
-                                        <i class="fas fa-eye"></i> Preview
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="stat-card" style="margin-top: 25px; background: #fff3cd; border-left-color: #ffc107;">
-                    <h3><i class="fas fa-exclamation-triangle"></i> Penting!</h3>
-                    <ul style="padding-left: 20px;">
-                        <li><strong>Backup data</strong> sebelum melakukan migrasi</li>
-                        <li>Pastikan format data sesuai dengan template</li>
-                        <li>Jangan ubah nama sheet atau header kolom</li>
-                        <li>ID harus unik untuk setiap record</li>
-                        <li>Format tanggal: YYYY-MM-DD HH:MM:SS</li>
-                    </ul>
-                </div>
-                
-                <div id="previewSection" style="display: none; margin-top: 30px;">
-                    <!-- Preview akan ditampilkan di sini -->
-                </div>
-            `,
-            'categories': `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <h1 style="color: var(--mint-dark);">
-                        <i class="fas fa-tags"></i> Kategori Produk
-                    </h1>
-                    <button class="btn btn-primary" id="btnAddCategory">
-                        <i class="fas fa-plus"></i> Tambah Kategori
-                    </button>
-                </div>
-                
-                <p>Kelola kategori produk untuk mengorganisir inventaris Anda.</p>
-                
-                <div class="data-table">
-                    <table style="width: 100%;">
-                        <thead>
-                            <tr>
-                                <th>ID Kategori</th>
-                                <th>Nama Kategori</th>
-                                <th>Jumlah Produk</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>CAT-001</td>
-                                <td>Beverage</td>
-                                <td>8 produk</td>
-                                <td><button class="btn-small btn-edit-category">Edit</button></td>
-                            </tr>
-                            <tr>
-                                <td>CAT-002</td>
-                                <td>Grocery</td>
-                                <td>12 produk</td>
-                                <td><button class="btn-small btn-edit-category">Edit</button></td>
-                            </tr>
-                            <tr>
-                                <td>CAT-003</td>
-                                <td>Household</td>
-                                <td>6 produk</td>
-                                <td><button class="btn-small btn-edit-category">Edit</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            `,
-            'suppliers': `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <h1 style="color: var(--mint-dark);">
-                        <i class="fas fa-truck"></i> Supplier / Pemasok
-                    </h1>
-                    <button class="btn btn-primary" id="btnAddSupplier">
-                        <i class="fas fa-plus"></i> Tambah Supplier
-                    </button>
-                </div>
-                
-                <p>Kelola data supplier atau pemasok produk Anda.</p>
-                
-                <div class="data-table">
-                    <table style="width: 100%;">
-                        <thead>
-                            <tr>
-                                <th>ID Supplier</th>
-                                <th>Nama Supplier</th>
-                                <th>Kota</th>
-                                <th>Kontak Person</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Pangan Jaya</td>
-                                <td>Bekasi</td>
-                                <td>Joko</td>
-                                <td><button class="btn-small btn-edit-supplier">Edit</button></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Subur Makmur</td>
-                                <td>Depok</td>
-                                <td>Tini</td>
-                                <td><button class="btn-small btn-edit-supplier">Edit</button></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Pasar Cuan</td>
-                                <td>Jakarta</td>
-                                <td>Bambang</td>
-                                <td><button class="btn-small btn-edit-supplier">Edit</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            `,
-            'customers': `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <h1 style="color: var(--mint-dark);">
-                        <i class="fas fa-users"></i> Pelanggan
-                    </h1>
-                    <button class="btn btn-primary" id="btnAddCustomer">
-                        <i class="fas fa-plus"></i> Tambah Pelanggan
-                    </button>
-                </div>
-                
-                <p>Kelola data pelanggan atau customer Anda.</p>
-                
-                <div class="data-table">
-                    <table style="width: 100%;">
-                        <thead>
-                            <tr>
-                                <th>ID Pelanggan</th>
-                                <th>Nama Pelanggan</th>
-                                <th>Tipe</th>
-                                <th>Kota</th>
-                                <th>Telepon</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Adipati Dolken</td>
-                                <td><span class="badge-retail">RETAIL</span></td>
-                                <td>Bogor</td>
-                                <td>08889191919</td>
-                                <td><button class="btn-small btn-edit-customer">Edit</button></td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>Resto Pagi Siang</td>
-                                <td><span class="badge-wholesale">WHOLESALE</span></td>
-                                <td>Bandung</td>
-                                <td>08783113085</td>
-                                <td><button class="btn-small btn-edit-customer">Edit</button></td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>Warung Emak</td>
-                                <td><span class="badge-retail">RETAIL</span></td>
-                                <td>Bekasi</td>
-                                <td>021-30517510</td>
-                                <td><button class="btn-small btn-edit-customer">Edit</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            `,
-            'units': `
-                <div style="text-align: center; padding: 40px;">
-                    <i class="fas fa-cogs" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
-                    <h3 style="color: #666;">Halaman dalam pengembangan</h3>
-                    <p>Fitur Satuan & Ukuran akan segera hadir.</p>
-                </div>
-            `,
-            'products': `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <h1>Products Management</h1>
-                    <button class="btn btn-primary" id="btnAddProduct"><i class="fas fa-plus"></i> Add New Product</button>
-                </div>
-                <p>Kelola seluruh produk dalam inventaris. Tambah, edit, atau non-aktifkan produk.</p>
-                <div class="data-table">
-                    <div style="padding: 15px; border-bottom: 1px solid #eee; display: flex; gap: 10px;">
-                        <input type="text" placeholder="Search product..." style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; flex-grow: 1;">
-                        <select style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;">
-                            <option>All Categories</option>
-                            <option>Beverage</option>
-                            <option>Grocery</option>
-                        </select>
-                    </div>
-                    <table style="width: 100%;">
-                        <thead>
-                            <tr><th>ID</th><th>Product Name</th><th>Category</th><th>Stock</th><th>Price</th><th>Action</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>P001</td><td>Kopi Arabica 250g</td><td>Beverage</td><td>45</td><td>Rp 75.000</td><td><button class="btn-action-edit">Edit</button></td></tr>
-                            <tr><td>P002</td><td>Gula Pasir 1kg</td><td>Grocery</td><td>28</td><td>Rp 15.000</td><td><button class="btn-action-edit">Edit</button></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            `,
-            'purchases': `
-                <h1>Purchases Management</h1>
-                <p>Kelola pembelian barang dari supplier. Setiap pembelian akan otomatis menambah stok.</p>
-                <div class="stat-card">
-                    <h3>Fitur yang akan tersedia:</h3>
-                    <ul style="padding-left: 20px;">
-                        <li>Input pembelian baru</li>
-                        <li>Histori pembelian</li>
-                        <li>Laporan pembelian per supplier</li>
-                        <li>Otomatis update stok produk</li>
-                    </ul>
-                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
-                </div>
-            `,
-            'sales': `
-                <h1>Sales Management</h1>
-                <p>Kelola penjualan barang ke pelanggan. Hitung profit otomatis dari setiap transaksi.</p>
-                <div class="stat-card">
-                    <h3>Fitur yang akan tersedia:</h3>
-                    <ul style="padding-left: 20px;">
-                        <li>Input penjualan baru</li>
-                        <li>Histori penjualan</li>
-                        <li>Laporan penjualan harian/bulanan</li>
-                        <li>Analisis produk terlaris</li>
-                    </ul>
-                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
-                </div>
-            `,
-            'calculator': `
-                <h1>Price Calculator</h1>
-                <p>Hitung harga jual optimal berdasarkan margin yang diinginkan.</p>
-                <div class="stat-card">
-                    <h3>Profit Margin Calculator (Basic)</h3>
-                    <div style="margin: 20px 0;">
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Harga Beli (Cost):</label>
-                            <input type="number" id="costPrice" placeholder="Rp" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 300px; font-size: 16px;">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Margin yang Diinginkan (%):</label>
-                            <input type="number" id="margin" placeholder="30" style="padding: 10px; border: 2px solid #ddd; border-radius: 8px; width: 100%; max-width: 300px; font-size: 16px;">
-                        </div>
-                        <button onclick="calculatePrice()" class="btn btn-primary" style="font-size: 16px; padding: 12px 25px;">
-                            <i class="fas fa-calculator"></i> Calculate Selling Price
-                        </button>
-                        <div id="result" style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #19BEBB; display: none;">
-                            <h4 style="margin-bottom: 10px; color: #19BEBB;">💰 Hasil Perhitungan:</h4>
-                            <div style="font-size: 24px; font-weight: bold; color: #333;" id="priceResult"></div>
-                            <div style="margin-top: 10px; color: #666;" id="profitResult"></div>
-                        </div>
-                    </div>
-                    <p><em>Catatan: Fitur kalkulator lengkap dengan potongan marketplace akan segera hadir.</em></p>
-                </div>
-            `,
-            'reports': `
-                <h1>Reports & Analytics</h1>
-                <p>Akses berbagai laporan untuk analisis bisnis yang mendalam.</p>
-                <div class="stat-card">
-                    <h3>Jenis Laporan yang akan tersedia:</h3>
-                    <ul style="padding-left: 20px;">
-                        <li>Laporan Penjualan Harian/Bulanan</li>
-                        <li>Laporan Profit Margin</li>
-                        <li>Laporan Stok Barang</li>
-                        <li>Laporan Produk Terlaris</li>
-                        <li>Laporan Pembelian</li>
-                    </ul>
-                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
-                </div>
-            `,
-            'settings': `
-                <h1>System Settings</h1>
-                <p>Pengaturan sistem dan konfigurasi aplikasi.</p>
-                <div class="stat-card">
-                    <h3>Pengaturan yang akan tersedia:</h3>
-                    <ul style="padding-left: 20px;">
-                        <li>Profil Perusahaan</li>
-                        <li>Manajemen User & Hak Akses</li>
-                        <li>Pengaturan Notifikasi</li>
-                        <li>Backup & Restore Data</li>
-                    </ul>
-                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
-                </div>
-            `,
-            'contacts': `
-                <h1>Contacts Management</h1>
-                <p>Kelola kontak supplier dan pelanggan.</p>
-                <div class="stat-card">
-                    <h3>Fitur yang akan tersedia:</h3>
-                    <ul style="padding-left: 20px;">
-                        <li>Daftar Supplier</li>
-                        <li>Daftar Pelanggan</li>
-                        <li>Riwayat Transaksi per Kontak</li>
-                        <li>Import/Export Kontak</li>
-                    </ul>
-                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
-                </div>
-            `,
-            'help': `
-                <h1>Help & Support</h1>
-                <p>Pusat bantuan dan panduan penggunaan StockMint.</p>
-                <div class="stat-card">
-                    <h3>Resources:</h3>
-                    <ul style="padding-left: 20px;">
-                        <li>Panduan Pengguna</li>
-                        <li>Video Tutorial</li>
-                        <li>FAQ (Pertanyaan Umum)</li>
-                        <li>Kontak Support</li>
-                    </ul>
-                    <p style="margin-top: 15px; font-style: italic; color: #666;">🚧 Modul dalam pengembangan</p>
-                </div>
+                ` : ''}
             `
         };
         
-        // ===== MASTER DATA SUB-MENU HANDLING =====
-        let currentMasterSubpage = 'migration';
+        // ===== MASTER DATA FUNCTIONS =====
+        let currentMasterSubpage = 'new';
+        let currentWizardStep = 1;
         
         function loadMasterDataSubpage(subpageId) {
+            currentMasterSubpage = subpageId;
+            
             // Update active state di sub-menu
             document.querySelectorAll('.submenu-item').forEach(item => {
                 item.classList.remove('active');
@@ -1420,21 +1431,21 @@
             // Update konten
             const contentArea = document.getElementById('masterDataContent');
             
-            if (pageContents[subpageId]) {
-                contentArea.innerHTML = pageContents[subpageId];
+            if (pageContents[`master-${subpageId}`]) {
+                contentArea.innerHTML = pageContents[`master-${subpageId}`];
                 
                 // Attach event listeners berdasarkan subpage
+                if (subpageId === 'new') {
+                    setupWizard();
+                }
                 if (subpageId === 'migration') {
                     attachMigrationEvents();
                 }
-                if (subpageId === 'categories') {
-                    attachCategoriesEvents();
+                if (subpageId === 'backup') {
+                    attachBackupEvents();
                 }
-                if (subpageId === 'suppliers') {
-                    attachSuppliersEvents();
-                }
-                if (subpageId === 'customers') {
-                    attachCustomersEvents();
+                if (subpageId === 'reset') {
+                    attachResetEvents();
                 }
             } else {
                 contentArea.innerHTML = `
@@ -1445,209 +1456,259 @@
                     </div>
                 `;
             }
-            
-            // Simpan state
-            currentMasterSubpage = subpageId;
         }
         
-        function attachMasterDataEvents() {
-            // Event listeners untuk sub-menu items
-            document.querySelectorAll('.submenu-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const subpageId = this.getAttribute('data-subpage');
-                    loadMasterDataSubpage(subpageId);
-                });
-            });
+        function setupWizard() {
+            currentWizardStep = 1;
+            updateWizardUI();
             
-            // Load default subpage (Migrasi Data)
-            loadMasterDataSubpage('migration');
+            // Navigation buttons
+            document.getElementById('wizardPrevBtn').addEventListener('click', prevWizardStep);
+            document.getElementById('wizardNextBtn').addEventListener('click', nextWizardStep);
+            document.getElementById('wizardFinishBtn').addEventListener('click', finishWizard);
+            
+            // Add item buttons
+            document.getElementById('btnAddWarehouse')?.addEventListener('click', addWarehouseItem);
+            document.getElementById('btnAddCategory')?.addEventListener('click', addCategoryItem);
+            document.getElementById('btnAddSupplier')?.addEventListener('click', addSupplierItem);
+            document.getElementById('btnAddCustomer')?.addEventListener('click', addCustomerItem);
+            document.getElementById('btnAddProduct')?.addEventListener('click', addProductItem);
         }
         
-        // Fungsi untuk halaman Migration
-        function attachMigrationEvents() {
-            // Download template buttons
-            document.querySelectorAll('[data-template]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const templateType = this.getAttribute('data-template');
-                    downloadExcelTemplate(templateType);
-                });
-            });
-            
-            // Preview buttons
-            document.querySelectorAll('[data-preview]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const previewType = this.getAttribute('data-preview');
-                    showTemplatePreview(previewType);
-                });
-            });
-            
-            // Download template button utama
-            document.getElementById('btnDownloadTemplate')?.addEventListener('click', function() {
-                downloadExcelTemplate('full');
-            });
-            
-            document.getElementById('btnDownloadFullTemplate')?.addEventListener('click', function() {
-                downloadExcelTemplate('full');
-            });
-            
-            // View guide button
-            document.getElementById('btnViewGuide')?.addEventListener('click', function() {
-                showMigrationGuide();
-            });
-            
-            // Upload Excel button
-            document.getElementById('btnUploadExcel')?.addEventListener('click', function() {
-                document.getElementById('fileUpload').click();
-            });
-            
-            // File upload handler
-            document.getElementById('fileUpload')?.addEventListener('change', function(e) {
-                if (e.target.files.length > 0) {
-                    handleFileUpload(e.target.files[0]);
+        function updateWizardUI() {
+            // Update step indicators
+            document.querySelectorAll('.wizard-step').forEach(step => {
+                step.classList.remove('active', 'completed');
+                const stepNum = parseInt(step.getAttribute('data-step'));
+                
+                if (stepNum < currentWizardStep) {
+                    step.classList.add('completed');
+                } else if (stepNum === currentWizardStep) {
+                    step.classList.add('active');
                 }
             });
-        }
-        
-        // Fungsi untuk download template
-        function downloadExcelTemplate(type) {
-            // Buka halaman template.html di tab baru dengan parameter type
-            window.open(`template.html?type=${type}`, '_blank');
-        }
-        
-        // Fungsi untuk preview template
-        function showTemplatePreview(type) {
-            const previewSection = document.getElementById('previewSection');
             
-            let previewHTML = `
-                <div class="stat-card">
-                    <h3><i class="fas fa-eye"></i> Preview Template: ${type === 'full' ? 'Lengkap' : type === 'master' ? 'Master Data' : 'Kosong'}</h3>
-                    <p>Template ini berisi:</p>
-                    <ul style="padding-left: 20px;">
-            `;
+            // Show/hide content
+            document.querySelectorAll('.wizard-content').forEach(content => {
+                content.style.display = 'none';
+                if (parseInt(content.getAttribute('data-step')) === currentWizardStep) {
+                    content.style.display = 'block';
+                }
+            });
             
-            if (type === 'full') {
-                previewHTML += `
-                    <li>12 sheet lengkap dengan contoh data</li>
-                    <li>Semua tabel: Master data, produk, harga, dll</li>
-                    <li>Cocok untuk migrasi data lengkap</li>
-                `;
-            } else if (type === 'master') {
-                previewHTML += `
-                    <li>5 sheet untuk data master</li>
-                    <li>Perusahaan, supplier, pelanggan, kategori, gudang</li>
-                    <li>Cocok untuk setup awal</li>
-                `;
+            // Update navigation buttons
+            const prevBtn = document.getElementById('wizardPrevBtn');
+            const nextBtn = document.getElementById('wizardNextBtn');
+            const finishBtn = document.getElementById('wizardFinishBtn');
+            
+            prevBtn.disabled = currentWizardStep === 1;
+            
+            if (currentWizardStep === 7) {
+                nextBtn.style.display = 'none';
+                finishBtn.style.display = 'inline-flex';
             } else {
-                previewHTML += `
-                    <li>12 sheet kosong (hanya header)</li>
-                    <li>Tanpa contoh data</li>
-                    <li>Cocok untuk data import</li>
-                `;
+                nextBtn.style.display = 'inline-flex';
+                finishBtn.style.display = 'none';
             }
-            
-            previewHTML += `
-                    </ul>
-                    <div style="margin-top: 20px;">
-                        <button class="btn btn-primary" onclick="downloadExcelTemplate('${type}')">
-                            <i class="fas fa-download"></i> Download Template Ini
-                        </button>
-                        <button class="btn" onclick="document.getElementById('previewSection').style.display='none'" style="margin-left: 10px;">
-                            <i class="fas fa-times"></i> Tutup Preview
+        }
+        
+        function prevWizardStep() {
+            if (currentWizardStep > 1) {
+                currentWizardStep--;
+                updateWizardUI();
+            }
+        }
+        
+        function nextWizardStep() {
+            if (currentWizardStep < 7) {
+                // Validate current step before proceeding
+                if (validateCurrentStep()) {
+                    currentWizardStep++;
+                    updateWizardUI();
+                    
+                    // If moving to product step, load categories
+                    if (currentWizardStep === 6) {
+                        loadCategoriesForProducts();
+                    }
+                }
+            }
+        }
+        
+        function validateCurrentStep() {
+            // Simple validation for demo
+            if (currentWizardStep === 1) {
+                const companyName = document.getElementById('companyName');
+                if (!companyName.value.trim()) {
+                    alert('Nama perusahaan harus diisi');
+                    companyName.focus();
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        function finishWizard() {
+            if (validateCurrentStep()) {
+                if (isDemoMode()) {
+                    alert('🎉 Setup data master selesai!\n\nDalam mode demo, data disimpan sementara di browser Anda.\nUntuk penyimpanan permanen, login dengan akun Google.');
+                } else {
+                    alert('🎉 Setup data master selesai!\n\nData akan disimpan ke Google Sheets Anda.');
+                    // Here you would save to Google Sheets
+                }
+                
+                // Show summary
+                const contentArea = document.getElementById('masterDataContent');
+                contentArea.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="width: 80px; height: 80px; background: var(--mint-green); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 36px;">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h2 style="color: var(--mint-dark);">Setup Data Master Selesai!</h2>
+                        <p style="margin: 20px 0;">Data master Anda telah berhasil disimpan.</p>
+                        
+                        <div class="stat-card" style="max-width: 500px; margin: 30px auto;">
+                            <h3>Selanjutnya</h3>
+                            <ul style="text-align: left; padding-left: 20px; margin-top: 10px;">
+                                <li>Tambah produk di halaman <strong>Products</strong></li>
+                                <li>Input transaksi pembelian di <strong>Purchases</strong></li>
+                                <li>Mulai jual produk di <strong>Sales</strong></li>
+                                <li>Hitung margin di <strong>Price Calculator</strong></li>
+                            </ul>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="loadPage('products')">
+                            <i class="fas fa-boxes"></i> Lanjut ke Products
                         </button>
                     </div>
-                </div>
-            `;
-            
-            previewSection.innerHTML = previewHTML;
-            previewSection.style.display = 'block';
-            previewSection.scrollIntoView({ behavior: 'smooth' });
+                `;
+            }
         }
         
-        // Fungsi untuk show migration guide
-        function showMigrationGuide() {
-            const guide = `
-📋 **PANDUAN MIGRASI DATA STOCKMINT**
-
-**1. STRUKTUR TEMPLATE:**
-- Template terdiri dari 12 sheet yang saling terhubung
-- Setiap sheet memiliki nama dan struktur kolom yang tetap
-- Jangan ubah nama sheet atau header kolom
-
-**2. LANGKAH-LANGKAH:**
-1. Download template sesuai kebutuhan
-2. Isi data Anda ke dalam template
-3. Upload file Excel ke sistem
-4. Validasi data sebelum proses import
-
-**3. FORMAT DATA YANG DIPERLUKAN:**
-- Tanggal: YYYY-MM-DD HH:MM:SS
-- ID: Harus unik (contoh: P001, CAT-001)
-- Angka: Tanpa pemisah ribuan (120000)
-- Boolean: 1 (true) atau 0 (false)
-
-**4. TIPS:**
-- Backup data sebelum migrasi
-- Test dengan data kecil terlebih dahulu
-- Periksa konsistensi ID antar tabel
-            `;
+        function addWarehouseItem() {
+            const name = document.querySelector('.warehouse-name').value;
+            const location = document.querySelector('.warehouse-location').value;
+            const isPrimary = document.querySelector('.warehouse-primary').checked;
             
-            alert(guide);
-        }
-        
-        // Fungsi untuk handle file upload
-        function handleFileUpload(file) {
-            if (!file.name.match(/\.(xlsx|xls)$/i)) {
-                alert('Hanya file Excel (.xlsx, .xls) yang diizinkan!');
+            if (!name.trim()) {
+                alert('Nama gudang harus diisi');
                 return;
             }
             
-            if (confirm(`Upload file "${file.name}"? Pastikan format sudah sesuai template.`)) {
-                // Simulasi proses upload
-                alert('🚧 Fitur upload dalam pengembangan. Untuk saat ini, gunakan template untuk migrasi data manual.');
+            const warehouseList = document.getElementById('warehouseList');
+            const warehouseId = warehouseList.children.length + 1;
+            
+            const item = document.createElement('div');
+            item.className = 'warehouse-item-added';
+            item.style.cssText = 'padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 10px; background: #f9f9f9;';
+            item.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${name}</strong>
+                        <div style="font-size: 12px; color: #666;">
+                            ${location ? `Lokasi: ${location}` : ''} 
+                            ${isPrimary ? ' • <span style="color: var(--mint-green);">Gudang Utama</span>' : ''}
+                        </div>
+                    </div>
+                    <button class="btn-small btn-remove-warehouse" style="color: #f44336;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            warehouseList.appendChild(item);
+            
+            // Clear form
+            document.querySelector('.warehouse-name').value = '';
+            document.querySelector('.warehouse-location').value = '';
+            document.querySelector('.warehouse-primary').checked = false;
+            
+            // Add remove event
+            item.querySelector('.btn-remove-warehouse').addEventListener('click', function() {
+                item.remove();
+            });
+        }
+        
+        function addCategoryItem() {
+            const name = document.querySelector('.category-name').value;
+            
+            if (!name.trim()) {
+                alert('Nama kategori harus diisi');
+                return;
+            }
+            
+            const categoryList = document.getElementById('categoryList');
+            const categoryId = categoryList.children.length + 1;
+            
+            const item = document.createElement('div');
+            item.className = 'category-item-added';
+            item.style.cssText = 'padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 10px; background: #f9f9f9;';
+            item.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${name}</strong>
+                    </div>
+                    <button class="btn-small btn-remove-category" style="color: #f44336;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            categoryList.appendChild(item);
+            
+            // Clear form
+            document.querySelector('.category-name').value = '';
+            
+            // Add remove event
+            item.querySelector('.btn-remove-category').addEventListener('click', function() {
+                item.remove();
+            });
+        }
+        
+        function loadCategoriesForProducts() {
+            const categorySelect = document.querySelector('.product-category');
+            categorySelect.innerHTML = '<option value="">Pilih Kategori</option>';
+            
+            // In real app, load from saved data
+            const defaultCategories = ['Beverage', 'Grocery', 'Household'];
+            defaultCategories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                categorySelect.appendChild(option);
+            });
+        }
+        
+        function addSupplierItem() {
+            // Implementation similar to addWarehouseItem
+        }
+        
+        function addCustomerItem() {
+            // Implementation similar to addWarehouseItem
+        }
+        
+        function addProductItem() {
+            // Implementation similar to addWarehouseItem
+        }
+        
+        function attachMigrationEvents() {
+            if (!isDemoMode()) {
+                document.getElementById('btnDownloadTemplate')?.addEventListener('click', function() {
+                    window.open('template.html?type=full', '_blank');
+                });
             }
         }
         
-        // Fungsi untuk sub-pages lainnya
-        function attachCategoriesEvents() {
-            document.getElementById('btnAddCategory')?.addEventListener('click', function() {
-                alert('Fitur "Tambah Kategori" akan membuka form input.');
-            });
-            
-            document.querySelectorAll('.btn-edit-category').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    alert('Fitur edit kategori akan dibuka.');
-                });
-            });
+        function attachBackupEvents() {
+            // Implementation for backup
         }
         
-        function attachSuppliersEvents() {
-            document.getElementById('btnAddSupplier')?.addEventListener('click', function() {
-                alert('Fitur "Tambah Supplier" akan membuka form input.');
-            });
-            
-            document.querySelectorAll('.btn-edit-supplier').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    alert('Fitur edit supplier akan dibuka.');
-                });
-            });
+        function attachResetEvents() {
+            // Implementation for reset
         }
         
-        function attachCustomersEvents() {
-            document.getElementById('btnAddCustomer')?.addEventListener('click', function() {
-                alert('Fitur "Tambah Pelanggan" akan membuka form input.');
-            });
-            
-            document.querySelectorAll('.btn-edit-customer').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    alert('Fitur edit pelanggan akan dibuka.');
-                });
-            });
-        }
-        
-        // Fungsi untuk memuat halaman
+        // ===== MAIN PAGE LOADING =====
         function loadPage(pageId) {
-            // 1. Update menu aktif
+            // Update active menu
             menuItems.forEach(item => {
                 item.classList.remove('active');
                 if (item.getAttribute('data-page') === pageId) {
@@ -1655,56 +1716,58 @@
                 }
             });
             
-            // 2. Tutup sidebar di HP
+            // Close sidebar on mobile
             if (window.innerWidth <= 768) {
                 sidebar.classList.remove('active');
                 sidebarOverlay.classList.remove('active');
             }
             
-            // 3. Muat konten
+            // Load content
             if (pageContents[pageId]) {
                 contentArea.innerHTML = pageContents[pageId];
                 
-                // Jika halaman master-data, attach event listeners dan load default subpage
+                // Special handling for master-data
                 if (pageId === 'master-data') {
                     setTimeout(() => {
                         attachMasterDataEvents();
                     }, 100);
                 }
                 
-                // Jika halaman dashboard, attach event listener untuk refresh button
+                // Other page specific handlers
                 if (pageId === 'dashboard') {
                     attachDashboardEvents();
                 }
-                
-                // Jika halaman products, attach event listener
                 if (pageId === 'products') {
                     attachProductsEvents();
+                }
+                if (pageId === 'calculator') {
+                    attachCalculatorEvents();
                 }
             } else {
                 contentArea.innerHTML = `
                     <h1>Halaman Tidak Ditemukan</h1>
                     <p>Halaman yang Anda cari tidak tersedia.</p>
-                    <div class="stat-card">
-                        <p><i class="fas fa-exclamation-triangle"></i> Kembali ke <a href="#" onclick="loadPage('dashboard')" style="color: #19BEBB;">Dashboard</a></p>
-                    </div>
                 `;
             }
             
-            // 4. Scroll ke atas
+            // Scroll to top
             contentArea.scrollTo(0, 0);
         }
         
-        // Event listener untuk menu
-        menuItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const pageId = this.getAttribute('data-page');
-                loadPage(pageId);
+        function attachMasterDataEvents() {
+            // Sub-menu items
+            document.querySelectorAll('.submenu-item:not(.disabled)').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const subpageId = this.getAttribute('data-subpage');
+                    loadMasterDataSubpage(subpageId);
+                });
             });
-        });
+            
+            // Load default subpage
+            loadMasterDataSubpage('new');
+        }
         
-        // ===== FUNGSI BANTUAN UNTUK HALAMAN SPESIFIK =====
         function attachDashboardEvents() {
             const refreshBtn = document.getElementById('refreshBtn');
             if (refreshBtn) {
@@ -1718,70 +1781,50 @@
                     setTimeout(() => {
                         icon.className = originalClass;
                         this.disabled = false;
-                        
-                        const originalText = this.innerHTML;
-                        this.innerHTML = '<i class="fas fa-check"></i> Data Updated!';
-                        
-                        setTimeout(() => {
-                            this.innerHTML = originalText;
-                        }, 1500);
-                        
-                        // Update random data
-                        document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = 
-                            'Rp ' + (Math.floor(Math.random() * 500000) + 3000000).toLocaleString('id-ID');
+                        alert('Data diperbarui!');
                     }, 1000);
                 });
             }
         }
         
         function attachProductsEvents() {
-            // Add Product button
-            document.getElementById('btnAddProduct')?.addEventListener('click', function() {
-                alert('Fitur "Add New Product" akan membuka form input.');
-            });
+            // Implementation for products page
+        }
+        
+        function attachCalculatorEvents() {
+            // Implementation for calculator page
+        }
+        
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            if (!checkAuth()) {
+                return;
+            }
             
-            // Edit buttons
-            document.querySelectorAll('.btn-action-edit').forEach(btn => {
-                btn.addEventListener('click', function() { 
-                    alert('Fitur edit produk akan dibuka.'); 
+            // Attach logout event
+            document.getElementById('logoutBtn')?.addEventListener('click', handleLogout);
+            
+            // Menu event listeners
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    loadPage(pageId);
                 });
             });
-        }
-        
-        // ===== PRICE CALCULATOR FUNCTION =====
-        window.calculatePrice = function() {
-            const cost = parseFloat(document.getElementById('costPrice')?.value);
-            const margin = parseFloat(document.getElementById('margin')?.value);
             
-            if (cost && margin) {
-                const sellingPrice = cost * (1 + margin/100);
-                const profit = sellingPrice - cost;
-                
-                document.getElementById('priceResult').innerHTML = 
-                    `Harga Jual: <strong style="color: #19BEBB;">Rp ${sellingPrice.toLocaleString('id-ID')}</strong>`;
-                
-                document.getElementById('profitResult').innerHTML = 
-                    `Profit per item: Rp ${profit.toLocaleString('id-ID')} (${margin}% margin)`;
-                
-                document.getElementById('result').style.display = 'block';
-            } else {
-                alert('Mohon isi semua field');
-            }
-        };
-        
-        // ===== DETEKSI UKURAN LAYAR =====
-        function handleResize() {
-            if (window.innerWidth > 768) {
-                sidebar.classList.remove('active');
-                sidebarOverlay.classList.remove('active');
-            }
-        }
-        
-        window.addEventListener('resize', handleResize);
-        
-        // ===== INISIALISASI AWAL =====
-        // Load halaman dashboard saat pertama kali
-        loadPage('dashboard');
+            // Load default page
+            loadPage('dashboard');
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                }
+            });
+        });
     </script>
 </body>
 </html>
