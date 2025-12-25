@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockMint - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
         :root {
             --mint-green: #19BEBB;
@@ -509,6 +510,34 @@
             flex: 1;
         }
         
+        /* ===== ITEM LIST STYLING ===== */
+        .item-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+            padding-right: 10px;
+        }
+        
+        .item-list-item {
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .item-list-item .item-info {
+            flex: 1;
+        }
+        
+        .item-list-item .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
         /* ===== DEMO BANNER ===== */
         .demo-banner {
             background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
@@ -523,6 +552,38 @@
         
         .demo-banner i {
             font-size: 24px;
+        }
+        
+        /* ===== UPLOAD AREA ===== */
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--mint-green);
+            background: #f0f9ff;
+        }
+        
+        .upload-area i {
+            font-size: 48px;
+            color: var(--mint-green);
+            margin-bottom: 15px;
+        }
+        
+        .file-preview {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         /* ===== RESPONSIVE DESIGN ===== */
@@ -841,6 +902,28 @@
             sidebarOverlay.classList.remove('active');
         });
         
+        // ===== DATA STORAGE =====
+        const masterData = {
+            company: null,
+            warehouses: [],
+            categories: [],
+            suppliers: [],
+            customers: [],
+            products: [],
+            relations: []
+        };
+        
+        function saveMasterData() {
+            localStorage.setItem('stockmint_master_data', JSON.stringify(masterData));
+        }
+        
+        function loadMasterData() {
+            const saved = localStorage.getItem('stockmint_master_data');
+            if (saved) {
+                Object.assign(masterData, JSON.parse(saved));
+            }
+        }
+        
         // ===== PAGE CONTENTS =====
         const pageContents = {
             'dashboard': `
@@ -867,22 +950,22 @@
                 <div class="stats-container">
                     <div class="stat-card">
                         <h3>Total Products</h3>
-                        <div class="stat-value">${isDemoMode() ? '12' : '142'}</div>
+                        <div class="stat-value">${masterData.products.length || (isDemoMode() ? '12' : '0')}</div>
                         <div class="stat-change">↑ 12% from last month</div>
                     </div>
                     <div class="stat-card">
                         <h3>Today's Sales</h3>
-                        <div class="stat-value">${isDemoMode() ? 'Rp 850.000' : 'Rp 3.250.000'}</div>
+                        <div class="stat-value">${isDemoMode() ? 'Rp 850.000' : 'Rp 0'}</div>
                         <div class="stat-change">↑ 8% from yesterday</div>
                     </div>
                     <div class="stat-card">
                         <h3>Low Stock Alert</h3>
-                        <div class="stat-value">${isDemoMode() ? '2 Items' : '8 Items'}</div>
+                        <div class="stat-value">${isDemoMode() ? '2 Items' : '0 Items'}</div>
                         <div class="stat-change danger">⚠️ Need restock</div>
                     </div>
                     <div class="stat-card">
                         <h3>Monthly Profit</h3>
-                        <div class="stat-value">${isDemoMode() ? 'Rp 12.500.000' : 'Rp 48.500.000'}</div>
+                        <div class="stat-value">${isDemoMode() ? 'Rp 12.500.000' : 'Rp 0'}</div>
                         <div class="stat-change">↑ 15% from last month</div>
                     </div>
                 </div>
@@ -971,6 +1054,18 @@
                                 </div>
                             </a>
                         </div>
+                        
+                        <div class="stat-card" style="margin-top: 25px; background: #f8f9fa;">
+                            <h4><i class="fas fa-info-circle"></i> Status Data</h4>
+                            <ul style="font-size: 13px; margin-top: 10px; padding-left: 20px;">
+                                <li>Perusahaan: ${masterData.company ? '✓' : '✗'}</li>
+                                <li>Gudang: ${masterData.warehouses.length}</li>
+                                <li>Kategori: ${masterData.categories.length}</li>
+                                <li>Supplier: ${masterData.suppliers.length}</li>
+                                <li>Pelanggan: ${masterData.customers.length}</li>
+                                <li>Produk: ${masterData.products.length}</li>
+                            </ul>
+                        </div>
                     </div>
                     
                     <!-- RIGHT COLUMN: Content Area -->
@@ -1041,36 +1136,36 @@
                         
                         <div class="form-group">
                             <label for="companyName">Nama Perusahaan/Toko *</label>
-                            <input type="text" id="companyName" class="form-control" placeholder="Contoh: PT. Maju Terus">
+                            <input type="text" id="companyName" class="form-control" placeholder="Contoh: PT. Maju Terus" value="${masterData.company?.COMPANY_NAME || ''}">
                         </div>
                         
                         <div class="form-row">
                             <div class="form-col">
                                 <label for="companyStreet">Alamat</label>
-                                <input type="text" id="companyStreet" class="form-control" placeholder="Jalan dan nomor">
+                                <input type="text" id="companyStreet" class="form-control" placeholder="Jalan dan nomor" value="${masterData.company?.STREET || ''}">
                             </div>
                             <div class="form-col">
                                 <label for="companyCity">Kota</label>
-                                <input type="text" id="companyCity" class="form-control" placeholder="Contoh: Jakarta">
+                                <input type="text" id="companyCity" class="form-control" placeholder="Contoh: Jakarta" value="${masterData.company?.CITY || ''}">
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-col">
                                 <label for="companyPhone">Telepon</label>
-                                <input type="text" id="companyPhone" class="form-control" placeholder="Contoh: 021-88889999">
+                                <input type="text" id="companyPhone" class="form-control" placeholder="Contoh: 021-88889999" value="${masterData.company?.PHONE1 || ''}">
                             </div>
                             <div class="form-col">
                                 <label for="companyEmail">Email</label>
-                                <input type="email" id="companyEmail" class="form-control" placeholder="email@perusahaan.com">
+                                <input type="email" id="companyEmail" class="form-control" placeholder="email@perusahaan.com" value="${masterData.company?.EMAIL || ''}">
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label for="defaultCurrency">Mata Uang Default</label>
                             <select id="defaultCurrency" class="form-control">
-                                <option value="Rp.">Rupiah (Rp.)</option>
-                                <option value="$">Dollar ($)</option>
+                                <option value="Rp." ${(!masterData.company?.DEFAULT_CURRENCY || masterData.company?.DEFAULT_CURRENCY === 'Rp.') ? 'selected' : ''}>Rupiah (Rp.)</option>
+                                <option value="$" ${(masterData.company?.DEFAULT_CURRENCY === '$') ? 'selected' : ''}>Dollar ($)</option>
                             </select>
                         </div>
                     </div>
@@ -1080,30 +1175,50 @@
                         <h3>Step 2: Data Gudang</h3>
                         <p>Tambah minimal satu gudang untuk penyimpanan produk.</p>
                         
-                        <div id="warehouseList">
-                            <!-- Gudang akan ditambahkan di sini -->
+                        <div class="item-list" id="warehouseList">
+                            ${masterData.warehouses.map((warehouse, index) => `
+                                <div class="item-list-item" data-id="${warehouse.STORAGE_ID || index + 1}">
+                                    <div class="item-info">
+                                        <strong>${warehouse.STORAGE_NAME}</strong>
+                                        <div style="font-size: 12px; color: #666;">
+                                            ${warehouse.STORAGE_AREA ? `Lokasi: ${warehouse.STORAGE_AREA}` : ''} 
+                                            ${warehouse.IS_PRIMARY == 1 ? ' • <span style="color: var(--mint-green);">Gudang Utama</span>' : ''}
+                                        </div>
+                                    </div>
+                                    <div class="item-actions">
+                                        ${warehouse.IS_PRIMARY != 1 ? `<button class="btn-small btn-set-primary" data-id="${warehouse.STORAGE_ID || index + 1}">Utama</button>` : ''}
+                                        <button class="btn-small btn-remove-item" data-type="warehouse" data-id="${warehouse.STORAGE_ID || index + 1}" style="color: #f44336;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                         
-                        <button class="btn btn-small" id="btnAddWarehouse">
-                            <i class="fas fa-plus"></i> Tambah Gudang
-                        </button>
-                        
-                        <div class="warehouse-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                        <div style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px; background: #f8f9fa;">
                             <div class="form-row">
                                 <div class="form-col">
                                     <label>Nama Gudang *</label>
-                                    <input type="text" class="form-control warehouse-name" placeholder="Contoh: Gudang Utama">
+                                    <input type="text" class="form-control" id="warehouseName" placeholder="Contoh: Gudang Utama">
                                 </div>
                                 <div class="form-col">
                                     <label>Lokasi</label>
-                                    <input type="text" class="form-control warehouse-location" placeholder="Contoh: Kapuk">
+                                    <input type="text" class="form-control" id="warehouseLocation" placeholder="Contoh: Kapuk">
                                 </div>
                             </div>
                             <div class="form-group" style="margin-top: 10px;">
                                 <label>
-                                    <input type="checkbox" class="warehouse-primary"> Jadikan gudang utama
+                                    <input type="checkbox" id="warehousePrimary"> Jadikan gudang utama
+                                    <small style="color: #666; display: block; margin-top: 5px;">
+                                        ${masterData.warehouses.some(w => w.IS_PRIMARY == 1) ? 
+                                            '⚠️ Sudah ada gudang utama. Centang ini akan mengganti gudang utama.' : 
+                                            'Gudang utama akan digunakan sebagai default untuk penerimaan barang.'}
+                                    </small>
                                 </label>
                             </div>
+                            <button class="btn btn-primary" id="btnAddWarehouse" style="margin-top: 10px;">
+                                <i class="fas fa-plus"></i> Tambah Gudang
+                            </button>
                         </div>
                     </div>
                     
@@ -1112,19 +1227,29 @@
                         <h3>Step 3: Kategori Produk</h3>
                         <p>Tambah kategori untuk mengelompokkan produk Anda.</p>
                         
-                        <div id="categoryList">
-                            <!-- Kategori akan ditambahkan di sini -->
+                        <div class="item-list" id="categoryList">
+                            ${masterData.categories.map((category, index) => `
+                                <div class="item-list-item" data-id="${category.CATEGORY_ID || 'CAT-' + (index + 1).toString().padStart(3, '0')}">
+                                    <div class="item-info">
+                                        <strong>${category.CATEGORY_NAME}</strong>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button class="btn-small btn-remove-item" data-type="category" data-id="${category.CATEGORY_ID || 'CAT-' + (index + 1).toString().padStart(3, '0')}" style="color: #f44336;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                         
-                        <button class="btn btn-small" id="btnAddCategory">
-                            <i class="fas fa-plus"></i> Tambah Kategori
-                        </button>
-                        
-                        <div class="category-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                        <div style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px; background: #f8f9fa;">
                             <div class="form-group">
                                 <label>Nama Kategori *</label>
-                                <input type="text" class="form-control category-name" placeholder="Contoh: Beverage, Grocery">
+                                <input type="text" class="form-control" id="categoryName" placeholder="Contoh: Beverage, Grocery">
                             </div>
+                            <button class="btn btn-primary" id="btnAddCategory">
+                                <i class="fas fa-plus"></i> Tambah Kategori
+                            </button>
                         </div>
                     </div>
                     
@@ -1133,35 +1258,50 @@
                         <h3>Step 4: Data Supplier</h3>
                         <p>Tambah supplier atau pemasok produk Anda.</p>
                         
-                        <div id="supplierList">
-                            <!-- Supplier akan ditambahkan di sini -->
+                        <div class="item-list" id="supplierList">
+                            ${masterData.suppliers.map((supplier, index) => `
+                                <div class="item-list-item" data-id="${supplier.SUPPLIER_ID || index + 1}">
+                                    <div class="item-info">
+                                        <strong>${supplier.SUPPLIER_NAME}</strong>
+                                        <div style="font-size: 12px; color: #666;">
+                                            ${supplier.CONTACT_PERSON ? `Kontak: ${supplier.CONTACT_PERSON}` : ''} 
+                                            ${supplier.PHONE1 ? ` • Telp: ${supplier.PHONE1}` : ''}
+                                            ${supplier.CITY ? ` • Kota: ${supplier.CITY}` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button class="btn-small btn-remove-item" data-type="supplier" data-id="${supplier.SUPPLIER_ID || index + 1}" style="color: #f44336;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                         
-                        <button class="btn btn-small" id="btnAddSupplier">
-                            <i class="fas fa-plus"></i> Tambah Supplier
-                        </button>
-                        
-                        <div class="supplier-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                        <div style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px; background: #f8f9fa;">
                             <div class="form-row">
                                 <div class="form-col">
                                     <label>Nama Supplier *</label>
-                                    <input type="text" class="form-control supplier-name" placeholder="Contoh: Pangan Jaya">
+                                    <input type="text" class="form-control" id="supplierName" placeholder="Contoh: Pangan Jaya">
                                 </div>
                                 <div class="form-col">
                                     <label>Kontak Person</label>
-                                    <input type="text" class="form-control supplier-contact" placeholder="Contoh: Joko">
+                                    <input type="text" class="form-control" id="supplierContact" placeholder="Contoh: Joko">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-col">
                                     <label>Telepon</label>
-                                    <input type="text" class="form-control supplier-phone" placeholder="Contoh: 08123456789">
+                                    <input type="text" class="form-control" id="supplierPhone" placeholder="Contoh: 08123456789">
                                 </div>
                                 <div class="form-col">
                                     <label>Kota</label>
-                                    <input type="text" class="form-control supplier-city" placeholder="Contoh: Bekasi">
+                                    <input type="text" class="form-control" id="supplierCity" placeholder="Contoh: Bekasi">
                                 </div>
                             </div>
+                            <button class="btn btn-primary" id="btnAddSupplier" style="margin-top: 10px;">
+                                <i class="fas fa-plus"></i> Tambah Supplier
+                            </button>
                         </div>
                     </div>
                     
@@ -1170,23 +1310,35 @@
                         <h3>Step 5: Data Pelanggan</h3>
                         <p>Tambah pelanggan atau customer Anda.</p>
                         
-                        <div id="customerList">
-                            <!-- Pelanggan akan ditambahkan di sini -->
+                        <div class="item-list" id="customerList">
+                            ${masterData.customers.map((customer, index) => `
+                                <div class="item-list-item" data-id="${customer.CUSTOMER_ID || index + 1}">
+                                    <div class="item-info">
+                                        <strong>${customer.CUSTOMER_NAME}</strong>
+                                        <div style="font-size: 12px; color: #666;">
+                                            ${customer.CUSTOMER_TYPE ? `Tipe: ${customer.CUSTOMER_TYPE}` : ''} 
+                                            ${customer.PHONE1 ? ` • Telp: ${customer.PHONE1}` : ''}
+                                            ${customer.CITY ? ` • Kota: ${customer.CITY}` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button class="btn-small btn-remove-item" data-type="customer" data-id="${customer.CUSTOMER_ID || index + 1}" style="color: #f44336;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                         
-                        <button class="btn btn-small" id="btnAddCustomer">
-                            <i class="fas fa-plus"></i> Tambah Pelanggan
-                        </button>
-                        
-                        <div class="customer-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                        <div style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px; background: #f8f9fa;">
                             <div class="form-row">
                                 <div class="form-col">
                                     <label>Nama Pelanggan *</label>
-                                    <input type="text" class="form-control customer-name" placeholder="Contoh: Adipati Dolken">
+                                    <input type="text" class="form-control" id="customerName" placeholder="Contoh: Adipati Dolken">
                                 </div>
                                 <div class="form-col">
                                     <label>Tipe</label>
-                                    <select class="form-control customer-type">
+                                    <select class="form-control" id="customerType">
                                         <option value="RETAIL">Retail</option>
                                         <option value="WHOLESALE">Wholesale</option>
                                     </select>
@@ -1195,13 +1347,16 @@
                             <div class="form-row">
                                 <div class="form-col">
                                     <label>Telepon</label>
-                                    <input type="text" class="form-control customer-phone" placeholder="Contoh: 08123456789">
+                                    <input type="text" class="form-control" id="customerPhone" placeholder="Contoh: 08123456789">
                                 </div>
                                 <div class="form-col">
                                     <label>Kota</label>
-                                    <input type="text" class="form-control customer-city" placeholder="Contoh: Bogor">
+                                    <input type="text" class="form-control" id="customerCity" placeholder="Contoh: Bogor">
                                 </div>
                             </div>
+                            <button class="btn btn-primary" id="btnAddCustomer" style="margin-top: 10px;">
+                                <i class="fas fa-plus"></i> Tambah Pelanggan
+                            </button>
                         </div>
                     </div>
                     
@@ -1210,47 +1365,68 @@
                         <h3>Step 6: Data Produk</h3>
                         <p>Tambah produk yang akan dijual.</p>
                         
-                        <div id="productList">
-                            <!-- Produk akan ditambahkan di sini -->
+                        <div class="item-list" id="productList">
+                            ${masterData.products.map((product, index) => `
+                                <div class="item-list-item" data-id="${product.PRODUCT_ID || 'P' + (index + 1).toString().padStart(3, '0')}">
+                                    <div class="item-info">
+                                        <strong>${product.PRODUCT_NAME}</strong>
+                                        <div style="font-size: 12px; color: #666;">
+                                            ${product.CATEGORY_ID ? `Kategori: ${product.CATEGORY_ID}` : ''} 
+                                            ${product.UNIT ? ` • Satuan: ${product.UNIT}` : ''}
+                                            ${product.SIZE ? ` • Ukuran: ${product.SIZE}` : ''}
+                                            ${product.HAS_EXPIRY == 1 ? ` • <span style="color: orange;">Ada Expiry</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button class="btn-small btn-remove-item" data-type="product" data-id="${product.PRODUCT_ID || 'P' + (index + 1).toString().padStart(3, '0')}" style="color: #f44336;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                         
-                        <button class="btn btn-small" id="btnAddProduct">
-                            <i class="fas fa-plus"></i> Tambah Produk
-                        </button>
-                        
-                        <div class="product-item" style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px;">
+                        <div style="margin-top: 20px; padding: 15px; border: 1px dashed #ddd; border-radius: 8px; background: #f8f9fa;">
                             <div class="form-row">
                                 <div class="form-col">
                                     <label>Nama Produk *</label>
-                                    <input type="text" class="form-control product-name" placeholder="Contoh: Kopi Arabica 250gr">
+                                    <input type="text" class="form-control" id="productName" placeholder="Contoh: Kopi Arabica 250gr">
                                 </div>
                                 <div class="form-col">
                                     <label>Kategori</label>
-                                    <select class="form-control product-category">
+                                    <select class="form-control" id="productCategory">
                                         <option value="">Pilih Kategori</option>
+                                        ${masterData.categories.map(cat => `
+                                            <option value="${cat.CATEGORY_ID}">${cat.CATEGORY_NAME}</option>
+                                        `).join('')}
                                     </select>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-col">
                                     <label>Satuan</label>
-                                    <select class="form-control product-unit">
+                                    <select class="form-control" id="productUnit">
                                         <option value="Pcs">Pcs</option>
                                         <option value="Kg">Kg</option>
                                         <option value="Liter">Liter</option>
                                         <option value="Set">Set</option>
+                                        <option value="Box">Box</option>
+                                        <option value="Pack">Pack</option>
                                     </select>
                                 </div>
                                 <div class="form-col">
                                     <label>Ukuran</label>
-                                    <input type="text" class="form-control product-size" placeholder="Contoh: 250gr, 1Kg">
+                                    <input type="text" class="form-control" id="productSize" placeholder="Contoh: 250gr, 1Kg">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>
-                                    <input type="checkbox" class="product-expiry"> Produk memiliki tanggal kadaluarsa
+                                    <input type="checkbox" id="productExpiry"> Produk memiliki tanggal kadaluarsa
                                 </label>
                             </div>
+                            <button class="btn btn-primary" id="btnAddProduct" style="margin-top: 10px;">
+                                <i class="fas fa-plus"></i> Tambah Produk
+                            </button>
                         </div>
                     </div>
                     
@@ -1260,13 +1436,71 @@
                         <p>Tentukan supplier dan gudang utama untuk setiap produk.</p>
                         
                         <div id="relationList">
-                            <!-- Relasi akan ditambahkan di sini -->
+                            ${masterData.products.length === 0 ? `
+                                <div style="text-align: center; padding: 40px; color: #666;">
+                                    <i class="fas fa-info-circle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                                    <p>Tidak ada produk yang perlu dihubungkan.</p>
+                                </div>
+                            ` : `
+                                <div class="data-table">
+                                    <table style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Produk</th>
+                                                <th>Supplier Utama</th>
+                                                <th>Gudang Utama</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${masterData.products.map(product => {
+                                                const relation = masterData.relations.find(r => r.PRODUCT_ID === product.PRODUCT_ID);
+                                                const supplier = relation ? masterData.suppliers.find(s => s.SUPPLIER_ID == relation.SUPPLIER_ID) : null;
+                                                const warehouse = relation ? masterData.warehouses.find(w => w.STORAGE_ID == relation.WAREHOUSE_ID) : null;
+                                                
+                                                return `
+                                                    <tr>
+                                                        <td>${product.PRODUCT_NAME}</td>
+                                                        <td>
+                                                            <select class="form-control relation-supplier" data-product="${product.PRODUCT_ID}" style="font-size: 14px; padding: 5px;">
+                                                                <option value="">Pilih Supplier</option>
+                                                                ${masterData.suppliers.map(s => `
+                                                                    <option value="${s.SUPPLIER_ID}" ${relation && relation.SUPPLIER_ID == s.SUPPLIER_ID ? 'selected' : ''}>
+                                                                        ${s.SUPPLIER_NAME}${s.CITY ? ` (${s.CITY})` : ''}
+                                                                    </option>
+                                                                `).join('')}
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-control relation-warehouse" data-product="${product.PRODUCT_ID}" style="font-size: 14px; padding: 5px;">
+                                                                <option value="">Pilih Gudang</option>
+                                                                ${masterData.warehouses.map(w => `
+                                                                    <option value="${w.STORAGE_ID}" ${relation && relation.WAREHOUSE_ID == w.STORAGE_ID ? 'selected' : ''}>
+                                                                        ${w.STORAGE_NAME}${w.STORAGE_AREA ? ` (${w.STORAGE_AREA})` : ''}
+                                                                    </option>
+                                                                `).join('')}
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            ${relation ? '<span style="color: #28a745;">✓ Terhubung</span>' : '<span style="color: #dc3545;">✗ Belum</span>'}
+                                                        </td>
+                                                    </tr>
+                                                `;
+                                            }).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            `}
                         </div>
                         
                         <div class="stat-card" style="margin-top: 20px;">
                             <h4><i class="fas fa-info-circle"></i> Informasi</h4>
-                            <p>Sistem akan otomatis membuat relasi berdasarkan data yang telah diinput.</p>
-                            <p>Anda dapat mengubah relasi nanti di halaman Products.</p>
+                            <p>Hubungkan setiap produk dengan supplier dan gudang utama. Relasi ini penting untuk:</p>
+                            <ul style="padding-left: 20px; margin-top: 10px;">
+                                <li>Mengetahui dari supplier mana produk dibeli</li>
+                                <li>Mengetahui di gudang mana produk disimpan</li>
+                                <li>Otomatis pengisian data pembelian dan penjualan</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -1307,25 +1541,70 @@
                     ` : ''}
                 </div>
                 
-                <div class="stat-card">
-                    <h3><i class="fas fa-info-circle"></i> Tentang Migrasi Data</h3>
-                    <p>Gunakan fitur ini jika Anda sudah memiliki data di sistem lain dan ingin pindah ke StockMint.</p>
-                    <ul style="padding-left: 20px; margin-top: 10px;">
-                        <li>Download template Excel untuk melihat format data</li>
-                        <li>Isi data Anda ke dalam template</li>
-                        <li>Upload file Excel yang sudah diisi</li>
-                        <li>Sistem akan memproses dan mengimpor data</li>
-                    </ul>
-                </div>
-                
                 ${!isDemoMode() ? `
+                    <div class="stat-card">
+                        <h3><i class="fas fa-info-circle"></i> Langkah-langkah Migrasi Data</h3>
+                        <ol style="padding-left: 20px; margin-top: 10px;">
+                            <li>Download template Excel di bawah ini</li>
+                            <li>Isi data Anda ke dalam template (jangan ubah nama sheet dan header)</li>
+                            <li>Upload file Excel yang sudah diisi</li>
+                            <li>Sistem akan memvalidasi dan mengimpor data</li>
+                        </ol>
+                    </div>
+                    
                     <div style="text-align: center; margin: 40px 0;">
                         <button class="btn btn-primary" id="btnDownloadTemplate" style="padding: 15px 30px; font-size: 16px;">
                             <i class="fas fa-download"></i> Download Template Excel
                         </button>
                         <p style="margin-top: 10px; color: #666; font-size: 14px;">
-                            Template berisi 12 sheet dengan format yang sudah disesuaikan
+                            Template berisi 12 sheet dengan contoh data dan format yang sudah disesuaikan
                         </p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3><i class="fas fa-upload"></i> Upload Data Excel</h3>
+                        <p>Setelah mengisi template, upload file Excel di sini.</p>
+                        
+                        <div class="upload-area" id="uploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h4>Drag & Drop file Excel di sini</h4>
+                            <p>atau klik untuk memilih file</p>
+                            <p style="font-size: 14px; color: #666; margin-top: 10px;">
+                                Format yang didukung: .xlsx, .xls (max 5MB)
+                            </p>
+                        </div>
+                        
+                        <input type="file" id="fileUpload" accept=".xlsx, .xls" style="display: none;">
+                        
+                        <div id="filePreview" style="display: none;">
+                            <div class="file-preview">
+                                <i class="fas fa-file-excel" style="color: #28a745; font-size: 24px;"></i>
+                                <div style="flex: 1;">
+                                    <strong id="fileName">file.xlsx</strong>
+                                    <div id="fileSize" style="font-size: 12px; color: #666;">0 KB</div>
+                                </div>
+                                <button class="btn-small" id="btnRemoveFile" style="color: #f44336;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <button class="btn btn-primary" id="btnProcessUpload" disabled style="width: 100%;">
+                                <i class="fas fa-cogs"></i> Proses Upload dan Import Data
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" style="background: #fff3cd; border-left-color: #ffc107;">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Penting!</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>Pastikan format file sesuai dengan template</li>
+                            <li>Jangan ubah nama sheet atau header kolom</li>
+                            <li>ID harus unik untuk setiap record</li>
+                            <li>Format tanggal: YYYY-MM-DD HH:MM:SS</li>
+                            <li>Data lama akan diganti dengan data baru</li>
+                        </ul>
                     </div>
                 ` : ''}
             `,
@@ -1358,10 +1637,24 @@
                             <li>Simpan file di tempat yang aman</li>
                             <li>Lakukan backup minimal sekali seminggu</li>
                         </ul>
-                        
-                        <div style="margin-top: 20px;">
-                            <button class="btn btn-primary" id="btnBackupData">
-                                <i class="fas fa-download"></i> Backup Data Sekarang
+                    </div>
+                    
+                    <div style="text-align: center; margin: 40px 0;">
+                        <button class="btn btn-primary" id="btnBackupData" style="padding: 15px 30px; font-size: 16px;">
+                            <i class="fas fa-download"></i> Backup Data Sekarang
+                        </button>
+                        <p style="margin-top: 10px; color: #666; font-size: 14px;">
+                            Semua data akan diexport ke file Excel dengan format standar
+                        </p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3><i class="fas fa-history"></i> Backup Terakhir</h3>
+                        <div style="text-align: center; padding: 20px;">
+                            <i class="fas fa-history" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                            <p>Belum ada backup yang dilakukan</p>
+                            <button class="btn btn-small" id="btnScheduleBackup">
+                                <i class="fas fa-calendar-alt"></i> Jadwalkan Backup Otomatis
                             </button>
                         </div>
                     </div>
@@ -1399,15 +1692,20 @@
                         <p style="margin-top: 15px; font-weight: 600; color: #f44336;">
                             Tindakan ini tidak dapat dibatalkan. Pastikan Anda sudah melakukan backup.
                         </p>
-                        
-                        <div style="margin-top: 20px;">
-                            <button class="btn" id="btnBackupBeforeReset" style="background: #ff9800; color: white;">
-                                <i class="fas fa-download"></i> Backup Dulu
-                            </button>
-                            <button class="btn" id="btnResetData" style="background: #f44336; color: white; margin-left: 10px;">
-                                <i class="fas fa-trash-alt"></i> Reset Data
-                            </button>
+                    </div>
+                    
+                    <div style="margin-top: 30px; text-align: center;">
+                        <div class="form-group" style="max-width: 400px; margin: 0 auto 20px;">
+                            <label for="resetConfirmation">Ketik "HAPUS" untuk konfirmasi</label>
+                            <input type="text" id="resetConfirmation" class="form-control" placeholder="HAPUS">
                         </div>
+                        
+                        <button class="btn" id="btnBackupBeforeReset" style="background: #ff9800; color: white; margin-right: 10px;">
+                            <i class="fas fa-download"></i> Backup Dulu
+                        </button>
+                        <button class="btn" id="btnResetData" style="background: #f44336; color: white;" disabled>
+                            <i class="fas fa-trash-alt"></i> Reset Data
+                        </button>
                     </div>
                 ` : ''}
             `
@@ -1473,6 +1771,26 @@
             document.getElementById('btnAddSupplier')?.addEventListener('click', addSupplierItem);
             document.getElementById('btnAddCustomer')?.addEventListener('click', addCustomerItem);
             document.getElementById('btnAddProduct')?.addEventListener('click', addProductItem);
+            
+            // Remove item buttons (delegated)
+            document.getElementById('wizardContent')?.addEventListener('click', function(e) {
+                if (e.target.closest('.btn-remove-item')) {
+                    const btn = e.target.closest('.btn-remove-item');
+                    const type = btn.getAttribute('data-type');
+                    const id = btn.getAttribute('data-id');
+                    removeItem(type, id);
+                }
+                
+                if (e.target.closest('.btn-set-primary')) {
+                    const btn = e.target.closest('.btn-set-primary');
+                    const id = btn.getAttribute('data-id');
+                    setPrimaryWarehouse(id);
+                }
+                
+                if (e.target.closest('.relation-supplier') || e.target.closest('.relation-warehouse')) {
+                    saveRelation(e.target);
+                }
+            });
         }
         
         function updateWizardUI() {
@@ -1500,8 +1818,13 @@
             const prevBtn = document.getElementById('wizardPrevBtn');
             const nextBtn = document.getElementById('wizardNextBtn');
             const finishBtn = document.getElementById('wizardFinishBtn');
+            const skipBtn = document.getElementById('wizardSkipBtn');
             
             prevBtn.disabled = currentWizardStep === 1;
+            
+            // Show skip button on optional steps
+            const optionalSteps = [4, 5]; // Supplier dan Pelanggan opsional
+            skipBtn.style.display = optionalSteps.includes(currentWizardStep) ? 'inline-flex' : 'none';
             
             if (currentWizardStep === 7) {
                 nextBtn.style.display = 'none';
@@ -1510,10 +1833,17 @@
                 nextBtn.style.display = 'inline-flex';
                 finishBtn.style.display = 'none';
             }
+            
+            // Load data for product step
+            if (currentWizardStep === 6) {
+                loadCategoriesForProducts();
+            }
         }
         
         function prevWizardStep() {
             if (currentWizardStep > 1) {
+                // Save current step data
+                saveCurrentStepData();
                 currentWizardStep--;
                 updateWizardUI();
             }
@@ -1521,34 +1851,74 @@
         
         function nextWizardStep() {
             if (currentWizardStep < 7) {
-                // Validate current step before proceeding
+                // Validate and save current step data
                 if (validateCurrentStep()) {
+                    saveCurrentStepData();
                     currentWizardStep++;
                     updateWizardUI();
-                    
-                    // If moving to product step, load categories
-                    if (currentWizardStep === 6) {
-                        loadCategoriesForProducts();
-                    }
                 }
             }
         }
         
         function validateCurrentStep() {
-            // Simple validation for demo
-            if (currentWizardStep === 1) {
-                const companyName = document.getElementById('companyName');
-                if (!companyName.value.trim()) {
-                    alert('Nama perusahaan harus diisi');
-                    companyName.focus();
-                    return false;
-                }
+            switch(currentWizardStep) {
+                case 1: // Company
+                    const companyName = document.getElementById('companyName');
+                    if (!companyName.value.trim()) {
+                        alert('Nama perusahaan harus diisi');
+                        companyName.focus();
+                        return false;
+                    }
+                    break;
+                case 2: // Warehouse
+                    if (masterData.warehouses.length === 0) {
+                        alert('Minimal satu gudang harus ditambahkan');
+                        return false;
+                    }
+                    break;
+                case 3: // Category
+                    if (masterData.categories.length === 0) {
+                        alert('Minimal satu kategori harus ditambahkan');
+                        return false;
+                    }
+                    break;
+                case 6: // Product
+                    if (masterData.products.length === 0) {
+                        alert('Minimal satu produk harus ditambahkan');
+                        return false;
+                    }
+                    break;
             }
             return true;
         }
         
+        function saveCurrentStepData() {
+            switch(currentWizardStep) {
+                case 1: // Company
+                    masterData.company = {
+                        COMPANY_ID: 1,
+                        COMPANY_NAME: document.getElementById('companyName').value,
+                        STREET: document.getElementById('companyStreet').value,
+                        CITY: document.getElementById('companyCity').value,
+                        PHONE1: document.getElementById('companyPhone').value,
+                        EMAIL: document.getElementById('companyEmail').value,
+                        DEFAULT_CURRENCY: document.getElementById('defaultCurrency').value,
+                        DEFAULT_WAREHOUSE_ID: masterData.warehouses.find(w => w.IS_PRIMARY == 1)?.STORAGE_ID || null,
+                        DECIMAL_PLACES: 0
+                    };
+                    break;
+            }
+            saveMasterData();
+        }
+        
         function finishWizard() {
             if (validateCurrentStep()) {
+                // Save all data
+                saveCurrentStepData();
+                
+                // Generate relations automatically
+                generateAutoRelations();
+                
                 if (isDemoMode()) {
                     alert('🎉 Setup data master selesai!\n\nDalam mode demo, data disimpan sementara di browser Anda.\nUntuk penyimpanan permanen, login dengan akun Google.');
                 } else {
@@ -1567,143 +1937,551 @@
                         <p style="margin: 20px 0;">Data master Anda telah berhasil disimpan.</p>
                         
                         <div class="stat-card" style="max-width: 500px; margin: 30px auto;">
-                            <h3>Selanjutnya</h3>
+                            <h3>Ringkasan Data</h3>
                             <ul style="text-align: left; padding-left: 20px; margin-top: 10px;">
-                                <li>Tambah produk di halaman <strong>Products</strong></li>
-                                <li>Input transaksi pembelian di <strong>Purchases</strong></li>
-                                <li>Mulai jual produk di <strong>Sales</strong></li>
-                                <li>Hitung margin di <strong>Price Calculator</strong></li>
+                                <li>Perusahaan: <strong>${masterData.company?.COMPANY_NAME || '-'}</strong></li>
+                                <li>Gudang: <strong>${masterData.warehouses.length}</strong></li>
+                                <li>Kategori: <strong>${masterData.categories.length}</strong></li>
+                                <li>Supplier: <strong>${masterData.suppliers.length}</strong></li>
+                                <li>Pelanggan: <strong>${masterData.customers.length}</strong></li>
+                                <li>Produk: <strong>${masterData.products.length}</strong></li>
                             </ul>
                         </div>
                         
-                        <button class="btn btn-primary" onclick="loadPage('products')">
-                            <i class="fas fa-boxes"></i> Lanjut ke Products
-                        </button>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button class="btn btn-primary" onclick="loadPage('products')">
+                                <i class="fas fa-boxes"></i> Lanjut ke Products
+                            </button>
+                            <button class="btn" onclick="loadMasterDataSubpage('new')">
+                                <i class="fas fa-edit"></i> Edit Data Master
+                            </button>
+                        </div>
                     </div>
                 `;
             }
         }
         
+        // ===== ITEM MANAGEMENT FUNCTIONS =====
+        
         function addWarehouseItem() {
-            const name = document.querySelector('.warehouse-name').value;
-            const location = document.querySelector('.warehouse-location').value;
-            const isPrimary = document.querySelector('.warehouse-primary').checked;
+            const name = document.getElementById('warehouseName').value;
+            const location = document.getElementById('warehouseLocation').value;
+            const isPrimary = document.getElementById('warehousePrimary').checked;
             
             if (!name.trim()) {
                 alert('Nama gudang harus diisi');
                 return;
             }
             
-            const warehouseList = document.getElementById('warehouseList');
-            const warehouseId = warehouseList.children.length + 1;
+            // Jika ini gudang utama, reset yang lain
+            if (isPrimary) {
+                masterData.warehouses.forEach(w => w.IS_PRIMARY = 0);
+            }
             
-            const item = document.createElement('div');
-            item.className = 'warehouse-item-added';
-            item.style.cssText = 'padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 10px; background: #f9f9f9;';
-            item.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong>${name}</strong>
-                        <div style="font-size: 12px; color: #666;">
-                            ${location ? `Lokasi: ${location}` : ''} 
-                            ${isPrimary ? ' • <span style="color: var(--mint-green);">Gudang Utama</span>' : ''}
-                        </div>
-                    </div>
-                    <button class="btn-small btn-remove-warehouse" style="color: #f44336;">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
+            const warehouseId = masterData.warehouses.length > 0 ? 
+                Math.max(...masterData.warehouses.map(w => w.STORAGE_ID)) + 1 : 1;
             
-            warehouseList.appendChild(item);
-            
-            // Clear form
-            document.querySelector('.warehouse-name').value = '';
-            document.querySelector('.warehouse-location').value = '';
-            document.querySelector('.warehouse-primary').checked = false;
-            
-            // Add remove event
-            item.querySelector('.btn-remove-warehouse').addEventListener('click', function() {
-                item.remove();
+            masterData.warehouses.push({
+                STORAGE_ID: warehouseId,
+                STORAGE_NAME: name,
+                STORAGE_AREA: location,
+                IS_PRIMARY: isPrimary ? 1 : 0
             });
+            
+            saveMasterData();
+            
+            // Refresh display
+            loadMasterDataSubpage('new');
+            
+            // Reset form
+            document.getElementById('warehouseName').value = '';
+            document.getElementById('warehouseLocation').value = '';
+            document.getElementById('warehousePrimary').checked = false;
+            
+            alert('Gudang berhasil ditambahkan!');
+        }
+        
+        function setPrimaryWarehouse(warehouseId) {
+            masterData.warehouses.forEach(w => {
+                w.IS_PRIMARY = w.STORAGE_ID == warehouseId ? 1 : 0;
+            });
+            
+            saveMasterData();
+            loadMasterDataSubpage('new');
         }
         
         function addCategoryItem() {
-            const name = document.querySelector('.category-name').value;
+            const name = document.getElementById('categoryName').value;
             
             if (!name.trim()) {
                 alert('Nama kategori harus diisi');
                 return;
             }
             
-            const categoryList = document.getElementById('categoryList');
-            const categoryId = categoryList.children.length + 1;
+            const categoryId = 'CAT-' + (masterData.categories.length + 1).toString().padStart(3, '0');
             
-            const item = document.createElement('div');
-            item.className = 'category-item-added';
-            item.style.cssText = 'padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 10px; background: #f9f9f9;';
-            item.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong>${name}</strong>
-                    </div>
-                    <button class="btn-small btn-remove-category" style="color: #f44336;">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
-            
-            categoryList.appendChild(item);
-            
-            // Clear form
-            document.querySelector('.category-name').value = '';
-            
-            // Add remove event
-            item.querySelector('.btn-remove-category').addEventListener('click', function() {
-                item.remove();
+            masterData.categories.push({
+                CATEGORY_ID: categoryId,
+                CATEGORY_NAME: name
             });
-        }
-        
-        function loadCategoriesForProducts() {
-            const categorySelect = document.querySelector('.product-category');
-            categorySelect.innerHTML = '<option value="">Pilih Kategori</option>';
             
-            // In real app, load from saved data
-            const defaultCategories = ['Beverage', 'Grocery', 'Household'];
-            defaultCategories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                categorySelect.appendChild(option);
-            });
+            saveMasterData();
+            loadMasterDataSubpage('new');
+            document.getElementById('categoryName').value = '';
+            
+            alert('Kategori berhasil ditambahkan!');
         }
         
         function addSupplierItem() {
-            // Implementation similar to addWarehouseItem
+            const name = document.getElementById('supplierName').value;
+            const contact = document.getElementById('supplierContact').value;
+            const phone = document.getElementById('supplierPhone').value;
+            const city = document.getElementById('supplierCity').value;
+            
+            if (!name.trim()) {
+                alert('Nama supplier harus diisi');
+                return;
+            }
+            
+            const supplierId = masterData.suppliers.length > 0 ? 
+                Math.max(...masterData.suppliers.map(s => s.SUPPLIER_ID)) + 1 : 1;
+            
+            masterData.suppliers.push({
+                SUPPLIER_ID: supplierId,
+                SUPPLIER_NAME: name,
+                CONTACT_PERSON: contact,
+                PHONE1: phone,
+                CITY: city,
+                COUNTRY: 'Indonesia',
+                IS_ACTIVE: 1
+            });
+            
+            saveMasterData();
+            loadMasterDataSubpage('new');
+            
+            // Reset form
+            document.getElementById('supplierName').value = '';
+            document.getElementById('supplierContact').value = '';
+            document.getElementById('supplierPhone').value = '';
+            document.getElementById('supplierCity').value = '';
+            
+            alert('Supplier berhasil ditambahkan!');
         }
         
         function addCustomerItem() {
-            // Implementation similar to addWarehouseItem
+            const name = document.getElementById('customerName').value;
+            const type = document.getElementById('customerType').value;
+            const phone = document.getElementById('customerPhone').value;
+            const city = document.getElementById('customerCity').value;
+            
+            if (!name.trim()) {
+                alert('Nama pelanggan harus diisi');
+                return;
+            }
+            
+            const customerId = masterData.customers.length > 0 ? 
+                Math.max(...masterData.customers.map(c => c.CUSTOMER_ID)) + 1 : 1;
+            
+            masterData.customers.push({
+                CUSTOMER_ID: customerId,
+                CUSTOMER_NAME: name,
+                CUSTOMER_TYPE: type,
+                PHONE1: phone,
+                CITY: city,
+                COUNTRY: 'Indonesia',
+                IS_ACTIVE: 1
+            });
+            
+            saveMasterData();
+            loadMasterDataSubpage('new');
+            
+            // Reset form
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customerCity').value = '';
+            
+            alert('Pelanggan berhasil ditambahkan!');
         }
         
         function addProductItem() {
-            // Implementation similar to addWarehouseItem
+            const name = document.getElementById('productName').value;
+            const category = document.getElementById('productCategory').value;
+            const unit = document.getElementById('productUnit').value;
+            const size = document.getElementById('productSize').value;
+            const expiry = document.getElementById('productExpiry').checked;
+            
+            if (!name.trim()) {
+                alert('Nama produk harus diisi');
+                return;
+            }
+            
+            if (!category) {
+                alert('Kategori produk harus dipilih');
+                return;
+            }
+            
+            const productId = 'P' + (masterData.products.length + 1).toString().padStart(3, '0');
+            
+            masterData.products.push({
+                PRODUCT_ID: productId,
+                PRODUCT_NAME: name,
+                CATEGORY_ID: category,
+                UNIT: unit,
+                SIZE: size,
+                HAS_EXPIRY: expiry ? 1 : 0,
+                ARCHIVE: 0
+            });
+            
+            saveMasterData();
+            loadMasterDataSubpage('new');
+            
+            // Reset form
+            document.getElementById('productName').value = '';
+            document.getElementById('productSize').value = '';
+            document.getElementById('productExpiry').checked = false;
+            
+            alert('Produk berhasil ditambahkan!');
         }
         
-        function attachMigrationEvents() {
-            if (!isDemoMode()) {
-                document.getElementById('btnDownloadTemplate')?.addEventListener('click', function() {
-                    window.open('template.html?type=full', '_blank');
-                });
+        function removeItem(type, id) {
+            if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
+                switch(type) {
+                    case 'warehouse':
+                        masterData.warehouses = masterData.warehouses.filter(w => w.STORAGE_ID != id);
+                        break;
+                    case 'category':
+                        masterData.categories = masterData.categories.filter(c => c.CATEGORY_ID !== id);
+                        break;
+                    case 'supplier':
+                        masterData.suppliers = masterData.suppliers.filter(s => s.SUPPLIER_ID != id);
+                        break;
+                    case 'customer':
+                        masterData.customers = masterData.customers.filter(c => c.CUSTOMER_ID != id);
+                        break;
+                    case 'product':
+                        masterData.products = masterData.products.filter(p => p.PRODUCT_ID !== id);
+                        // Also remove relations for this product
+                        masterData.relations = masterData.relations.filter(r => r.PRODUCT_ID !== id);
+                        break;
+                }
+                saveMasterData();
+                loadMasterDataSubpage('new');
             }
         }
         
-        function attachBackupEvents() {
-            // Implementation for backup
+        function loadCategoriesForProducts() {
+            const categorySelect = document.getElementById('productCategory');
+            if (categorySelect) {
+                categorySelect.innerHTML = '<option value="">Pilih Kategori</option>' +
+                    masterData.categories.map(cat => 
+                        `<option value="${cat.CATEGORY_ID}">${cat.CATEGORY_NAME}</option>`
+                    ).join('');
+            }
         }
         
+        function saveRelation(selectElement) {
+            const productId = selectElement.getAttribute('data-product');
+            const isSupplier = selectElement.classList.contains('relation-supplier');
+            const value = selectElement.value;
+            
+            let relation = masterData.relations.find(r => r.PRODUCT_ID === productId);
+            
+            if (!relation) {
+                relation = {
+                    LINK_ID: 'LINK' + (masterData.relations.length + 1).toString().padStart(5, '0'),
+                    PRODUCT_ID: productId,
+                    SUPPLIER_ID: null,
+                    WAREHOUSE_ID: null,
+                    IS_PRIMARY_SUPPLIER: 1,
+                    IS_PRIMARY_WAREHOUSE: 1
+                };
+                masterData.relations.push(relation);
+            }
+            
+            if (isSupplier) {
+                relation.SUPPLIER_ID = value ? parseInt(value) : null;
+            } else {
+                relation.WAREHOUSE_ID = value ? parseInt(value) : null;
+            }
+            
+            saveMasterData();
+            
+            // Update status
+            const row = selectElement.closest('tr');
+            const statusCell = row.querySelector('td:last-child');
+            if (relation.SUPPLIER_ID && relation.WAREHOUSE_ID) {
+                statusCell.innerHTML = '<span style="color: #28a745;">✓ Terhubung</span>';
+            } else {
+                statusCell.innerHTML = '<span style="color: #dc3545;">✗ Belum</span>';
+            }
+        }
+        
+        function generateAutoRelations() {
+            // Auto-connect products with first supplier and primary warehouse
+            masterData.products.forEach(product => {
+                const existingRelation = masterData.relations.find(r => r.PRODUCT_ID === product.PRODUCT_ID);
+                
+                if (!existingRelation) {
+                    const primaryWarehouse = masterData.warehouses.find(w => w.IS_PRIMARY == 1);
+                    const firstSupplier = masterData.suppliers[0];
+                    
+                    if (primaryWarehouse && firstSupplier) {
+                        masterData.relations.push({
+                            LINK_ID: 'LINK' + (masterData.relations.length + 1).toString().padStart(5, '0'),
+                            PRODUCT_ID: product.PRODUCT_ID,
+                            SUPPLIER_ID: firstSupplier.SUPPLIER_ID,
+                            WAREHOUSE_ID: primaryWarehouse.STORAGE_ID,
+                            IS_PRIMARY_SUPPLIER: 1,
+                            IS_PRIMARY_WAREHOUSE: 1
+                        });
+                    }
+                }
+            });
+            saveMasterData();
+        }
+        
+        // ===== MIGRATION FUNCTIONS =====
+        function attachMigrationEvents() {
+            if (!isDemoMode()) {
+                // Download template
+                document.getElementById('btnDownloadTemplate')?.addEventListener('click', function() {
+                    window.open('template.html?type=full', '_blank');
+                });
+                
+                // File upload
+                const uploadArea = document.getElementById('uploadArea');
+                const fileUpload = document.getElementById('fileUpload');
+                const filePreview = document.getElementById('filePreview');
+                const btnProcessUpload = document.getElementById('btnProcessUpload');
+                
+                uploadArea.addEventListener('click', () => fileUpload.click());
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = 'var(--mint-green)';
+                    uploadArea.style.background = '#f0f9ff';
+                });
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.style.borderColor = '#ddd';
+                    uploadArea.style.background = '';
+                });
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#ddd';
+                    uploadArea.style.background = '';
+                    
+                    if (e.dataTransfer.files.length) {
+                        handleFileSelect(e.dataTransfer.files[0]);
+                    }
+                });
+                
+                fileUpload.addEventListener('change', (e) => {
+                    if (e.target.files.length) {
+                        handleFileSelect(e.target.files[0]);
+                    }
+                });
+                
+                document.getElementById('btnRemoveFile')?.addEventListener('click', () => {
+                    fileUpload.value = '';
+                    filePreview.style.display = 'none';
+                    btnProcessUpload.disabled = true;
+                });
+                
+                btnProcessUpload.addEventListener('click', processUploadedFile);
+            }
+        }
+        
+        function handleFileSelect(file) {
+            if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                alert('Hanya file Excel (.xlsx, .xls) yang diizinkan!');
+                return;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) { // 5MB
+                alert('Ukuran file maksimal 5MB!');
+                return;
+            }
+            
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('filePreview').style.display = 'block';
+            document.getElementById('btnProcessUpload').disabled = false;
+        }
+        
+        function processUploadedFile() {
+            const file = document.getElementById('fileUpload').files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    
+                    // Process each sheet
+                    const sheetNames = workbook.SheetNames;
+                    let processedData = {};
+                    
+                    sheetNames.forEach(sheetName => {
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                        processedData[sheetName] = jsonData;
+                    });
+                    
+                    // Validate and import data
+                    importDataFromExcel(processedData);
+                    
+                } catch (error) {
+                    console.error('Error processing file:', error);
+                    alert('❌ Terjadi kesalahan saat memproses file. Pastikan format file sesuai template.');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        function importDataFromExcel(data) {
+            // Clear existing data
+            Object.keys(masterData).forEach(key => {
+                if (Array.isArray(masterData[key])) {
+                    masterData[key] = [];
+                } else {
+                    masterData[key] = null;
+                }
+            });
+            
+            // Import data from each sheet
+            if (data.dim_Company && data.dim_Company.length > 0) {
+                masterData.company = data.dim_Company[0];
+            }
+            
+            if (data.dim_Warehouses) {
+                masterData.warehouses = data.dim_Warehouses;
+            }
+            
+            if (data.dim_Categories) {
+                masterData.categories = data.dim_Categories;
+            }
+            
+            if (data.dim_Suppliers) {
+                masterData.suppliers = data.dim_Suppliers;
+            }
+            
+            if (data.dim_Customers) {
+                masterData.customers = data.dim_Customers;
+            }
+            
+            if (data.dim_Products) {
+                masterData.products = data.dim_Products;
+            }
+            
+            if (data.Product_Supplier_Warehouse) {
+                masterData.relations = data.Product_Supplier_Warehouse;
+            }
+            
+            saveMasterData();
+            
+            alert('✅ Data berhasil diimpor!\n\n' + 
+                  'Perusahaan: ' + (masterData.company ? '✓' : '✗') + '\n' +
+                  'Gudang: ' + masterData.warehouses.length + '\n' +
+                  'Kategori: ' + masterData.categories.length + '\n' +
+                  'Supplier: ' + masterData.suppliers.length + '\n' +
+                  'Pelanggan: ' + masterData.customers.length + '\n' +
+                  'Produk: ' + masterData.products.length);
+            
+            // Refresh the page
+            loadMasterDataSubpage('migration');
+        }
+        
+        // ===== BACKUP FUNCTIONS =====
+        function attachBackupEvents() {
+            if (!isDemoMode()) {
+                document.getElementById('btnBackupData')?.addEventListener('click', backupData);
+                document.getElementById('btnScheduleBackup')?.addEventListener('click', scheduleBackup);
+            }
+        }
+        
+        function backupData() {
+            try {
+                const wb = XLSX.utils.book_new();
+                
+                // Add company sheet
+                if (masterData.company) {
+                    const companyWS = XLSX.utils.json_to_sheet([masterData.company]);
+                    XLSX.utils.book_append_sheet(wb, companyWS, "dim_Company");
+                }
+                
+                // Add other sheets
+                const sheets = [
+                    {name: "dim_Warehouses", data: masterData.warehouses},
+                    {name: "dim_Categories", data: masterData.categories},
+                    {name: "dim_Suppliers", data: masterData.suppliers},
+                    {name: "dim_Customers", data: masterData.customers},
+                    {name: "dim_Products", data: masterData.products},
+                    {name: "Product_Supplier_Warehouse", data: masterData.relations}
+                ];
+                
+                sheets.forEach(sheet => {
+                    if (sheet.data && sheet.data.length > 0) {
+                        const ws = XLSX.utils.json_to_sheet(sheet.data);
+                        XLSX.utils.book_append_sheet(wb, ws, sheet.name);
+                    }
+                });
+                
+                const fileName = `StockMint_Backup_${new Date().toISOString().slice(0,10)}.xlsx`;
+                XLSX.writeFile(wb, fileName);
+                
+                alert('✅ Backup data berhasil! File telah didownload.');
+                
+            } catch (error) {
+                console.error('Error creating backup:', error);
+                alert('❌ Terjadi kesalahan saat membuat backup.');
+            }
+        }
+        
+        function scheduleBackup() {
+            alert('Fitur jadwal backup otomatis akan segera hadir.');
+        }
+        
+        // ===== RESET FUNCTIONS =====
         function attachResetEvents() {
-            // Implementation for reset
+            if (!isDemoMode()) {
+                const resetConfirmation = document.getElementById('resetConfirmation');
+                const btnResetData = document.getElementById('btnResetData');
+                const btnBackupBeforeReset = document.getElementById('btnBackupBeforeReset');
+                
+                resetConfirmation?.addEventListener('input', function() {
+                    btnResetData.disabled = this.value.toUpperCase() !== 'HAPUS';
+                });
+                
+                btnResetData?.addEventListener('click', resetData);
+                btnBackupBeforeReset?.addEventListener('click', backupData);
+            }
+        }
+        
+        function resetData() {
+            if (confirm('⚠️ APAKAH ANDA YAKIN?\n\nSemua data akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.')) {
+                // Clear all master data
+                Object.keys(masterData).forEach(key => {
+                    if (Array.isArray(masterData[key])) {
+                        masterData[key] = [];
+                    } else {
+                        masterData[key] = null;
+                    }
+                });
+                
+                saveMasterData();
+                
+                alert('✅ Semua data telah dihapus.');
+                loadMasterDataSubpage('reset');
+            }
+        }
+        
+        // ===== HELPER FUNCTIONS =====
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
         
         // ===== MAIN PAGE LOADING =====
@@ -1801,6 +2579,9 @@
             if (!checkAuth()) {
                 return;
             }
+            
+            // Load saved data
+            loadMasterData();
             
             // Attach logout event
             document.getElementById('logoutBtn')?.addEventListener('click', handleLogout);
