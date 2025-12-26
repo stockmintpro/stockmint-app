@@ -1,41 +1,160 @@
 // File: js/common.js
 // Fungsi-fungsi yang digunakan di semua halaman
 
-// Load sidebar dan navbar
+// Load sidebar dan navbar langsung dari string HTML
 function loadCommonElements() {
-    return Promise.all([
-        fetch('includes/sidebar.html').then(res => res.text()),
-        fetch('includes/navbar.html').then(res => res.text())
-    ])
-    .then(([sidebarHTML, navbarHTML]) => {
-        // Insert sidebar first
-        const sidebarContainer = document.createElement('div');
-        sidebarContainer.innerHTML = sidebarHTML;
-        document.body.insertBefore(sidebarContainer.firstChild, document.body.firstChild);
+    // SIDEBAR HTML
+    const sidebarHTML = `
+        <!-- Hamburger Menu -->
+        <button class="hamburger-menu" id="hamburgerBtn">
+            <i class="fas fa-bars"></i>
+        </button>
         
-        // Insert navbar after sidebar
-        const navbarContainer = document.createElement('div');
-        navbarContainer.innerHTML = navbarHTML;
-        document.body.insertBefore(navbarContainer.firstChild, document.body.firstChild);
+        <!-- Overlay untuk menutup sidebar di HP -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
         
-        // Initialize after elements are added
-        setTimeout(() => {
-            initSidebar();
-            initNavbar();
-            setActiveMenu();
-        }, 100);
-    })
-    .catch(error => {
-        console.error('Error loading common elements:', error);
-        // Fallback: show error message
-        const errorDiv = document.createElement('div');
-        errorDiv.innerHTML = `
-            <div style="position: fixed; top: 0; left: 0; right: 0; background: #f8d7da; color: #721c24; padding: 10px; text-align: center; z-index: 9999;">
-                Error loading page elements. Please check if includes/sidebar.html and includes/navbar.html exist.
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <!-- Logo Section -->
+            <div class="logo-container">
+                <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
+                     alt="StockMint Logo" 
+                     class="logo"
+                     id="mainLogo"
+                     onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='flex';">
+                
+                <div class="logo-fallback" id="fallbackLogo" style="display: none;">
+                    SM
+                </div>
+                
+                <div class="logo-text">
+                    <div class="logo-title">StockMint</div>
+                    <div class="logo-subtitle">Precision Inventory &<br>Profit Tracking</div>
+                </div>
             </div>
-        `;
-        document.body.insertBefore(errorDiv, document.body.firstChild);
-    });
+
+            <!-- Menu -->
+            <div class="menu">
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                
+                <a href="masterdata.html" class="menu-item">
+                    <i class="fas fa-database"></i>
+                    <span class="menu-text">Master Data</span>
+                </a>
+                
+                <!-- Business Entities Group (Collapsible) -->
+                <div class="menu-group">
+                    <div class="menu-group-title">
+                        BUSINESS ENTITIES
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="submenu-items">
+                        <a href="entities/company.html" class="menu-item submenu-item">
+                            <i class="fas fa-building"></i>
+                            <span class="menu-text">Company</span>
+                        </a>
+                        <a href="entities/warehouses.html" class="menu-item submenu-item">
+                            <i class="fas fa-warehouse"></i>
+                            <span class="menu-text">Warehouses</span>
+                        </a>
+                        <a href="entities/suppliers.html" class="menu-item submenu-item">
+                            <i class="fas fa-truck-loading"></i>
+                            <span class="menu-text">Suppliers</span>
+                        </a>
+                        <a href="entities/customers.html" class="menu-item submenu-item">
+                            <i class="fas fa-users"></i>
+                            <span class="menu-text">Customers</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <a href="products.html" class="menu-item">
+                    <i class="fas fa-boxes"></i>
+                    <span class="menu-text">Products</span>
+                </a>
+                
+                <a href="purchases.html" class="menu-item">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="menu-text">Purchases</span>
+                </a>
+                
+                <a href="sales.html" class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="menu-text">Sales</span>
+                </a>
+                
+                <a href="calculator.html" class="menu-item">
+                    <i class="fas fa-calculator"></i>
+                    <span class="menu-text">Price Calculator</span>
+                </a>
+                
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="menu-text">Reports</span>
+                </a>
+                
+                <a href="settings.html" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span class="menu-text">Settings</span>
+                </a>
+                
+                <a href="help.html" class="menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="menu-text">Help</span>
+                </a>
+            </div>
+
+            <!-- User Section -->
+            <div class="user-section">
+                <div class="user-avatar">AJ</div>
+                <div class="user-info">
+                    <h4>Admin Joko</h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // NAVBAR HTML
+    const navbarHTML = `
+        <!-- Top Navbar -->
+        <div class="top-navbar" id="topNavbar">
+            <div class="top-navbar-content">
+                <img id="userAvatar" src="" alt="User">
+                <div class="user-info-nav">
+                    <div class="user-name" id="userName">Admin Joko</div>
+                    <div class="user-package" id="userPackage">Pro</div>
+                </div>
+            </div>
+            <button id="logoutBtn" class="btn" style="background: #dc3545; color: white; padding: 8px 16px;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    `;
+    
+    // Insert ke dalam body
+    const sidebarContainer = document.createElement('div');
+    sidebarContainer.innerHTML = sidebarHTML;
+    document.body.insertBefore(sidebarContainer, document.body.firstChild);
+    
+    const navbarContainer = document.createElement('div');
+    navbarContainer.innerHTML = navbarHTML;
+    document.body.insertBefore(navbarContainer, document.body.firstChild.nextSibling);
+    
+    // Inisialisasi setelah elements ditambahkan
+    setTimeout(() => {
+        initCommon();
+    }, 100);
+}
+
+// Inisialisasi umum
+function initCommon() {
+    initSidebar();
+    initNavbar();
+    setActiveMenu();
 }
 
 // Inisialisasi sidebar
@@ -63,19 +182,20 @@ function initSidebar() {
         });
     }
     
-    // Handle collapsible menu group
+    // Handle collapsible menu group untuk Business Entities
     const masterDataMenu = document.querySelector('a[href="masterdata.html"]');
     const businessEntitiesGroup = document.querySelector('.menu-group');
     
     if (masterDataMenu && businessEntitiesGroup) {
         // Check if current page is master data or business entities
         const currentPath = window.location.pathname;
-        const isMasterDataPage = currentPath.includes('masterdata') || 
-                                 currentPath.includes('entities/') ||
-                                 currentPath.includes('company') ||
-                                 currentPath.includes('warehouses') ||
-                                 currentPath.includes('suppliers') ||
-                                 currentPath.includes('customers');
+        const currentPage = window.location.pathname.split('/').pop();
+        const isMasterDataPage = currentPage === 'masterdata.html' || 
+                                 currentPage === 'company.html' ||
+                                 currentPage === 'warehouses.html' ||
+                                 currentPage === 'suppliers.html' ||
+                                 currentPage === 'customers.html' ||
+                                 currentPath.includes('entities/');
         
         if (isMasterDataPage) {
             businessEntitiesGroup.classList.add('expanded');
@@ -124,8 +244,7 @@ function initNavbar() {
 
 // Set active menu berdasarkan halaman saat ini
 function setActiveMenu() {
-    const currentPath = window.location.pathname;
-    const currentPage = currentPath.split('/').pop();
+    const currentPage = window.location.pathname.split('/').pop();
     
     setTimeout(() => {
         const menuItems = document.querySelectorAll('.menu-item');
@@ -141,6 +260,15 @@ function setActiveMenu() {
             const href = item.getAttribute('href');
             if (href === currentPage || (currentPage === '' && href === 'dashboard.html')) {
                 item.classList.add('active');
+                
+                // Jika ini adalah salah satu dari Business Entities, expand group-nya
+                if (href && (href.includes('company') || href.includes('warehouses') || 
+                    href.includes('suppliers') || href.includes('customers') || href === 'masterdata.html')) {
+                    const businessEntitiesGroup = document.querySelector('.menu-group');
+                    if (businessEntitiesGroup) {
+                        businessEntitiesGroup.classList.add('expanded');
+                    }
+                }
             }
         });
     }, 200);
@@ -162,4 +290,13 @@ function checkAuth() {
 function isDemoMode() {
     const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
     return user.isDemo === true;
+}
+
+// Format file size
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
