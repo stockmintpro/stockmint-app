@@ -3,21 +3,38 @@
 
 // Load sidebar dan navbar
 function loadCommonElements() {
-    // Load sidebar
-    fetch('includes/sidebar.html')
-        .then(response => response.text())
-        .then(html => {
-            document.body.insertAdjacentHTML('afterbegin', html);
-            initSidebar();
-        });
-    
-    // Load navbar
-    fetch('includes/navbar.html')
-        .then(response => response.text())
-        .then(html => {
-            document.body.insertAdjacentHTML('afterbegin', html);
-            initNavbar();
-        });
+    return new Promise((resolve, reject) => {
+        // Load sidebar
+        fetch('includes/sidebar.html')
+            .then(response => response.text())
+            .then(html => {
+                const sidebarDiv = document.createElement('div');
+                sidebarDiv.innerHTML = html;
+                document.body.insertBefore(sidebarDiv.firstChild, document.body.firstChild);
+                
+                // Load navbar setelah sidebar
+                return fetch('includes/navbar.html');
+            })
+            .then(response => response.text())
+            .then(html => {
+                const navbarDiv = document.createElement('div');
+                navbarDiv.innerHTML = html;
+                document.body.insertBefore(navbarDiv.firstChild, document.body.firstChild);
+                
+                initCommon();
+                resolve();
+            })
+            .catch(error => {
+                console.error('Error loading common elements:', error);
+                reject(error);
+            });
+    });
+}
+
+function initCommon() {
+    initSidebar();
+    initNavbar();
+    setActiveMenu();
 }
 
 // Inisialisasi sidebar
@@ -40,14 +57,33 @@ function initSidebar() {
         });
     }
     
-    // Set active menu berdasarkan halaman saat ini
-    const currentPage = window.location.pathname.split('/').pop();
-    document.querySelectorAll('.menu-item').forEach(item => {
-        if (item.getAttribute('href') === currentPage || 
-            item.getAttribute('data-page') === currentPage.replace('.html', '')) {
-            item.classList.add('active');
+    // Handle collapsible menu group
+    const masterDataMenu = document.querySelector('a[href="masterdata.html"]');
+    const businessEntitiesGroup = document.querySelector('.menu-group');
+    
+    if (masterDataMenu && businessEntitiesGroup) {
+        // Check if current page is master data or business entities
+        const currentPath = window.location.pathname;
+        const isMasterDataPage = currentPath.includes('masterdata') || 
+                                 currentPath.includes('entities/') ||
+                                 currentPath.includes('company') ||
+                                 currentPath.includes('warehouses') ||
+                                 currentPath.includes('suppliers') ||
+                                 currentPath.includes('customers');
+        
+        if (isMasterDataPage) {
+            businessEntitiesGroup.classList.add('expanded');
+            masterDataMenu.classList.add('active');
         }
-    });
+        
+        // Toggle expand/collapse
+        const groupTitle = businessEntitiesGroup.querySelector('.menu-group-title');
+        if (groupTitle) {
+            groupTitle.addEventListener('click', () => {
+                businessEntitiesGroup.classList.toggle('expanded');
+            });
+        }
+    }
 }
 
 // Inisialisasi navbar
@@ -68,9 +104,29 @@ function initNavbar() {
         logoutBtn.addEventListener('click', () => {
             localStorage.removeItem('stockmint_token');
             localStorage.removeItem('stockmint_user');
+            localStorage.removeItem('stockmint_sheet_id');
             window.location.href = 'index.html';
         });
     }
+}
+
+// Set active menu berdasarkan halaman saat ini
+function setActiveMenu() {
+    const currentPath = window.location.pathname;
+    const currentPage = currentPath.split('/').pop();
+    
+    // Remove active class from all menu items
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Set active class for current page
+    document.querySelectorAll('.menu-item').forEach(item => {
+        const href = item.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'dashboard.html')) {
+            item.classList.add('active');
+        }
+    });
 }
 
 // Cek autentikasi
@@ -89,13 +145,4 @@ function checkAuth() {
 function isDemoMode() {
     const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
     return user.isDemo === true;
-}
-
-// Format file size
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
