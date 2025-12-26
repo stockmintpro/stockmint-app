@@ -17,7 +17,7 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
-            <!-- Logo Section -->
+            <!-- Logo Section - DIUBAH: Logo kiri, teks kanan -->
             <div class="logo-section">
                 <div class="logo-circle">
                     <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
@@ -25,9 +25,11 @@
                          class="logo-img"
                          onerror="this.src='images/logo-stockmint.png'; this.onerror=null;">
                 </div>
-                <div class="app-name">StockMint</div>
-                <div class="app-tagline">Precision Inventory & Profit Tracking</div>
-                <div class="pro-badge">Pro</div>
+                <div class="logo-text">
+                    <div class="app-name">StockMint</div>
+                    <div class="app-tagline">Precision Inventory &</div>
+                    <div class="app-tagline">Profit Tracking <span class="pro-badge">PRO</span></div>
+                </div>
             </div>
             
             <!-- Navigation Menu -->
@@ -36,7 +38,7 @@
                     <!-- Dashboard -->
                     <li class="menu-item active">
                         <a href="dashboard.html" class="menu-link">
-                            <i class="menu-icon fas fa-tachometer-alt"></i>
+                            <span class="menu-icon">📊</span>
                             <span>Dashboard</span>
                         </a>
                     </li>
@@ -44,7 +46,7 @@
                     <!-- Master Data -->
                     <li class="menu-item">
                         <a href="masterdata.html" class="menu-link">
-                            <i class="menu-icon fas fa-database"></i>
+                            <span class="menu-icon">📁</span>
                             <span>Master Data</span>
                         </a>
                     </li>
@@ -52,32 +54,28 @@
                     <!-- Business Entities (Collapsible) -->
                     <li class="menu-item">
                         <a href="#" class="menu-link" data-toggle="business-entities">
-                            <i class="menu-icon fas fa-building"></i>
+                            <span class="menu-icon">🏢</span>
                             <span>Business Entities</span>
-                            <i class="menu-arrow fas fa-chevron-down"></i>
+                            <span class="menu-arrow">▼</span>
                         </a>
                         <ul class="submenu" id="businessEntitiesMenu">
                             <li class="menu-item submenu-item">
                                 <a href="entities/company.html" class="menu-link">
-                                    <i class="menu-icon fas fa-landmark"></i>
                                     <span>Company</span>
                                 </a>
                             </li>
                             <li class="menu-item submenu-item">
                                 <a href="entities/warehouses.html" class="menu-link">
-                                    <i class="menu-icon fas fa-warehouse"></i>
                                     <span>Warehouses</span>
                                 </a>
                             </li>
                             <li class="menu-item submenu-item">
                                 <a href="entities/suppliers.html" class="menu-link">
-                                    <i class="menu-icon fas fa-truck"></i>
                                     <span>Suppliers</span>
                                 </a>
                             </li>
                             <li class="menu-item submenu-item">
                                 <a href="entities/customers.html" class="menu-link">
-                                    <i class="menu-icon fas fa-users"></i>
                                     <span>Customers</span>
                                 </a>
                             </li>
@@ -87,26 +85,23 @@
                     <!-- Business Operations (Collapsible) -->
                     <li class="menu-item">
                         <a href="#" class="menu-link" data-toggle="business-ops">
-                            <i class="menu-icon fas fa-cogs"></i>
+                            <span class="menu-icon">🔄</span>
                             <span>Business Operations</span>
-                            <i class="menu-arrow fas fa-chevron-down"></i>
+                            <span class="menu-arrow">▼</span>
                         </a>
                         <ul class="submenu" id="businessOpsMenu">
                             <li class="menu-item submenu-item">
                                 <a href="products.html" class="menu-link">
-                                    <i class="menu-icon fas fa-boxes"></i>
                                     <span>Products</span>
                                 </a>
                             </li>
                             <li class="menu-item submenu-item">
                                 <a href="purchases.html" class="menu-link">
-                                    <i class="menu-icon fas fa-shopping-cart"></i>
                                     <span>Purchases</span>
                                 </a>
                             </li>
                             <li class="menu-item submenu-item">
                                 <a href="sales.html" class="menu-link">
-                                    <i class="menu-icon fas fa-chart-line"></i>
                                     <span>Sales</span>
                                 </a>
                             </li>
@@ -116,56 +111,56 @@
                     <!-- Tools (Collapsible) -->
                     <li class="menu-item">
                         <a href="#" class="menu-link" data-toggle="tools">
-                            <i class="menu-icon fas fa-tools"></i>
+                            <span class="menu-icon">🛠️</span>
                             <span>Tools</span>
-                            <i class="menu-arrow fas fa-chevron-down"></i>
+                            <span class="menu-arrow">▼</span>
                         </a>
                         <ul class="submenu" id="toolsMenu">
                             <li class="menu-item submenu-item">
                                 <a href="calculator.html" class="menu-link">
-                                    <i class="menu-icon fas fa-calculator"></i>
                                     <span>Price Calculator</span>
                                 </a>
                             </li>
                             <li class="menu-item submenu-item">
                                 <a href="reports.html" class="menu-link">
-                                    <i class="menu-icon fas fa-chart-bar"></i>
                                     <span>Reports</span>
                                 </a>
                             </li>
                         </ul>
                     </li>
                     
-                    <!-- Settings (Collapsible) -->
+                    <!-- Settings (Collapsible) dengan System Settings Nested -->
                     <li class="menu-item">
                         <a href="#" class="menu-link" data-toggle="settings">
-                            <i class="menu-icon fas fa-cog"></i>
+                            <span class="menu-icon">⚙️</span>
                             <span>Settings</span>
-                            <i class="menu-arrow fas fa-chevron-down"></i>
+                            <span class="menu-arrow">▼</span>
                         </a>
                         <ul class="submenu" id="settingsMenu">
-                            <li class="menu-item submenu-item">
-                                <a href="settings.html" class="menu-link">
-                                    <i class="menu-icon fas fa-sliders-h"></i>
-                                    <span>System Settings</span>
+                            <!-- System Settings dengan nested submenu -->
+                            <li class="menu-item submenu-item with-nested">
+                                <a href="#" class="menu-link" data-toggle="system-settings">
+                                    System Settings
+                                    <span class="menu-arrow">▼</span>
                                 </a>
+                                <div class="nested-submenu" id="systemSettingsMenu">
+                                    <a href="system/user-management.html" class="menu-link">User Management</a>
+                                    <a href="system/role-permissions.html" class="menu-link">Role & Permissions</a>
+                                    <a href="system/company-settings.html" class="menu-link">Company Settings</a>
+                                    <a href="system/notification-settings.html" class="menu-link">Notification Settings</a>
+                                    <a href="system/marketplace-fee.html" class="menu-link">Marketplace Fee</a>
+                                    <a href="system/backup-restore.html" class="menu-link">Backup & Restore</a>
+                                    <a href="system/api-integrations.html" class="menu-link">API Integrations</a>
+                                </div>
                             </li>
                             <li class="menu-item submenu-item">
                                 <a href="contacts.html" class="menu-link">
-                                    <i class="menu-icon fas fa-address-book"></i>
                                     <span>Contacts</span>
                                 </a>
                             </li>
                             <li class="menu-item submenu-item">
                                 <a href="help.html" class="menu-link">
-                                    <i class="menu-icon fas fa-question-circle"></i>
                                     <span>Help & Guide</span>
-                                </a>
-                            </li>
-                            <li class="menu-item submenu-item">
-                                <a href="marketplace-fee.html" class="menu-link">
-                                    <i class="menu-icon fas fa-percentage"></i>
-                                    <span>Marketplace Fee</span>
                                 </a>
                             </li>
                         </ul>
@@ -182,7 +177,7 @@
                     <div class="user-name">Admin Joko</div>
                     <div class="user-role">Administrator</div>
                 </div>
-                <a href="index.html" class="logout-btn" title="Logout">
+                <a href="#" class="logout-btn" title="Logout" onclick="logout(); return false;">
                     <i class="fas fa-sign-out-alt"></i>
                 </a>
             </div>
