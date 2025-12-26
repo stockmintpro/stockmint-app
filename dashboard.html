@@ -172,91 +172,113 @@
 
     <script src="js/common.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Dashboard loaded');
+    document.addEventListener('DOMContentLoaded', async function() {
+        console.log('Dashboard loaded');
+        
+        // CEK AUTENTIKASI DULU SEBELUM APA-APA
+        if (!checkAuth()) {
+            // checkAuth() sudah redirect ke index.html jika gagal
+            return;
+        }
+        
+        // Load common elements (sidebar & navbar) - PASTIKAN SETELAH CEK AUTH
+        try {
+            await loadCommonElements();
+            console.log('Common elements loaded');
             
-            // Cek autentikasi terlebih dahulu
-            const token = localStorage.getItem('stockmint_token');
+            // Ambil user data lagi setelah common elements loaded
             const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
             
-            if (!token || !user.email) {
-                console.log('No auth token, redirecting to login');
-                window.location.href = 'index.html';
-                return;
+            // Show demo banner jika dalam mode demo
+            if (user.isDemo) {
+                document.getElementById('demoBanner').style.display = 'flex';
+                loadDemoData();
+            } else {
+                loadRealData();
             }
             
-            console.log('User authenticated:', user.email);
-            
-            // Load common elements (sidebar & navbar)
-            try {
-                loadCommonElements();
-                console.log('Common elements loaded');
+            // Event listeners
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const originalClass = icon.className;
                 
-                // Show demo banner jika dalam mode demo
-                if (user.isDemo) {
-                    document.getElementById('demoBanner').style.display = 'flex';
-                    loadDemoData();
-                } else {
-                    loadRealData();
-                }
+                icon.className = 'fas fa-spinner loading';
+                this.disabled = true;
                 
-                // Event listeners
-                document.getElementById('refreshBtn').addEventListener('click', function() {
-                    const icon = this.querySelector('i');
-                    const originalClass = icon.className;
+                setTimeout(() => {
+                    icon.className = originalClass;
+                    this.disabled = false;
                     
-                    icon.className = 'fas fa-spinner loading';
-                    this.disabled = true;
+                    if (user.isDemo) {
+                        loadDemoData();
+                    } else {
+                        loadRealData();
+                    }
                     
-                    setTimeout(() => {
-                        icon.className = originalClass;
-                        this.disabled = false;
-                        
-                        if (user.isDemo) {
-                            loadDemoData();
-                        } else {
-                            loadRealData();
-                        }
-                        
-                        // Tambah activity baru
-                        const activities = document.querySelector('.recent-activities');
-                        const newActivity = document.createElement('div');
-                        newActivity.className = 'activity-item';
-                        newActivity.innerHTML = `
-                            <div class="activity-icon">
-                                <i class="fas fa-sync-alt"></i>
-                            </div>
-                            <div class="activity-content">
-                                <strong>Dashboard data refreshed</strong>
-                                <div class="activity-time">Just now</div>
-                            </div>
-                        `;
+                    // Tambah activity baru
+                    const activities = document.querySelector('.recent-activities');
+                    const newActivity = document.createElement('div');
+                    newActivity.className = 'activity-item';
+                    newActivity.innerHTML = `
+                        <div class="activity-icon">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <strong>Dashboard data refreshed</strong>
+                            <div class="activity-time">Just now</div>
+                        </div>
+                    `;
+                    if (activities) {
                         activities.insertBefore(newActivity, activities.firstChild);
-                        
-                        alert('Data diperbarui!');
-                    }, 1000);
-                });
-                
-            } catch (error) {
-                console.error('Error initializing dashboard:', error);
-                alert('Error loading page. Please check console for details.');
+                    }
+                    
+                    alert('Data diperbarui!');
+                }, 1000);
+            });
+            
+        } catch (error) {
+            console.error('Error initializing dashboard:', error);
+            alert('Error loading page. Please check console for details.');
+        }
+    });
+    
+    function loadDemoData() {
+        // Demo data - angka dummy seperti di HTML
+        document.getElementById('totalProducts').textContent = '142';
+        document.getElementById('todaySales').textContent = 'Rp 3.250.000';
+        document.getElementById('lowStock').textContent = '8 Items';
+        document.getElementById('monthlyProfit').textContent = 'Rp 48.500.000';
+    }
+    
+    function loadRealData() {
+        // Load real data from localStorage - KOSONGKAN JIKA BELUM ADA DATA
+        const masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
+        const productCount = masterData.products?.length || 0;
+        
+        // TAMPILKAN 0 JIKA BELUM ADA DATA
+        document.getElementById('totalProducts').textContent = productCount;
+        document.getElementById('todaySales').textContent = 'Rp 0';
+        document.getElementById('lowStock').textContent = productCount > 0 ? '0 Items' : '0 Items';
+        document.getElementById('monthlyProfit').textContent = 'Rp 0';
+        
+        // Jika belum ada data sama sekali, ubah recent activities
+        if (productCount === 0) {
+            const activities = document.querySelector('.recent-activities');
+            if (activities) {
+                activities.innerHTML = `
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <strong>Belum ada data</strong>
+                            <div class="activity-time">Silakan isi data master terlebih dahulu</div>
+                        </div>
+                    </div>
+                `;
             }
-        });
-        
-        function loadDemoData() {
-            // Demo data
-            document.getElementById('totalProducts').textContent = '142';
-            document.getElementById('todaySales').textContent = 'Rp 3.250.000';
-            document.getElementById('lowStock').textContent = '8 Items';
-            document.getElementById('monthlyProfit').textContent = 'Rp 48.500.000';
         }
-        
-        function loadRealData() {
-            // Load real data from localStorage
-            const masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
-            document.getElementById('totalProducts').textContent = (masterData.products?.length || 0);
-            // Data lainnya bisa diisi dari localStorage atau API
-        }
+    }
     </script>
 </body>
 </html>
