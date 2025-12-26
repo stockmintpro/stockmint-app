@@ -1,41 +1,41 @@
 // ===== KONFIGURASI PATH =====
 // Untuk GitHub Pages: '/stockmint-app'
-// Untuk localhost: '' (kosong)
-const BASE_PATH = '/stockmint-app'; // Ganti ke '' jika di localhost
+// Untuk localhost: ''
+const BASE_PATH = '/stockmint-app';
 
 // ===== EKSEKUSI SAAT DOKUMEN SIAP =====
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('StockMint Pro - Common.js loaded | Base Path:', BASE_PATH);
+    console.log('StockMint Pro - Initializing...');
     
     // Hanya load elemen dinamis jika tidak ada sidebar statis
     if (!document.querySelector('.sidebar')) {
         loadCommonElements();
+    } else {
+        // Jika sidebar sudah ada, setup logo
+        setupLogo();
     }
     
     // Inisialisasi semua fungsi
     initCommonFunctions();
 });
 
-// ===== FUNGSI LOAD ELEMEN DINAMIS (untuk halaman tanpa sidebar) =====
+// ===== FUNGSI LOAD ELEMEN DINAMIS =====
 function loadCommonElements() {
-    const base = BASE_PATH ? BASE_PATH + '/' : '';
+    const base = getBasePath();
     
     const sidebarHTML = `
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <img src="${base}assets/images/logo-stockmint.png" 
-                     alt="StockMint Logo" 
-                     class="logo-img"
-                     onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='flex';">
-                
-                <div id="fallbackLogo" class="logo-fallback" style="display: none;">
-                    <i class="fas fa-boxes"></i>
-                </div>
-                
-                <div class="logo-text">
-                    <h2>StockMint <span class="pro-badge">Pro</span></h2>
-                    <div class="logo-tagline">Precision Inventory & Profit Tracking</div>
+                <div class="logo-container">
+                    <img src="${base}assets/images/logo-stockmint.png" 
+                         alt="StockMint Logo" 
+                         class="logo-img"
+                         onerror="this.src='${base}images/logo-stockmint.png'; this.onerror=null;">
+                    <div class="logo-text">
+                        <h1>StockMint <span class="pro-badge">Pro</span></h1>
+                        <div class="logo-tagline">Precision Inventory & Profit Tracking</div>
+                    </div>
                 </div>
             </div>
             
@@ -43,19 +43,30 @@ function loadCommonElements() {
                 <ul>
                     <li><a href="${base}dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="${base}masterdata.html"><i class="fas fa-database"></i> Master Data</a></li>
-                    <li class="nav-subheader">BUSINESS ENTITIES</li>
-                    <li><a href="${base}entities/company.html"><i class="fas fa-building"></i> Company</a></li>
-                    <li><a href="${base}entities/warehouses.html"><i class="fas fa-warehouse"></i> Warehouses</a></li>
-                    <li><a href="${base}entities/suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
-                    <li><a href="${base}entities/customers.html"><i class="fas fa-users"></i> Customers</a></li>
-                    <li class="nav-subheader">OPERATIONS</li>
+                    
+                    <!-- Business Entities Submenu -->
+                    <div class="nav-subheader" id="businessEntitiesToggle">
+                        BUSINESS ENTITIES
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="entities-submenu" id="businessEntitiesMenu">
+                        <li><a href="${base}entities/company.html"><i class="fas fa-building"></i> Company</a></li>
+                        <li><a href="${base}entities/warehouses.html"><i class="fas fa-warehouse"></i> Warehouses</a></li>
+                        <li><a href="${base}entities/suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
+                        <li><a href="${base}entities/customers.html"><i class="fas fa-users"></i> Customers</a></li>
+                    </div>
+                    
                     <li><a href="${base}products.html"><i class="fas fa-boxes"></i> Products</a></li>
                     <li><a href="${base}purchases.html"><i class="fas fa-shopping-cart"></i> Purchases</a></li>
                     <li><a href="${base}sales.html"><i class="fas fa-chart-line"></i> Sales</a></li>
-                    <li class="nav-subheader">TOOLS</li>
+                    
+                    <div class="nav-subheader">TOOLS</div>
                     <li><a href="${base}calculator.html"><i class="fas fa-calculator"></i> Price Calculator</a></li>
                     <li><a href="${base}reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    
+                    <div class="nav-subheader">SETTINGS</div>
                     <li><a href="${base}settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="${base}contacts.html"><i class="fas fa-address-book"></i> Contacts</a></li>
                 </ul>
             </nav>
             
@@ -82,21 +93,49 @@ function loadCommonElements() {
     // Insert sidebar jika belum ada
     if (!document.querySelector('.sidebar')) {
         document.body.insertAdjacentHTML('afterbegin', sidebarHTML);
+        setupLogo(); // Setup logo setelah dimasukkan
     }
 }
 
 // ===== FUNGSI INISIALISASI =====
 function initCommonFunctions() {
     initMobileMenu();
+    initBusinessEntitiesToggle();
     updateDateTime();
     setActiveMenu();
     setupLogout();
     
     // Update waktu setiap menit
     setInterval(updateDateTime, 60000);
-    
-    // Load logo jika ada fallback
-    loadLogo();
+}
+
+// ===== SETUP LOGO =====
+function setupLogo() {
+    const logoImg = document.querySelector('.logo-img');
+    if (logoImg) {
+        // Coba berbagai sumber logo
+        const logoUrls = [
+            'https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png',
+            'https://i.ibb.co/XxvfRDyV/logo-stockmint-png.png',
+            `${getBasePath()}assets/images/logo-stockmint.png`,
+            `${getBasePath()}images/logo-stockmint.png`,
+            `${getBasePath()}logo-stockmint.png`
+        ];
+        
+        let currentIndex = 0;
+        
+        function tryNextLogo() {
+            if (currentIndex < logoUrls.length) {
+                logoImg.src = logoUrls[currentIndex];
+                currentIndex++;
+            }
+        }
+        
+        logoImg.onerror = tryNextLogo;
+        
+        // Coba load pertama
+        tryNextLogo();
+    }
 }
 
 // ===== MOBILE MENU =====
@@ -123,36 +162,42 @@ function initMobileMenu() {
     }
 }
 
-// ===== LOAD LOGO =====
-function loadLogo() {
-    const base = BASE_PATH ? BASE_PATH + '/' : '';
-    const logoImg = document.querySelector('.logo-img');
+// ===== BUSINESS ENTITIES TOGGLE =====
+function initBusinessEntitiesToggle() {
+    const toggle = document.getElementById('businessEntitiesToggle');
+    const menu = document.getElementById('businessEntitiesMenu');
     
-    if (logoImg) {
-        // Coba load dari beberapa sumber
-        const logoUrls = [
-            'https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png',
-            `${base}assets/images/logo-stockmint.png`,
-            `${base}images/logo-stockmint.png`,
-            `${base}logo-stockmint.png`
-        ];
+    if (toggle && menu) {
+        // Cek apakah kita di halaman Master Data atau Entities
+        const currentPath = window.location.pathname;
+        const isMasterDataPage = currentPath.includes('masterdata') || 
+                                currentPath.includes('company') ||
+                                currentPath.includes('warehouses') ||
+                                currentPath.includes('suppliers') ||
+                                currentPath.includes('customers');
         
-        let currentIndex = 0;
-        
-        function tryNextLogo() {
-            if (currentIndex < logoUrls.length) {
-                logoImg.src = logoUrls[currentIndex];
-                currentIndex++;
-            }
+        // Jika di dashboard, sembunyikan Business Entities
+        if (currentPath.includes('dashboard') || currentPath === '/' || currentPath === BASE_PATH || 
+            currentPath.includes('index')) {
+            menu.style.maxHeight = '0';
+            menu.style.overflow = 'hidden';
+            toggle.classList.add('collapsed');
+        } else if (isMasterDataPage) {
+            // Jika di halaman Master Data atau Entities, tampilkan
+            menu.style.maxHeight = '500px';
+            toggle.classList.remove('collapsed');
         }
         
-        logoImg.onerror = tryNextLogo;
-        logoImg.onload = function() {
-            console.log('Logo loaded from:', this.src);
-        };
-        
-        // Coba load pertama
-        tryNextLogo();
+        // Toggle functionality
+        toggle.addEventListener('click', function() {
+            if (menu.style.maxHeight === '0px' || menu.style.maxHeight === '') {
+                menu.style.maxHeight = '500px';
+                this.classList.remove('collapsed');
+            } else {
+                menu.style.maxHeight = '0';
+                this.classList.add('collapsed');
+            }
+        });
     }
 }
 
@@ -182,16 +227,13 @@ function updateDateTime() {
         year: 'numeric'
     });
     
-    // Update semua elemen waktu
-    const timeElements = document.querySelectorAll('#currentTime, .time, .current-time');
-    const dateElements = document.querySelectorAll('#currentDate, .date, .current-date');
-    
-    timeElements.forEach(el => {
+    // Update elements
+    document.querySelectorAll('#currentTime, .time').forEach(el => {
         el.textContent = timeString;
     });
     
-    dateElements.forEach(el => {
-        if (el.classList.contains('date-long') || el.hasAttribute('data-format') && el.getAttribute('data-format') === 'long') {
+    document.querySelectorAll('#currentDate, .date').forEach(el => {
+        if (el.classList.contains('date-long') || el.dataset.format === 'long') {
             el.textContent = dateLongString;
         } else {
             el.textContent = dateString;
@@ -204,52 +246,41 @@ function setActiveMenu() {
     const currentPath = window.location.pathname;
     let currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1);
     
-    // Handle root path atau BASE_PATH
+    // Handle root path
     if (currentPage === '' || currentPage === BASE_PATH.replace(/\//g, '')) {
         currentPage = 'dashboard.html';
     }
     
-    // Remove active class dari semua menu item
+    // Remove active class from all
     document.querySelectorAll('.nav-menu li').forEach(li => {
         li.classList.remove('active');
     });
     
-    // Set active berdasarkan halaman saat ini
-    const menuItems = document.querySelectorAll('.nav-menu a');
-    
-    menuItems.forEach(item => {
+    // Set active based on current page
+    document.querySelectorAll('.nav-menu a').forEach(item => {
         const href = item.getAttribute('href');
         const itemPage = href.substring(href.lastIndexOf('/') + 1);
         
-        // Exact match untuk halaman utama
+        // Simple matching
         if (currentPage === itemPage) {
             item.parentElement.classList.add('active');
             return;
         }
         
-        // Match untuk halaman entities
-        const isEntityPage = currentPage.includes('company') || currentPage.includes('warehouses') || 
-                           currentPage.includes('suppliers') || currentPage.includes('customers');
-        
-        if (isEntityPage && itemPage.includes(currentPage.replace('.html', ''))) {
+        // Match entities pages
+        if (currentPage.includes('company') && itemPage.includes('company')) {
             item.parentElement.classList.add('active');
-            return;
         }
-        
-        // Match untuk dashboard/masterdata tanpa folder
-        if ((currentPage === 'dashboard.html' && itemPage === 'dashboard.html') ||
-            (currentPage === 'masterdata.html' && itemPage === 'masterdata.html')) {
+        if (currentPage.includes('warehouses') && itemPage.includes('warehouses')) {
+            item.parentElement.classList.add('active');
+        }
+        if (currentPage.includes('suppliers') && itemPage.includes('suppliers')) {
+            item.parentElement.classList.add('active');
+        }
+        if (currentPage.includes('customers') && itemPage.includes('customers')) {
             item.parentElement.classList.add('active');
         }
     });
-    
-    // Tambah highlight untuk parent jika di sub-folder
-    if (currentPath.includes('entities/')) {
-        const masterDataLink = document.querySelector('a[href*="masterdata.html"]');
-        if (masterDataLink) {
-            masterDataLink.parentElement.classList.add('parent-active');
-        }
-    }
 }
 
 // ===== LOGOUT FUNCTION =====
@@ -263,43 +294,19 @@ function setupLogout() {
 }
 
 function logout() {
-    // Show confirmation dialog
-    if (!confirm('Apakah Anda yakin ingin logout dari StockMint Pro?')) {
-        return;
+    // Show confirmation
+    if (confirm('Apakah Anda yakin ingin logout dari StockMint Pro?')) {
+        // Clear user data
+        const itemsToKeep = ['language', 'theme'];
+        Object.keys(localStorage).forEach(key => {
+            if (!itemsToKeep.includes(key)) {
+                localStorage.removeItem(key);
+            }
+        });
+        
+        // Redirect to index.html
+        window.location.href = getBasePath() + 'index.html';
     }
-    
-    // Clear semua data user dari localStorage
-    const itemsToKeep = ['language', 'theme']; // Data yang ingin dipertahankan
-    const allKeys = Object.keys(localStorage);
-    
-    allKeys.forEach(key => {
-        if (!itemsToKeep.includes(key)) {
-            localStorage.removeItem(key);
-        }
-    });
-    
-    // Redirect ke index.html (halaman landing/login)
-    const base = BASE_PATH ? BASE_PATH + '/' : '';
-    window.location.href = base + 'index.html';
-}
-
-// ===== AUTH CHECK (jika diperlukan) =====
-function checkAuth() {
-    const currentUser = localStorage.getItem('currentUser') || 
-                       localStorage.getItem('stockmint_user') || 
-                       sessionStorage.getItem('stockmint_user');
-    
-    // Jika tidak ada user data dan tidak di halaman index, redirect
-    const currentPage = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-    const allowedPages = ['index.html', 'login.html', 'register.html', 'forgot-password.html'];
-    
-    if (!currentUser && !allowedPages.includes(currentPage) && !currentPage.includes('landing')) {
-        const base = BASE_PATH ? BASE_PATH + '/' : '';
-        window.location.href = base + 'index.html';
-        return false;
-    }
-    
-    return true;
 }
 
 // ===== HELPER FUNCTIONS =====
@@ -308,131 +315,12 @@ function getBasePath() {
 }
 
 function navigateTo(url) {
-    const base = getBasePath();
-    window.location.href = base + url;
+    window.location.href = getBasePath() + url;
 }
 
-function showNotification(message, type = 'info', duration = 5000) {
-    // Buat elemen notifikasi
-    const notification = document.createElement('div');
-    notification.className = `global-notification ${type}`;
-    notification.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : 
-                         type === 'error' ? 'exclamation-circle' : 
-                         type === 'warning' ? 'exclamation-triangle' : 
-                         'info-circle'}"></i>
-        <span>${message}</span>
-        <button class="notification-close"><i class="fas fa-times"></i></button>
-    `;
-    
-    // Tambah ke body
-    document.body.appendChild(notification);
-    
-    // Tambah style jika belum ada
-    if (!document.getElementById('notification-styles')) {
-        const style = document.createElement('style');
-        style.id = 'notification-styles';
-        style.textContent = `
-            .global-notification {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 16px 20px;
-                border-radius: 12px;
-                color: white;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                z-index: 99999;
-                animation: slideInRight 0.3s ease;
-                box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-                max-width: 400px;
-                font-weight: 500;
-            }
-            .global-notification.success {
-                background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
-                border-left: 5px solid #0d8c8a;
-            }
-            .global-notification.error {
-                background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-                border-left: 5px solid #b91c1c;
-            }
-            .global-notification.warning {
-                background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-                border-left: 5px solid #b45309;
-            }
-            .global-notification.info {
-                background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-                border-left: 5px solid #1e40af;
-            }
-            .notification-close {
-                background: transparent;
-                border: none;
-                color: rgba(255,255,255,0.8);
-                cursor: pointer;
-                margin-left: auto;
-                font-size: 16px;
-                padding: 4px;
-                border-radius: 4px;
-            }
-            .notification-close:hover {
-                background: rgba(255,255,255,0.1);
-            }
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            @keyframes slideOutRight {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    // Close button functionality
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.addEventListener('click', () => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    });
-    
-    // Auto remove after duration
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 300);
-        }
-    }, duration);
-}
-
-// ===== MAKE FUNCTIONS GLOBALLY AVAILABLE =====
+// ===== GLOBAL FUNCTIONS =====
 window.updateDateTime = updateDateTime;
 window.setActiveMenu = setActiveMenu;
 window.logout = logout;
 window.navigateTo = navigateTo;
 window.getBasePath = getBasePath;
-window.showNotification = showNotification;
-
-// Jalankan checkAuth jika diperlukan
-// window.addEventListener('load', checkAuth);
