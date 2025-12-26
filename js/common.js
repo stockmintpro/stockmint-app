@@ -7,107 +7,14 @@ const BASE_PATH = '/stockmint-app';
 document.addEventListener('DOMContentLoaded', function() {
     console.log('StockMint Pro - Initializing...');
     
-    // Hanya load elemen dinamis jika tidak ada sidebar statis
-    if (!document.querySelector('.sidebar')) {
-        loadCommonElements();
-    } else {
-        // Jika sidebar sudah ada, setup logo
+    // Setup logo jika sidebar sudah ada
+    if (document.querySelector('.sidebar')) {
         setupLogo();
     }
     
     // Inisialisasi semua fungsi
     initCommonFunctions();
 });
-
-// ===== FUNGSI LOAD ELEMEN DINAMIS =====
-function loadCommonElements() {
-    const base = getBasePath();
-    
-    const sidebarHTML = `
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-container">
-                    <img src="${base}assets/images/logo-stockmint.png" 
-                         alt="StockMint Logo" 
-                         class="logo-img"
-                         onerror="this.src='${base}images/logo-stockmint.png'; this.onerror=null;">
-                    <div class="logo-text">
-                        <h1>StockMint <span class="pro-badge">Pro</span></h1>
-                        <div class="logo-tagline">Precision Inventory & Profit Tracking</div>
-                    </div>
-                </div>
-            </div>
-            
-            <nav class="nav-menu">
-                <ul>
-                    <li><a href="${base}dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="${base}masterdata.html"><i class="fas fa-database"></i> Master Data</a></li>
-                    
-                    <!-- Business Entities Submenu -->
-                    <div class="nav-subheader" id="businessEntitiesToggle">
-                        BUSINESS ENTITIES
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="entities-submenu" id="businessEntitiesMenu">
-                        <li><a href="${base}entities/company.html"><i class="fas fa-building"></i> Company</a></li>
-                        <li><a href="${base}entities/warehouses.html"><i class="fas fa-warehouse"></i> Warehouses</a></li>
-                        <li><a href="${base}entities/suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
-                        <li><a href="${base}entities/customers.html"><i class="fas fa-users"></i> Customers</a></li>
-                    </div>
-                    
-                    <li><a href="${base}products.html"><i class="fas fa-boxes"></i> Products</a></li>
-                    <li><a href="${base}purchases.html"><i class="fas fa-shopping-cart"></i> Purchases</a></li>
-                    <li><a href="${base}sales.html"><i class="fas fa-chart-line"></i> Sales</a></li>
-                    
-                    <div class="nav-subheader">TOOLS</div>
-                    <li><a href="${base}calculator.html"><i class="fas fa-calculator"></i> Price Calculator</a></li>
-                    <li><a href="${base}reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
-                    
-                    <div class="nav-subheader">SETTINGS</div>
-                    <li><a href="${base}settings.html"><i class="fas fa-cog"></i> Settings</a></li>
-                    <li><a href="${base}contacts.html"><i class="fas fa-address-book"></i> Contacts</a></li>
-                </ul>
-            </nav>
-            
-            <div class="user-profile">
-                <div class="user-avatar">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-                <div class="user-info">
-                    <span class="user-name">Admin Joko</span>
-                    <span class="user-role">Administrator</span>
-                </div>
-                <a href="${base}index.html" class="logout-btn" title="Logout">
-                    <i class="fas fa-sign-out-alt"></i>
-                </a>
-            </div>
-        </aside>
-
-        <!-- Mobile Menu Toggle -->
-        <button class="mobile-menu-toggle" id="mobileMenuToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-    `;
-    
-    // Insert sidebar jika belum ada
-    if (!document.querySelector('.sidebar')) {
-        document.body.insertAdjacentHTML('afterbegin', sidebarHTML);
-        setupLogo(); // Setup logo setelah dimasukkan
-    }
-}
-
-// ===== FUNGSI INISIALISASI =====
-function initCommonFunctions() {
-    initMobileMenu();
-    initBusinessEntitiesToggle();
-    updateDateTime();
-    setActiveMenu();
-    setupLogout();
-    
-    // Update waktu setiap menit
-    setInterval(updateDateTime, 60000);
-}
 
 // ===== SETUP LOGO =====
 function setupLogo() {
@@ -128,14 +35,36 @@ function setupLogo() {
             if (currentIndex < logoUrls.length) {
                 logoImg.src = logoUrls[currentIndex];
                 currentIndex++;
+            } else {
+                // Jika semua gagal, tampilkan fallback
+                logoImg.style.display = 'none';
+                const logoCircle = document.querySelector('.logo-circle');
+                if (logoCircle) {
+                    logoCircle.innerHTML = '<span style="font-size: 24px; font-weight: bold; color: #19BEBB;">SM</span>';
+                }
             }
         }
         
         logoImg.onerror = tryNextLogo;
+        logoImg.onload = function() {
+            console.log('Logo loaded from:', this.src);
+        };
         
         // Coba load pertama
         tryNextLogo();
     }
+}
+
+// ===== FUNGSI INISIALISASI =====
+function initCommonFunctions() {
+    initMobileMenu();
+    initMenuToggles();
+    updateDateTime();
+    setActiveMenu();
+    setupLogout();
+    
+    // Update waktu setiap menit
+    setInterval(updateDateTime, 60000);
 }
 
 // ===== MOBILE MENU =====
@@ -162,42 +91,104 @@ function initMobileMenu() {
     }
 }
 
-// ===== BUSINESS ENTITIES TOGGLE =====
-function initBusinessEntitiesToggle() {
-    const toggle = document.getElementById('businessEntitiesToggle');
-    const menu = document.getElementById('businessEntitiesMenu');
+// ===== MENU TOGGLES =====
+function initMenuToggles() {
+    // Business Entities Toggle
+    const businessEntitiesToggle = document.querySelector('[data-toggle="business-entities"]');
+    const businessEntitiesMenu = document.getElementById('businessEntitiesMenu');
     
-    if (toggle && menu) {
-        // Cek apakah kita di halaman Master Data atau Entities
-        const currentPath = window.location.pathname;
-        const isMasterDataPage = currentPath.includes('masterdata') || 
-                                currentPath.includes('company') ||
-                                currentPath.includes('warehouses') ||
-                                currentPath.includes('suppliers') ||
-                                currentPath.includes('customers');
-        
-        // Jika di dashboard, sembunyikan Business Entities
-        if (currentPath.includes('dashboard') || currentPath === '/' || currentPath === BASE_PATH || 
-            currentPath.includes('index')) {
-            menu.style.maxHeight = '0';
-            menu.style.overflow = 'hidden';
-            toggle.classList.add('collapsed');
-        } else if (isMasterDataPage) {
-            // Jika di halaman Master Data atau Entities, tampilkan
-            menu.style.maxHeight = '500px';
-            toggle.classList.remove('collapsed');
-        }
-        
-        // Toggle functionality
-        toggle.addEventListener('click', function() {
-            if (menu.style.maxHeight === '0px' || menu.style.maxHeight === '') {
-                menu.style.maxHeight = '500px';
-                this.classList.remove('collapsed');
-            } else {
-                menu.style.maxHeight = '0';
-                this.classList.add('collapsed');
-            }
+    if (businessEntitiesToggle && businessEntitiesMenu) {
+        businessEntitiesToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            this.parentElement.classList.toggle('expanded');
+            businessEntitiesMenu.classList.toggle('expanded');
         });
+    }
+    
+    // Business Operations Toggle
+    const businessOpsToggle = document.querySelector('[data-toggle="business-ops"]');
+    const businessOpsMenu = document.getElementById('businessOpsMenu');
+    
+    if (businessOpsToggle && businessOpsMenu) {
+        businessOpsToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            this.parentElement.classList.toggle('expanded');
+            businessOpsMenu.classList.toggle('expanded');
+        });
+    }
+    
+    // Tools Toggle
+    const toolsToggle = document.querySelector('[data-toggle="tools"]');
+    const toolsMenu = document.getElementById('toolsMenu');
+    
+    if (toolsToggle && toolsMenu) {
+        toolsToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            this.parentElement.classList.toggle('expanded');
+            toolsMenu.classList.toggle('expanded');
+        });
+    }
+    
+    // Settings Toggle
+    const settingsToggle = document.querySelector('[data-toggle="settings"]');
+    const settingsMenu = document.getElementById('settingsMenu');
+    
+    if (settingsToggle && settingsMenu) {
+        settingsToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            this.parentElement.classList.toggle('expanded');
+            settingsMenu.classList.toggle('expanded');
+        });
+    }
+    
+    // Auto expand based on current page
+    autoExpandMenus();
+}
+
+// ===== AUTO EXPAND MENUS =====
+function autoExpandMenus() {
+    const currentPath = window.location.pathname;
+    
+    // Business Entities
+    if (currentPath.includes('company') || currentPath.includes('warehouses') || 
+        currentPath.includes('suppliers') || currentPath.includes('customers') ||
+        currentPath.includes('masterdata')) {
+        const businessEntitiesItem = document.querySelector('[data-toggle="business-entities"]').parentElement;
+        const businessEntitiesMenu = document.getElementById('businessEntitiesMenu');
+        if (businessEntitiesItem && businessEntitiesMenu) {
+            businessEntitiesItem.classList.add('expanded');
+            businessEntitiesMenu.classList.add('expanded');
+        }
+    }
+    
+    // Business Operations
+    if (currentPath.includes('products') || currentPath.includes('purchases') || currentPath.includes('sales')) {
+        const businessOpsItem = document.querySelector('[data-toggle="business-ops"]').parentElement;
+        const businessOpsMenu = document.getElementById('businessOpsMenu');
+        if (businessOpsItem && businessOpsMenu) {
+            businessOpsItem.classList.add('expanded');
+            businessOpsMenu.classList.add('expanded');
+        }
+    }
+    
+    // Tools
+    if (currentPath.includes('calculator') || currentPath.includes('reports')) {
+        const toolsItem = document.querySelector('[data-toggle="tools"]').parentElement;
+        const toolsMenu = document.getElementById('toolsMenu');
+        if (toolsItem && toolsMenu) {
+            toolsItem.classList.add('expanded');
+            toolsMenu.classList.add('expanded');
+        }
+    }
+    
+    // Settings
+    if (currentPath.includes('settings') || currentPath.includes('contacts') || currentPath.includes('help')) {
+        const settingsItem = document.querySelector('[data-toggle="settings"]').parentElement;
+        const settingsMenu = document.getElementById('settingsMenu');
+        if (settingsItem && settingsMenu) {
+            settingsItem.classList.add('expanded');
+            settingsMenu.classList.add('expanded');
+        }
     }
 }
 
@@ -219,25 +210,13 @@ function updateDateTime() {
         year: 'numeric'
     });
     
-    // Format date long (Monday, 26 December 2025)
-    const dateLongString = now.toLocaleDateString('id-ID', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-    
     // Update elements
     document.querySelectorAll('#currentTime, .time').forEach(el => {
         el.textContent = timeString;
     });
     
     document.querySelectorAll('#currentDate, .date').forEach(el => {
-        if (el.classList.contains('date-long') || el.dataset.format === 'long') {
-            el.textContent = dateLongString;
-        } else {
-            el.textContent = dateString;
-        }
+        el.textContent = dateString;
     });
 }
 
@@ -252,33 +231,28 @@ function setActiveMenu() {
     }
     
     // Remove active class from all
-    document.querySelectorAll('.nav-menu li').forEach(li => {
-        li.classList.remove('active');
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.remove('active');
     });
     
     // Set active based on current page
-    document.querySelectorAll('.nav-menu a').forEach(item => {
-        const href = item.getAttribute('href');
-        const itemPage = href.substring(href.lastIndexOf('/') + 1);
+    document.querySelectorAll('.menu-link').forEach(link => {
+        const href = link.getAttribute('href');
+        const linkPage = href.substring(href.lastIndexOf('/') + 1);
         
-        // Simple matching
-        if (currentPage === itemPage) {
-            item.parentElement.classList.add('active');
+        // Simple matching for main pages
+        if (currentPage === linkPage || 
+            (currentPage.includes(linkPage.replace('.html', '')) && linkPage !== '')) {
+            link.parentElement.classList.add('active');
             return;
         }
         
-        // Match entities pages
-        if (currentPage.includes('company') && itemPage.includes('company')) {
-            item.parentElement.classList.add('active');
-        }
-        if (currentPage.includes('warehouses') && itemPage.includes('warehouses')) {
-            item.parentElement.classList.add('active');
-        }
-        if (currentPage.includes('suppliers') && itemPage.includes('suppliers')) {
-            item.parentElement.classList.add('active');
-        }
-        if (currentPage.includes('customers') && itemPage.includes('customers')) {
-            item.parentElement.classList.add('active');
+        // Special cases for entities
+        if ((currentPage.includes('company') && linkPage.includes('company')) ||
+            (currentPage.includes('warehouses') && linkPage.includes('warehouses')) ||
+            (currentPage.includes('suppliers') && linkPage.includes('suppliers')) ||
+            (currentPage.includes('customers') && linkPage.includes('customers'))) {
+            link.parentElement.classList.add('active');
         }
     });
 }
@@ -296,13 +270,18 @@ function setupLogout() {
 function logout() {
     // Show confirmation
     if (confirm('Apakah Anda yakin ingin logout dari StockMint Pro?')) {
-        // Clear user data
-        const itemsToKeep = ['language', 'theme'];
+        // Clear user data but keep some settings
+        const itemsToKeep = ['language', 'theme', 'sidebar_state'];
         Object.keys(localStorage).forEach(key => {
-            if (!itemsToKeep.includes(key)) {
+            if (!itemsToKeep.includes(key) && !key.startsWith('stockmint_')) {
                 localStorage.removeItem(key);
             }
         });
+        
+        // Clear specific StockMint data
+        localStorage.removeItem('stockmint_user');
+        localStorage.removeItem('stockmint_token');
+        localStorage.removeItem('currentUser');
         
         // Redirect to index.html
         window.location.href = getBasePath() + 'index.html';
