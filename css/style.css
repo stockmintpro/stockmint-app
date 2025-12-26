@@ -315,3 +315,85 @@ body {
         justify-content: center;
     }
 }
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 240px;
+    }
+    
+    .main-content {
+        margin-left: 240px;
+    }
+    
+    .content-area {
+        padding: 25px;
+    }
+    
+    .action-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 999;
+        background: #667eea;
+        color: white;
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .content-area {
+        padding: 15px;
+        padding-top: 70px; /* Untuk memberi ruang tombol mobile */
+    }
+    
+    .action-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .action-card {
+        padding: 20px;
+    }
+    
+    .main-header {
+        padding: 15px;
+        margin-top: 60px;
+    }
+    
+    .header-left h1 {
+        font-size: 24px;
+    }
+    
+    .time {
+        font-size: 28px;
+    }
+}
