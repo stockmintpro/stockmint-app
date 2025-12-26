@@ -141,6 +141,21 @@ function initMenuToggles() {
         });
     }
     
+    // System Settings (Nested Submenu) Toggle
+    const systemSettingsToggle = document.querySelector('[data-toggle="system-settings"]');
+    const systemSettingsMenu = document.getElementById('systemSettingsMenu');
+    
+    if (systemSettingsToggle && systemSettingsMenu) {
+        systemSettingsToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            this.parentElement.classList.toggle('expanded');
+            systemSettingsMenu.classList.toggle('expanded');
+            
+            // Prevent closing other open submenus
+            e.stopPropagation();
+        });
+    }
+    
     // Auto expand based on current page
     autoExpandMenus();
 }
@@ -148,48 +163,90 @@ function initMenuToggles() {
 // ===== AUTO EXPAND MENUS =====
 function autoExpandMenus() {
     const currentPath = window.location.pathname;
+    const currentPage = getCurrentPage();
+    
+    console.log('Current Page:', currentPage);
     
     // Business Entities
-    if (currentPath.includes('company') || currentPath.includes('warehouses') || 
-        currentPath.includes('suppliers') || currentPath.includes('customers') ||
-        currentPath.includes('masterdata')) {
-        const businessEntitiesItem = document.querySelector('[data-toggle="business-entities"]').parentElement;
+    if (currentPage.includes('company') || currentPage.includes('warehouses') || 
+        currentPage.includes('suppliers') || currentPage.includes('customers') ||
+        currentPage.includes('masterdata')) {
+        const businessEntitiesItem = document.querySelector('[data-toggle="business-entities"]');
         const businessEntitiesMenu = document.getElementById('businessEntitiesMenu');
         if (businessEntitiesItem && businessEntitiesMenu) {
-            businessEntitiesItem.classList.add('expanded');
+            businessEntitiesItem.parentElement.classList.add('expanded');
             businessEntitiesMenu.classList.add('expanded');
         }
     }
     
     // Business Operations
-    if (currentPath.includes('products') || currentPath.includes('purchases') || currentPath.includes('sales')) {
-        const businessOpsItem = document.querySelector('[data-toggle="business-ops"]').parentElement;
+    if (currentPage.includes('products') || currentPage.includes('purchases') || currentPage.includes('sales')) {
+        const businessOpsItem = document.querySelector('[data-toggle="business-ops"]');
         const businessOpsMenu = document.getElementById('businessOpsMenu');
         if (businessOpsItem && businessOpsMenu) {
-            businessOpsItem.classList.add('expanded');
+            businessOpsItem.parentElement.classList.add('expanded');
             businessOpsMenu.classList.add('expanded');
         }
     }
     
     // Tools
-    if (currentPath.includes('calculator') || currentPath.includes('reports')) {
-        const toolsItem = document.querySelector('[data-toggle="tools"]').parentElement;
+    if (currentPage.includes('calculator') || currentPage.includes('reports')) {
+        const toolsItem = document.querySelector('[data-toggle="tools"]');
         const toolsMenu = document.getElementById('toolsMenu');
         if (toolsItem && toolsMenu) {
-            toolsItem.classList.add('expanded');
+            toolsItem.parentElement.classList.add('expanded');
             toolsMenu.classList.add('expanded');
         }
     }
     
     // Settings
-    if (currentPath.includes('settings') || currentPath.includes('contacts') || currentPath.includes('help')) {
-        const settingsItem = document.querySelector('[data-toggle="settings"]').parentElement;
+    if (currentPage.includes('settings') || currentPage.includes('contacts') || currentPage.includes('help')) {
+        const settingsItem = document.querySelector('[data-toggle="settings"]');
         const settingsMenu = document.getElementById('settingsMenu');
         if (settingsItem && settingsMenu) {
-            settingsItem.classList.add('expanded');
+            settingsItem.parentElement.classList.add('expanded');
             settingsMenu.classList.add('expanded');
         }
     }
+    
+    // System Settings Nested Submenu
+    if (currentPage.includes('user-management') || currentPage.includes('role-permissions') || 
+        currentPage.includes('company-settings') || currentPage.includes('notification-settings') ||
+        currentPage.includes('marketplace-fee') || currentPage.includes('backup-restore') ||
+        currentPage.includes('api-integrations')) {
+        
+        // Expand Settings menu
+        const settingsItem = document.querySelector('[data-toggle="settings"]');
+        const settingsMenu = document.getElementById('settingsMenu');
+        if (settingsItem && settingsMenu) {
+            settingsItem.parentElement.classList.add('expanded');
+            settingsMenu.classList.add('expanded');
+        }
+        
+        // Expand System Settings nested menu
+        const systemSettingsItem = document.querySelector('[data-toggle="system-settings"]');
+        const systemSettingsMenu = document.getElementById('systemSettingsMenu');
+        if (systemSettingsItem && systemSettingsMenu) {
+            systemSettingsItem.parentElement.classList.add('expanded');
+            systemSettingsMenu.classList.add('expanded');
+        }
+    }
+}
+
+// ===== GET CURRENT PAGE =====
+function getCurrentPage() {
+    const currentPath = window.location.pathname;
+    let currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+    
+    // Handle root path
+    if (currentPage === '' || currentPage === BASE_PATH.replace(/\//g, '')) {
+        currentPage = 'dashboard.html';
+    }
+    
+    // Remove .html extension
+    currentPage = currentPage.replace('.html', '');
+    
+    return currentPage.toLowerCase();
 }
 
 // ===== DATE & TIME =====
@@ -222,13 +279,7 @@ function updateDateTime() {
 
 // ===== ACTIVE MENU HIGHLIGHT =====
 function setActiveMenu() {
-    const currentPath = window.location.pathname;
-    let currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1);
-    
-    // Handle root path
-    if (currentPage === '' || currentPage === BASE_PATH.replace(/\//g, '')) {
-        currentPage = 'dashboard.html';
-    }
+    const currentPage = getCurrentPage();
     
     // Remove active class from all
     document.querySelectorAll('.menu-item').forEach(item => {
@@ -238,21 +289,48 @@ function setActiveMenu() {
     // Set active based on current page
     document.querySelectorAll('.menu-link').forEach(link => {
         const href = link.getAttribute('href');
-        const linkPage = href.substring(href.lastIndexOf('/') + 1);
+        if (!href) return;
+        
+        const linkPage = href.substring(href.lastIndexOf('/') + 1).replace('.html', '').toLowerCase();
         
         // Simple matching for main pages
-        if (currentPage === linkPage || 
-            (currentPage.includes(linkPage.replace('.html', '')) && linkPage !== '')) {
-            link.parentElement.classList.add('active');
+        if (currentPage === linkPage) {
+            let parentItem = link.parentElement;
+            
+            // For nested items, find the top-level menu item
+            while (parentItem && !parentItem.classList.contains('menu-item')) {
+                parentItem = parentItem.parentElement;
+            }
+            
+            if (parentItem) {
+                parentItem.classList.add('active');
+            }
             return;
         }
         
-        // Special cases for entities
-        if ((currentPage.includes('company') && linkPage.includes('company')) ||
-            (currentPage.includes('warehouses') && linkPage.includes('warehouses')) ||
-            (currentPage.includes('suppliers') && linkPage.includes('suppliers')) ||
-            (currentPage.includes('customers') && linkPage.includes('customers'))) {
-            link.parentElement.classList.add('active');
+        // Special cases for nested items
+        const nestedMapping = {
+            'company': 'company',
+            'warehouses': 'warehouses',
+            'suppliers': 'suppliers',
+            'customers': 'customers',
+            'user-management': 'system-settings',
+            'role-permissions': 'system-settings',
+            'company-settings': 'system-settings',
+            'notification-settings': 'system-settings',
+            'marketplace-fee': 'system-settings',  // Marketplace Fee is now in System Settings
+            'backup-restore': 'system-settings',
+            'api-integrations': 'system-settings'
+        };
+        
+        if (nestedMapping[currentPage] === linkPage) {
+            let parentItem = link.parentElement;
+            while (parentItem && !parentItem.classList.contains('menu-item')) {
+                parentItem = parentItem.parentElement;
+            }
+            if (parentItem) {
+                parentItem.classList.add('active');
+            }
         }
     });
 }
@@ -303,3 +381,4 @@ window.setActiveMenu = setActiveMenu;
 window.logout = logout;
 window.navigateTo = navigateTo;
 window.getBasePath = getBasePath;
+window.getCurrentPage = getCurrentPage;
