@@ -1,0 +1,114 @@
+<!-- File: entities/company.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockMint - Company</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Sidebar dan Navbar akan diload via JavaScript -->
+    
+    <div class="content" id="content-area">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <h1><i class="fas fa-building"></i> Company Profile</h1>
+            <button class="btn btn-primary" id="btnEditCompany">
+                <i class="fas fa-edit"></i> Edit Company
+            </button>
+        </div>
+        
+        <div class="stat-card">
+            <div id="companyView">
+                <!-- Data akan dimuat di sini -->
+            </div>
+            
+            <div id="companyEdit" style="display: none;">
+                <form id="companyForm">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label>Company Name *</label>
+                            <input type="text" class="form-control" name="COMPANY_NAME" required>
+                        </div>
+                        <div class="form-col">
+                            <label>Tax ID</label>
+                            <input type="text" class="form-control" name="TAX_ID">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <button type="button" class="btn" id="btnCancelEdit">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/common.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!checkAuth()) return;
+            
+            loadCommonElements();
+            
+            // Set active menu
+            setTimeout(() => {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href') === 'entities/company.html') {
+                        item.classList.add('active');
+                    }
+                });
+            }, 100);
+            
+            loadCompanyData();
+            
+            // Event listeners
+            document.getElementById('btnEditCompany')?.addEventListener('click', function() {
+                document.getElementById('companyView').style.display = 'none';
+                document.getElementById('companyEdit').style.display = 'block';
+            });
+            
+            document.getElementById('btnCancelEdit')?.addEventListener('click', function() {
+                document.getElementById('companyView').style.display = 'block';
+                document.getElementById('companyEdit').style.display = 'none';
+            });
+            
+            document.getElementById('companyForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveCompanyData();
+            });
+        });
+        
+        function loadCompanyData() {
+            const masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
+            const company = masterData.company || {};
+            
+            document.getElementById('companyView').innerHTML = company.COMPANY_NAME ? `
+                <h3>${company.COMPANY_NAME}</h3>
+                <p><i class="fas fa-map-marker-alt"></i> ${company.STREET || ''} ${company.CITY || ''}</p>
+                <p><i class="fas fa-phone"></i> ${company.PHONE1 || ''}</p>
+                <p><i class="fas fa-envelope"></i> ${company.EMAIL || ''}</p>
+            ` : `
+                <div style="text-align: center; padding: 20px;">
+                    <i class="fas fa-building" style="font-size: 48px; color: #ccc;"></i>
+                    <h3>No Company Data</h3>
+                    <p>Please set up company data first in Master Data > Mulai Baru</p>
+                </div>
+            `;
+        }
+        
+        function saveCompanyData() {
+            // Implement save functionality
+            alert('Company data saved!');
+        }
+    </script>
+</body>
+</html>
