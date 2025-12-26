@@ -377,14 +377,15 @@ function initNavbar() {
             localStorage.removeItem('stockmint_token');
             localStorage.removeItem('stockmint_user');
             localStorage.removeItem('stockmint_sheet_id');
-            window.location.href = 'index.html';
+            window.location.href = BASE_PATH + '/index.html';
         });
     }
 }
 
 // Set active menu berdasarkan halaman saat ini
 function setActiveMenu() {
-    const currentPage = window.location.pathname.split('/').pop();
+    const currentPath = window.location.pathname;
+    const currentPage = currentPath.split('/').pop();
     
     setTimeout(() => {
         const menuItems = document.querySelectorAll('.menu-item');
@@ -398,12 +399,14 @@ function setActiveMenu() {
         // Set active class for current page
         menuItems.forEach(item => {
             const href = item.getAttribute('href');
-            if (href === currentPage || (currentPage === '' && href === 'dashboard.html')) {
+            // Hapus BASE_PATH dari href untuk perbandingan
+            const hrefPage = href.replace(BASE_PATH, '').replace(/^\//, '');
+            if (hrefPage === currentPage || (currentPage === '' && hrefPage === 'dashboard.html')) {
                 item.classList.add('active');
                 
                 // Jika ini adalah salah satu dari Business Entities, expand group-nya
-                if (href && (href.includes('company') || href.includes('warehouses') || 
-                    href.includes('suppliers') || href.includes('customers') || href === 'masterdata.html')) {
+                if (hrefPage && (hrefPage.includes('company') || hrefPage.includes('warehouses') || 
+                    hrefPage.includes('suppliers') || hrefPage.includes('customers') || hrefPage === 'masterdata.html')) {
                     const businessEntitiesGroup = document.querySelector('.menu-group');
                     if (businessEntitiesGroup) {
                         businessEntitiesGroup.classList.add('expanded');
