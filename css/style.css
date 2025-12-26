@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fb;
+    background-color: #f8fafc;
     overflow-x: hidden;
 }
 
@@ -18,10 +18,10 @@ body {
     position: relative;
 }
 
-/* SIDEBAR - FIXED WIDTH dengan warna hijau mint */
+/* SIDEBAR - WARNA HIJAU BRAND #19BEBB */
 .sidebar {
-    width: 260px;
-    background: linear-gradient(180deg, #00d2b8 0%, #00a8a8 100%);
+    width: 280px;
+    background: linear-gradient(180deg, #19BEBB 0%, #14a5a3 100%);
     color: white;
     display: flex;
     flex-direction: column;
@@ -30,38 +30,62 @@ body {
     left: 0;
     bottom: 0;
     z-index: 1000;
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 4px 0 25px rgba(25, 190, 187, 0.2);
     overflow-y: auto;
     transition: transform 0.3s ease;
 }
 
-/* Logo Section dengan brand yang lengkap */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+/* Logo Section dengan LOGO */
 .logo {
     padding: 25px 20px;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-}
-
-.logo-brand {
-    display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.08);
+    flex-wrap: wrap;
 }
 
-.logo h2 {
+.logo-img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.logo-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.logo-text h2 {
     font-size: 24px;
     font-weight: 700;
+    color: white;
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 5px;
 }
 
-.logo i {
-    font-size: 28px;
-    color: #ffffff;
+.pro-badge {
+    background: linear-gradient(135deg, #FFD700 0%, #FFC107 100%);
+    color: #333;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .logo-tagline {
@@ -69,15 +93,7 @@ body {
     color: rgba(255, 255, 255, 0.9);
     line-height: 1.4;
     font-weight: 400;
-}
-
-.pro-badge {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
+    font-style: italic;
 }
 
 /* Navigation Menu */
@@ -91,25 +107,27 @@ body {
 }
 
 .nav-menu li {
-    margin: 5px 0;
+    margin: 3px 0;
 }
 
 .nav-menu a {
     display: flex;
     align-items: center;
-    padding: 12px 20px;
-    color: rgba(255, 255, 255, 0.85);
+    padding: 14px 20px;
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     transition: all 0.3s ease;
-    gap: 12px;
+    gap: 15px;
     font-weight: 500;
     border-left: 4px solid transparent;
+    position: relative;
 }
 
 .nav-menu a:hover {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border-left: 4px solid #FFD700;
+    padding-left: 25px;
 }
 
 .nav-menu .active a {
@@ -117,29 +135,30 @@ body {
     color: white;
     border-left: 4px solid #FFD700;
     font-weight: 600;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
 }
 
 .nav-menu i {
-    width: 20px;
+    width: 22px;
     text-align: center;
     font-size: 16px;
 }
 
 .nav-subheader {
     padding: 15px 20px 8px;
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.6);
     font-weight: 600;
-    letter-spacing: 1px;
-    margin-top: 15px;
+    letter-spacing: 1.5px;
+    margin-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* User Profile */
 .user-profile {
     padding: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: center;
     gap: 15px;
@@ -148,14 +167,17 @@ body {
 }
 
 .user-avatar {
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.1);
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 22px;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 .user-info {
@@ -166,7 +188,7 @@ body {
 
 .user-name {
     font-weight: 600;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .user-role {
@@ -176,89 +198,101 @@ body {
 
 .logout-btn {
     color: rgba(255, 255, 255, 0.7);
-    background: none;
+    background: rgba(255, 255, 255, 0.1);
     border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     font-size: 18px;
     cursor: pointer;
-    padding: 5px;
-    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
     text-decoration: none;
 }
 
 .logout-btn:hover {
     color: white;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
 }
 
 /* MAIN CONTENT - with sidebar offset */
 .main-content {
     flex: 1;
-    margin-left: 260px;
+    margin-left: 280px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: #f8fafc;
 }
 
 /* Main Header */
 .main-header {
     background: white;
-    padding: 20px 30px;
-    border-bottom: 1px solid #eaeaea;
+    padding: 20px 35px;
+    border-bottom: 1px solid #e1e8ed;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 3px 15px rgba(25, 190, 187, 0.08);
     position: sticky;
     top: 0;
     z-index: 100;
 }
 
 .header-left h1 {
-    font-size: 28px;
-    color: #333;
+    font-size: 32px;
+    color: #2d3748;
     font-weight: 700;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-    color: #666;
-    font-size: 14px;
+    color: #718096;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .date-time {
     text-align: right;
     font-family: 'Courier New', monospace;
+    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 10px 20px;
+    border-radius: 12px;
+    background-color: rgba(25, 190, 187, 0.08);
+    border: 1px solid rgba(25, 190, 187, 0.2);
 }
 
 .time {
     display: block;
-    font-size: 32px;
-    font-weight: 700;
-    color: #00a8a8;
+    font-size: 36px;
+    font-weight: 800;
     line-height: 1;
+    letter-spacing: 1px;
 }
 
 .date {
     display: block;
-    color: #666;
-    font-size: 14px;
+    font-size: 15px;
     margin-top: 5px;
+    font-weight: 600;
+    opacity: 0.9;
 }
 
 /* Content Area */
 .content-area {
     flex: 1;
-    padding: 30px;
-    max-width: 1400px;
+    padding: 35px;
+    max-width: 1600px;
     margin: 0 auto;
     width: 100%;
-}
-
-/* Responsive */
-@media (max-width: 1200px) {
-    .content-area {
-        max-width: 100%;
-        padding: 20px;
-    }
 }
 
 /* Mobile Menu Toggle */
@@ -268,21 +302,74 @@ body {
     top: 20px;
     left: 20px;
     z-index: 1001;
-    background: #00a8a8;
+    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
     color: white;
     border: none;
-    border-radius: 5px;
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
+    border-radius: 10px;
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
     cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 20px rgba(25, 190, 187, 0.4);
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(25, 190, 187, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .content-area {
+        max-width: 100%;
+        padding: 25px;
+    }
+    
+    .sidebar {
+        width: 260px;
+    }
+    
+    .main-content {
+        margin-left: 260px;
+    }
 }
 
 @media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 300px;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+    }
+    
     .mobile-menu-toggle {
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    
+    .main-header {
+        padding: 15px 20px;
+        margin-top: 80px;
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .date-time {
+        align-self: flex-end;
+        margin-top: 10px;
+    }
+    
+    .content-area {
+        padding: 20px;
     }
 }
