@@ -1,19 +1,33 @@
-// File: js/common.js
-// Fungsi-fungsi yang digunakan di semua halaman
+// File: js/common.js - VERSI DIPERBAIKI
+// ===== KONFIGURASI PATH =====
+// Deteksi otomatis base path berdasarkan lokasi file
+function getBasePath() {
+    // Untuk GitHub Pages
+    if (window.location.hostname.includes('github.io')) {
+        const pathSegments = window.location.pathname.split('/');
+        if (pathSegments[1] === 'stockmint-app') {
+            return '/stockmint-app';
+        }
+    }
+    // Untuk local development
+    return '';
+}
 
-// Base Path untuk semua link
-const BASE_PATH = window.location.hostname.includes('github.io') ? '/stockmint-app' : '';
+const BASE_PATH = getBasePath();
 
-// Load sidebar dan navbar langsung dari string HTML
+// ===== LOAD ELEMENTS DENGAN PATH ABSOLUT =====
 function loadCommonElements() {
-    // SIDEBAR HTML - PERBAIKI SEMUA LINK
+    // Pastikan BASE_PATH sudah terdefinisi
+    const base = BASE_PATH || '';
+    
+    // HTML untuk Sidebar - SEMUA LINK MENGGUNAKAN PATH ABSOLUT
     const sidebarHTML = `
         <!-- Hamburger Menu -->
         <button class="hamburger-menu" id="hamburgerBtn">
             <i class="fas fa-bars"></i>
         </button>
         
-        <!-- Overlay untuk menutup sidebar di HP -->
+        <!-- Overlay untuk sidebar di HP -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
         
         <!-- Sidebar -->
@@ -24,7 +38,7 @@ function loadCommonElements() {
                      alt="StockMint Logo" 
                      class="logo"
                      id="mainLogo"
-                     onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='flex';">
+                     onerror="this.style.display='none'; document.getElementById(\'fallbackLogo\').style.display=\'flex\';">
                 
                 <div class="logo-fallback" id="fallbackLogo" style="display: none;">
                     SM
@@ -36,77 +50,75 @@ function loadCommonElements() {
                 </div>
             </div>
 
-            <!-- Menu -->
+            <!-- Menu - SEMUA LINK DENGAN BASE_PATH -->
             <div class="menu">
-                <!-- PERBAIKI SEMUA LINK DENGAN BASE_PATH -->
-                <a href="${BASE_PATH}/dashboard.html" class="menu-item">
+                <a href="${base}/dashboard.html" class="menu-item">
                     <i class="fas fa-home"></i>
                     <span class="menu-text">Dashboard</span>
                 </a>
                 
-                <a href="${BASE_PATH}/masterdata.html" class="menu-item">
+                <a href="${base}/masterdata.html" class="menu-item">
                     <i class="fas fa-database"></i>
                     <span class="menu-text">Master Data</span>
                 </a>
                 
-                <!-- Business Entities Group (Collapsible) -->
+                <!-- Business Entities Group -->
                 <div class="menu-group">
                     <div class="menu-group-title">
                         BUSINESS ENTITIES
                         <i class="fas fa-chevron-right"></i>
                     </div>
                     <div class="submenu-items">
-                        <a href="${BASE_PATH}/entities/company.html" class="menu-item submenu-item">
+                        <a href="${base}/entities/company.html" class="menu-item submenu-item">
                             <i class="fas fa-building"></i>
                             <span class="menu-text">Company</span>
                         </a>
-                        <a href="${BASE_PATH}/entities/warehouses.html" class="menu-item submenu-item">
+                        <a href="${base}/entities/warehouses.html" class="menu-item submenu-item">
                             <i class="fas fa-warehouse"></i>
                             <span class="menu-text">Warehouses</span>
                         </a>
-                        <a href="${BASE_PATH}/entities/suppliers.html" class="menu-item submenu-item">
+                        <a href="${base}/entities/suppliers.html" class="menu-item submenu-item">
                             <i class="fas fa-truck-loading"></i>
                             <span class="menu-text">Suppliers</span>
                         </a>
-                        <a href="${BASE_PATH}/entities/customers.html" class="menu-item submenu-item">
+                        <a href="${base}/entities/customers.html" class="menu-item submenu-item">
                             <i class="fas fa-users"></i>
                             <span class="menu-text">Customers</span>
                         </a>
                     </div>
                 </div>
                 
-                <!-- Lanjutkan perbaikan untuk semua link lainnya... -->
-                <a href="${BASE_PATH}/products.html" class="menu-item">
+                <a href="${base}/products.html" class="menu-item">
                     <i class="fas fa-boxes"></i>
                     <span class="menu-text">Products</span>
                 </a>
                 
-                <a href="${BASE_PATH}/purchases.html" class="menu-item">
+                <a href="${base}/purchases.html" class="menu-item">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="menu-text">Purchases</span>
                 </a>
                 
-                <a href="${BASE_PATH}/sales.html" class="menu-item">
+                <a href="${base}/sales.html" class="menu-item">
                     <i class="fas fa-chart-line"></i>
                     <span class="menu-text">Sales</span>
                 </a>
                 
-                <a href="${BASE_PATH}/calculator.html" class="menu-item">
+                <a href="${base}/calculator.html" class="menu-item">
                     <i class="fas fa-calculator"></i>
                     <span class="menu-text">Price Calculator</span>
                 </a>
                 
-                <a href="${BASE_PATH}/reports.html" class="menu-item">
+                <a href="${base}/reports.html" class="menu-item">
                     <i class="fas fa-file-alt"></i>
                     <span class="menu-text">Reports</span>
                 </a>
                 
-                <a href="${BASE_PATH}/settings.html" class="menu-item">
+                <a href="${base}/settings.html" class="menu-item">
                     <i class="fas fa-cog"></i>
                     <span class="menu-text">Settings</span>
                 </a>
                 
-                <a href="${BASE_PATH}/help.html" class="menu-item">
+                <a href="${base}/help.html" class="menu-item">
                     <i class="fas fa-question-circle"></i>
                     <span class="menu-text">Help</span>
                 </a>
@@ -123,142 +135,7 @@ function loadCommonElements() {
         </div>
     `;
     
-    // NAVBAR HTML - PERBAIKI LOGOUT
-    const navbarHTML = `
-        <!-- Top Navbar -->
-        <div class="top-navbar" id="topNavbar">
-            <div class="top-navbar-content">
-                <img id="userAvatar" src="" alt="User">
-                <div class="user-info-nav">
-                    <div class="user-name" id="userName">Admin Joko</div>
-                    <div class="user-package" id="userPackage">Pro</div>
-                </div>
-            </div>
-            <button id="logoutBtn" class="btn" style="background: #dc3545; color: white; padding: 8px 16px;">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-    `;   
- }
-
-// Load sidebar dan navbar langsung dari string HTML
-function loadCommonElements() {
-    // SIDEBAR HTML
-    const sidebarHTML = `
-        <!-- Hamburger Menu -->
-        <button class="hamburger-menu" id="hamburgerBtn">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <!-- Overlay untuk menutup sidebar di HP -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-        
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <!-- Logo Section -->
-            <div class="logo-container">
-                <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
-                     alt="StockMint Logo" 
-                     class="logo"
-                     id="mainLogo"
-                     onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='flex';">
-                
-                <div class="logo-fallback" id="fallbackLogo" style="display: none;">
-                    SM
-                </div>
-                
-                <div class="logo-text">
-                    <div class="logo-title">StockMint</div>
-                    <div class="logo-subtitle">Precision Inventory &<br>Profit Tracking</div>
-                </div>
-            </div>
-
-            <!-- Menu -->
-            <div class="menu">
-                <a href="dashboard.html" class="menu-item">
-                    <i class="fas fa-home"></i>
-                    <span class="menu-text">Dashboard</span>
-                </a>
-                
-                <a href="masterdata.html" class="menu-item">
-                    <i class="fas fa-database"></i>
-                    <span class="menu-text">Master Data</span>
-                </a>
-                
-                <!-- Business Entities Group (Collapsible) -->
-                <div class="menu-group">
-                    <div class="menu-group-title">
-                        BUSINESS ENTITIES
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div class="submenu-items">
-                        <a href="entities/company.html" class="menu-item submenu-item">
-                            <i class="fas fa-building"></i>
-                            <span class="menu-text">Company</span>
-                        </a>
-                        <a href="entities/warehouses.html" class="menu-item submenu-item">
-                            <i class="fas fa-warehouse"></i>
-                            <span class="menu-text">Warehouses</span>
-                        </a>
-                        <a href="entities/suppliers.html" class="menu-item submenu-item">
-                            <i class="fas fa-truck-loading"></i>
-                            <span class="menu-text">Suppliers</span>
-                        </a>
-                        <a href="entities/customers.html" class="menu-item submenu-item">
-                            <i class="fas fa-users"></i>
-                            <span class="menu-text">Customers</span>
-                        </a>
-                    </div>
-                </div>
-                
-                <a href="products.html" class="menu-item">
-                    <i class="fas fa-boxes"></i>
-                    <span class="menu-text">Products</span>
-                </a>
-                
-                <a href="purchases.html" class="menu-item">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="menu-text">Purchases</span>
-                </a>
-                
-                <a href="sales.html" class="menu-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span class="menu-text">Sales</span>
-                </a>
-                
-                <a href="calculator.html" class="menu-item">
-                    <i class="fas fa-calculator"></i>
-                    <span class="menu-text">Price Calculator</span>
-                </a>
-                
-                <a href="reports.html" class="menu-item">
-                    <i class="fas fa-file-alt"></i>
-                    <span class="menu-text">Reports</span>
-                </a>
-                
-                <a href="settings.html" class="menu-item">
-                    <i class="fas fa-cog"></i>
-                    <span class="menu-text">Settings</span>
-                </a>
-                
-                <a href="help.html" class="menu-item">
-                    <i class="fas fa-question-circle"></i>
-                    <span class="menu-text">Help</span>
-                </a>
-            </div>
-
-            <!-- User Section -->
-            <div class="user-section">
-                <div class="user-avatar">AJ</div>
-                <div class="user-info">
-                    <h4>Admin Joko</h4>
-                    <p>Administrator</p>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // NAVBAR HTML
+    // HTML untuk Navbar
     const navbarHTML = `
         <!-- Top Navbar -->
         <div class="top-navbar" id="topNavbar">
@@ -276,38 +153,31 @@ function loadCommonElements() {
     `;
     
     // Insert ke dalam body
-    const sidebarContainer = document.createElement('div');
-    sidebarContainer.innerHTML = sidebarHTML;
-    document.body.insertBefore(sidebarContainer, document.body.firstChild);
+    document.body.insertAdjacentHTML('afterbegin', sidebarHTML);
+    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
     
-    const navbarContainer = document.createElement('div');
-    navbarContainer.innerHTML = navbarHTML;
-    document.body.insertBefore(navbarContainer, document.body.firstChild.nextSibling);
-    
-    // Inisialisasi setelah elements ditambahkan
-    setTimeout(() => {
-        initCommon();
-    }, 100);
+    // Inisialisasi
+    initCommon();
 }
 
-// Inisialisasi umum
+// ===== INISIALISASI =====
 function initCommon() {
     initSidebar();
     initNavbar();
     setActiveMenu();
 }
 
-// Inisialisasi sidebar
 function initSidebar() {
     const sidebar = document.getElementById('sidebar');
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     
     if (!sidebar) {
-        console.error('Sidebar element not found!');
+        console.error('Sidebar not found!');
         return;
     }
     
+    // Toggle untuk mobile
     if (hamburgerBtn) {
         hamburgerBtn.addEventListener('click', () => {
             sidebar.classList.toggle('active');
@@ -322,14 +192,13 @@ function initSidebar() {
         });
     }
     
-    // Handle collapsible menu group untuk Business Entities
-    const masterDataMenu = document.querySelector('a[href="masterdata.html"]');
+    // Business Entities expand/collapse
+    const masterDataMenu = document.querySelector(`a[href="${BASE_PATH}/masterdata.html"]`);
     const businessEntitiesGroup = document.querySelector('.menu-group');
     
     if (masterDataMenu && businessEntitiesGroup) {
-        // Check if current page is master data or business entities
         const currentPath = window.location.pathname;
-        const currentPage = window.location.pathname.split('/').pop();
+        const currentPage = currentPath.split('/').pop();
         const isMasterDataPage = currentPage === 'masterdata.html' || 
                                  currentPage === 'company.html' ||
                                  currentPage === 'warehouses.html' ||
@@ -352,9 +221,8 @@ function initSidebar() {
     }
 }
 
-// Inisialisasi navbar
 function initNavbar() {
-    // Update user info di navbar
+    // Update user info
     const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
     const userName = document.getElementById('userName');
     const userAvatar = document.getElementById('userAvatar');
@@ -363,14 +231,10 @@ function initNavbar() {
     if (userName) userName.textContent = user.name || user.email;
     if (userPackage) userPackage.textContent = user.package || 'Pro';
     if (userAvatar) {
-        if (user.picture) {
-            userAvatar.src = user.picture;
-        } else {
-            userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=19BEBB&color=fff`;
-        }
+        userAvatar.src = user.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=19BEBB&color=fff`;
     }
     
-    // Logout button
+    // Logout button - PASTIKAN PAKAI BASE_PATH
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
@@ -382,64 +246,37 @@ function initNavbar() {
     }
 }
 
-// Set active menu berdasarkan halaman saat ini
 function setActiveMenu() {
     const currentPath = window.location.pathname;
-    const currentPage = currentPath.split('/').pop();
+    const base = BASE_PATH || '';
+    const relativePath = currentPath.replace(base, '');
     
     setTimeout(() => {
-        const menuItems = document.querySelectorAll('.menu-item');
-        if (menuItems.length === 0) return;
-        
-        // Remove active class from all menu items
-        menuItems.forEach(item => {
-            item.classList.remove('active');
-        });
-        
-        // Set active class for current page
-        menuItems.forEach(item => {
+        document.querySelectorAll('.menu-item').forEach(item => {
             const href = item.getAttribute('href');
-            // Hapus BASE_PATH dari href untuk perbandingan
-            const hrefPage = href.replace(BASE_PATH, '').replace(/^\//, '');
-            if (hrefPage === currentPage || (currentPage === '' && hrefPage === 'dashboard.html')) {
+            // Bandingkan href dengan current path
+            if (href === currentPath || href === relativePath) {
                 item.classList.add('active');
-                
-                // Jika ini adalah salah satu dari Business Entities, expand group-nya
-                if (hrefPage && (hrefPage.includes('company') || hrefPage.includes('warehouses') || 
-                    hrefPage.includes('suppliers') || hrefPage.includes('customers') || hrefPage === 'masterdata.html')) {
-                    const businessEntitiesGroup = document.querySelector('.menu-group');
-                    if (businessEntitiesGroup) {
-                        businessEntitiesGroup.classList.add('expanded');
-                    }
-                }
+            } else {
+                item.classList.remove('active');
             }
         });
-    }, 200);
+    }, 100);
 }
 
-// Cek autentikasi
+// ===== FUNGSI UTILITAS =====
 function checkAuth() {
     const token = localStorage.getItem('stockmint_token');
     const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
     
     if (!token || !user.email) {
-        window.location.href = 'index.html';
+        window.location.href = (BASE_PATH || '') + '/index.html';
         return false;
     }
     return true;
 }
 
-// Cek apakah dalam mode demo
 function isDemoMode() {
     const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
     return user.isDemo === true;
-}
-
-// Format file size
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
