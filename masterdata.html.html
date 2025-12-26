@@ -7,14 +7,12 @@
     <title>StockMint - Master Data</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-    <style>
-        /* PASTE SEMUA CSS DISINI */
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Sama seperti dashboard.html untuk struktur sidebar dan navbar -->
-    <!-- Ganti bagian content dengan: -->
+    <!-- Sidebar dan Navbar akan diload via JavaScript -->
     
+    <!-- Main Content -->
     <div class="content" id="content-area">
         <div class="master-data-layout" style="display: flex; gap: 30px;">
             <!-- LEFT COLUMN: Sub-menu Navigation -->
@@ -98,271 +96,27 @@
         </div>
     </div>
 
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/masterdata.js"></script>
     <script>
-        // ===== FIXED WIZARD FUNCTIONS =====
-        let currentWizardStep = 1;
-        
-        function setupWizard() {
-            currentWizardStep = 1;
-            updateWizardUI();
-            updateDataStatus();
-            
-            // Navigation buttons
-            document.getElementById('wizardPrevBtn').addEventListener('click', prevWizardStep);
-            document.getElementById('wizardNextBtn').addEventListener('click', nextWizardStep);
-            document.getElementById('wizardFinishBtn').addEventListener('click', finishWizard);
-            document.getElementById('wizardSkipBtn').addEventListener('click', skipWizardStep);
-            
-            // Add item buttons - FIX: Gunakan event delegation yang benar
-            setTimeout(() => {
-                const wizardContent = document.getElementById('wizardContent');
-                if (wizardContent) {
-                    wizardContent.addEventListener('click', function(e) {
-                        if (e.target.id === 'btnAddWarehouse' || e.target.closest('#btnAddWarehouse')) {
-                            e.preventDefault();
-                            addWarehouseItem();
-                        }
-                        if (e.target.id === 'btnAddCategory' || e.target.closest('#btnAddCategory')) {
-                            e.preventDefault();
-                            addCategoryItem();
-                        }
-                        if (e.target.id === 'btnAddSupplier' || e.target.closest('#btnAddSupplier')) {
-                            e.preventDefault();
-                            addSupplierItem();
-                        }
-                        if (e.target.id === 'btnAddCustomer' || e.target.closest('#btnAddCustomer')) {
-                            e.preventDefault();
-                            addCustomerItem();
-                        }
-                        if (e.target.id === 'btnAddProduct' || e.target.closest('#btnAddProduct')) {
-                            e.preventDefault();
-                            addProductItem();
-                        }
-                        
-                        // Remove buttons
-                        if (e.target.closest('.btn-remove-item')) {
-                            const btn = e.target.closest('.btn-remove-item');
-                            const type = btn.getAttribute('data-type');
-                            const id = btn.getAttribute('data-id');
-                            removeItem(type, id);
-                        }
-                        
-                        // Set primary warehouse
-                        if (e.target.closest('.btn-set-primary')) {
-                            const btn = e.target.closest('.btn-set-primary');
-                            const id = btn.getAttribute('data-id');
-                            setPrimaryWarehouse(id);
-                        }
-                    });
-                }
-            }, 100);
-        }
-        
-        function skipWizardStep() {
-            if (currentWizardStep < 7) {
-                currentWizardStep++;
-                updateWizardUI();
-            }
-        }
-        
-        function prevWizardStep(e) {
-            e.preventDefault();
-            if (currentWizardStep > 1) {
-                saveCurrentStepData();
-                currentWizardStep--;
-                updateWizardUI();
-            }
-        }
-        
-        function nextWizardStep(e) {
-            e.preventDefault();
-            if (currentWizardStep < 7) {
-                if (validateCurrentStep()) {
-                    saveCurrentStepData();
-                    currentWizardStep++;
-                    updateWizardUI();
-                    updateDataStatus();
-                }
-            }
-        }
-        
-        function validateCurrentStep() {
-            const masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
-            
-            switch(currentWizardStep) {
-                case 1: // Company
-                    const companyName = document.getElementById('companyName');
-                    if (companyName && !companyName.value.trim()) {
-                        alert('Nama perusahaan harus diisi');
-                        companyName.focus();
-                        return false;
-                    }
-                    break;
-                case 2: // Warehouse
-                    if (!masterData.warehouses || masterData.warehouses.length === 0) {
-                        alert('Minimal satu gudang harus ditambahkan');
-                        return false;
-                    }
-                    break;
-                case 3: // Category
-                    if (!masterData.categories || masterData.categories.length === 0) {
-                        alert('Minimal satu kategori harus ditambahkan');
-                        return false;
-                    }
-                    break;
-                case 6: // Product
-                    if (!masterData.products || masterData.products.length === 0) {
-                        alert('Minimal satu produk harus ditambahkan');
-                        return false;
-                    }
-                    break;
-            }
-            return true;
-        }
-        
-        function saveCurrentStepData() {
-            let masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
-            
-            switch(currentWizardStep) {
-                case 1: // Company
-                    const companyName = document.getElementById('companyName');
-                    if (companyName) {
-                        masterData.company = {
-                            COMPANY_ID: 1,
-                            COMPANY_NAME: companyName.value,
-                            STREET: document.getElementById('companyStreet')?.value || '',
-                            CITY: document.getElementById('companyCity')?.value || '',
-                            PHONE1: document.getElementById('companyPhone')?.value || '',
-                            EMAIL: document.getElementById('companyEmail')?.value || '',
-                            DEFAULT_CURRENCY: document.getElementById('defaultCurrency')?.value || 'Rp.',
-                            DEFAULT_WAREHOUSE_ID: null,
-                            DECIMAL_PLACES: 0
-                        };
-                    }
-                    break;
-            }
-            localStorage.setItem('stockmint_master_data', JSON.stringify(masterData));
-        }
-        
-        // ===== FUNGSI TAMBAH ITEM YANG DIPERBAIKI =====
-        function addWarehouseItem() {
-            const name = document.getElementById('warehouseName');
-            const location = document.getElementById('warehouseLocation');
-            const isPrimary = document.getElementById('warehousePrimary');
-            
-            if (!name || !name.value.trim()) {
-                alert('Nama gudang harus diisi');
-                return;
-            }
-            
-            let masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
-            if (!masterData.warehouses) masterData.warehouses = [];
-            
-            // Jika ini gudang utama, reset yang lain
-            if (isPrimary?.checked) {
-                masterData.warehouses.forEach(w => w.IS_PRIMARY = 0);
-            }
-            
-            const warehouseId = masterData.warehouses.length > 0 ? 
-                Math.max(...masterData.warehouses.map(w => w.STORAGE_ID)) + 1 : 1;
-            
-            masterData.warehouses.push({
-                STORAGE_ID: warehouseId,
-                STORAGE_NAME: name.value,
-                STORAGE_AREA: location?.value || '',
-                IS_PRIMARY: isPrimary?.checked ? 1 : 0
-            });
-            
-            localStorage.setItem('stockmint_master_data', JSON.stringify(masterData));
-            
-            // Refresh display
-            loadMasterDataSubpage('new');
-            updateDataStatus();
-            
-            // Reset form
-            name.value = '';
-            if (location) location.value = '';
-            if (isPrimary) isPrimary.checked = false;
-            
-            alert('Gudang berhasil ditambahkan!');
-        }
-        
-        // Fungsi lainnya serupa dengan perbaikan...
-        
-        function updateDataStatus() {
-            const masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
-            const statusElement = document.getElementById('dataStatus');
-            
-            if (statusElement) {
-                statusElement.innerHTML = `
-                    <li>Perusahaan: ${masterData.company ? '✓' : '✗'}</li>
-                    <li>Gudang: ${masterData.warehouses?.length || 0}</li>
-                    <li>Kategori: ${masterData.categories?.length || 0}</li>
-                    <li>Supplier: ${masterData.suppliers?.length || 0}</li>
-                    <li>Pelanggan: ${masterData.customers?.length || 0}</li>
-                    <li>Produk: ${masterData.products?.length || 0}</li>
-                `;
-            }
-        }
-        
-        // Load page content
-        function loadMasterDataSubpage(subpageId) {
-            // Fetch HTML content for subpage
-            fetch(`masterdata_${subpageId}.html`)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('masterDataContent').innerHTML = html;
-                    
-                    if (subpageId === 'new') {
-                        setTimeout(() => setupWizard(), 100);
-                    }
-                    
-                    // Update active submenu
-                    document.querySelectorAll('.submenu-item').forEach(item => {
-                        item.classList.remove('active');
-                        if (item.getAttribute('data-subpage') === subpageId) {
-                            item.classList.add('active');
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error loading subpage:', error);
-                    document.getElementById('masterDataContent').innerHTML = `
-                        <div style="text-align: center; padding: 40px;">
-                            <i class="fas fa-exclamation-triangle" style="color: #f39c12; font-size: 48px;"></i>
-                            <h3>Halaman tidak dapat dimuat</h3>
-                            <p>Silakan refresh halaman atau coba lagi nanti.</p>
-                        </div>
-                    `;
-                });
-        }
-        
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Check auth
-            const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
-            if (user.isDemo) {
-                document.getElementById('demoBanner').style.display = 'flex';
-                document.querySelectorAll('.submenu-item:not([data-subpage="new"])').forEach(item => {
-                    item.classList.add('disabled');
-                });
-                document.getElementById('migrationLock').style.display = 'block';
-                document.getElementById('backupLock').style.display = 'block';
-                document.getElementById('resetLock').style.display = 'block';
-            }
+            if (!checkAuth()) return;
             
-            // Submenu event listeners
-            document.querySelectorAll('.submenu-item:not(.disabled)').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const subpageId = this.getAttribute('data-subpage');
-                    loadMasterDataSubpage(subpageId);
-                });
-            });
+            loadCommonElements();
             
-            // Load default subpage
-            loadMasterDataSubpage('new');
-            updateDataStatus();
+            // Set active menu
+            setTimeout(() => {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href') === 'masterdata.html') {
+                        item.classList.add('active');
+                    }
+                });
+            }, 100);
+            
+            // Load master data content
+            loadMasterDataContent('new');
         });
     </script>
 </body>
