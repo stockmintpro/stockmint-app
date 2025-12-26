@@ -1,3 +1,4 @@
+<!-- File: dashboard.html -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -5,120 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockMint - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* PASTE SEMUA CSS DARI FILE LAMA DISINI */
-        /* (Hapus bagian pageContents dari JavaScript) */
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Navbar untuk logout -->
-    <div class="top-navbar" id="topNavbar">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <img id="userAvatar" src="" alt="User" style="width: 35px; height: 35px; border-radius: 50%;">
-            <div>
-                <span id="userName" style="font-weight: 600;"></span><br>
-                <small id="userPackage" style="font-size: 12px; color: #666;">Pro</small>
-            </div>
-        </div>
-        <button id="logoutBtn" class="btn" style="background: #dc3545; color: white;">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </button>
-    </div>
-
-    <!-- Hamburger Menu untuk HP -->
-    <button class="hamburger-menu" id="hamburgerBtn">
-        <i class="fas fa-bars"></i>
-    </button>
+    <!-- Sidebar dan Navbar akan diload via JavaScript -->
     
-    <!-- Overlay untuk menutup sidebar di HP -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <!-- Logo Section -->
-        <div class="logo-container">
-            <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
-                 alt="StockMint Logo" 
-                 class="logo"
-                 id="mainLogo"
-                 onerror="enableFallbackLogo()">
-            
-            <div class="logo-fallback" id="fallbackLogo">
-                SM
-            </div>
-            
-            <div class="logo-text">
-                <div class="logo-title">StockMint</div>
-                <div class="logo-subtitle">Precision Inventory &<br>Profit Tracking</div>
-            </div>
-        </div>
-
-        <!-- Menu -->
-        <div class="menu">
-            <a href="dashboard.html" class="menu-item active">
-                <i class="fas fa-home"></i>
-                <span class="menu-text">Dashboard</span>
-            </a>
-            <a href="masterdata.html" class="menu-item">
-                <i class="fas fa-database"></i>
-                <span class="menu-text">Master Data</span>
-            </a>
-            <a href="company.html" class="menu-item">
-                <i class="fas fa-building"></i>
-                <span class="menu-text">Company</span>
-            </a>
-            <a href="warehouses.html" class="menu-item">
-                <i class="fas fa-warehouse"></i>
-                <span class="menu-text">Warehouses</span>
-            </a>
-            <a href="suppliers.html" class="menu-item">
-                <i class="fas fa-truck-loading"></i>
-                <span class="menu-text">Suppliers</span>
-            </a>
-            <a href="customers.html" class="menu-item">
-                <i class="fas fa-users"></i>
-                <span class="menu-text">Customers</span>
-            </a>
-            <a href="products.html" class="menu-item">
-                <i class="fas fa-boxes"></i>
-                <span class="menu-text">Products</span>
-            </a>
-            <a href="purchases.html" class="menu-item">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="menu-text">Purchases</span>
-            </a>
-            <a href="sales.html" class="menu-item">
-                <i class="fas fa-chart-line"></i>
-                <span class="menu-text">Sales</span>
-            </a>
-            <a href="calculator.html" class="menu-item">
-                <i class="fas fa-calculator"></i>
-                <span class="menu-text">Price Calculator</span>
-            </a>
-            <a href="reports.html" class="menu-item">
-                <i class="fas fa-file-alt"></i>
-                <span class="menu-text">Reports</span>
-            </a>
-            <a href="settings.html" class="menu-item">
-                <i class="fas fa-cog"></i>
-                <span class="menu-text">Settings</span>
-            </a>
-            <a href="help.html" class="menu-item">
-                <i class="fas fa-question-circle"></i>
-                <span class="menu-text">Help</span>
-            </a>
-        </div>
-
-        <!-- User Section -->
-        <div class="user-section">
-            <div class="user-avatar">AJ</div>
-            <div class="user-info">
-                <h4>Admin Joko</h4>
-                <p>Administrator</p>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Content -->
     <div class="content" id="content-area">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
@@ -174,76 +66,37 @@
         </div>
     </div>
 
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
     <script>
-        // ===== AUTHENTICATION =====
-        function checkAuth() {
-            const token = localStorage.getItem('stockmint_token');
+        // Load common elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek autentikasi terlebih dahulu
+            if (!checkAuth()) return;
+            
+            // Load sidebar dan navbar
+            loadCommonElements();
+            
+            // Set active menu
+            setTimeout(() => {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href') === 'dashboard.html') {
+                        item.classList.add('active');
+                    }
+                });
+            }, 100);
+            
+            // Load data
             const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
-    
-            if (!token || !user.email) {
-                window.location.href = 'index.html';
-                return false;
-            }
-    
-            document.getElementById('userName').textContent = user.name || user.email;
-            if (user.picture) {
-                document.getElementById('userAvatar').src = user.picture;
-            }
-            
-            // Set package type
-            document.getElementById('userPackage').textContent = user.package || 'Pro';
-            
-            document.getElementById('topNavbar').style.display = 'flex';
-            
-            // Show demo banner if in demo mode
             if (user.isDemo) {
                 document.getElementById('demoBanner').style.display = 'flex';
                 loadDemoData();
             } else {
                 loadRealData();
             }
-    
-            return true;
-        }
-        
-        function loadDemoData() {
-            document.getElementById('totalProducts').textContent = '12';
-            document.getElementById('todaySales').textContent = 'Rp 850.000';
-            document.getElementById('lowStock').textContent = '2 Items';
-            document.getElementById('monthlyProfit').textContent = 'Rp 12.500.000';
-        }
-        
-        function loadRealData() {
-            const masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
             
-            document.getElementById('totalProducts').textContent = (masterData.products?.length || 0);
-            // Load other real data from localStorage or API
-        }
-        
-        function handleLogout() {
-            localStorage.removeItem('stockmint_token');
-            localStorage.removeItem('stockmint_user');
-            localStorage.removeItem('stockmint_sheet_id');
-            window.location.href = 'index.html';
-        }
-        
-        // ===== SIDEBAR TOGGLE =====
-        document.getElementById('hamburgerBtn').addEventListener('click', () => {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
-        });
-        
-        document.getElementById('sidebarOverlay').addEventListener('click', () => {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('sidebarOverlay').classList.remove('active');
-        });
-        
-        // ===== EVENT LISTENERS =====
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!checkAuth()) return;
-            
-            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-            
+            // Event listeners
             document.getElementById('refreshBtn').addEventListener('click', function() {
                 const icon = this.querySelector('i');
                 const originalClass = icon.className;
@@ -257,17 +110,19 @@
                     alert('Data diperbarui!');
                 }, 1000);
             });
-            
-            // Mark active menu based on current page
-            const currentPage = window.location.pathname.split('/').pop();
-            document.querySelectorAll('.menu-item').forEach(item => {
-                if (item.getAttribute('href') === currentPage) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
-            });
         });
+        
+        function loadDemoData() {
+            document.getElementById('totalProducts').textContent = '12';
+            document.getElementById('todaySales').textContent = 'Rp 850.000';
+            document.getElementById('lowStock').textContent = '2 Items';
+            document.getElementById('monthlyProfit').textContent = 'Rp 12.500.000';
+        }
+        
+        function loadRealData() {
+            const masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
+            document.getElementById('totalProducts').textContent = (masterData.products?.length || 0);
+        }
     </script>
 </body>
 </html>
