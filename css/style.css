@@ -6,9 +6,9 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f8fafc;
-    color: #333;
+    color: #374151;
     line-height: 1.5;
 }
 
@@ -18,10 +18,10 @@ body {
     min-height: 100vh;
 }
 
-/* ===== SIDEBAR ===== */
+/* ===== SIDEBAR - Warna Konsisten ===== */
 .sidebar {
     width: 280px;
-    background: linear-gradient(180deg, #19BEBB 0%, #14a5a3 100%);
+    background: #19BEBB; /* Warna hijau mint solid */
     color: white;
     display: flex;
     flex-direction: column;
@@ -34,25 +34,26 @@ body {
     overflow-y: auto;
 }
 
-/* Logo Section - SESUAI INDEX.HTML */
+/* Logo Section - Warna Sama dengan Sidebar */
 .logo-section {
-    padding: 30px 20px 25px;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(0, 0, 0, 0.08);
+    padding: 25px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    background: #19BEBB; /* Warna sama dengan sidebar */
 }
 
 .logo-circle {
-    width: 70px;
-    height: 70px;
-    border-radius: 20px;
+    width: 50px; /* Diperkecil */
+    height: 50px; /* Diperkecil */
+    border-radius: 12px;
     background: white;
-    margin: 0 auto 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    flex-shrink: 0;
 }
 
 .logo-img {
@@ -61,17 +62,21 @@ body {
     object-fit: contain;
 }
 
+.logo-text {
+    flex: 1;
+}
+
 .app-name {
-    font-size: 24px;
-    font-weight: 800;
+    font-size: 22px;
+    font-weight: 700;
     color: white;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
 }
 
 .app-tagline {
-    font-size: 13px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 8px;
     line-height: 1.4;
 }
 
@@ -79,18 +84,18 @@ body {
     display: inline-block;
     background: rgba(255, 255, 255, 0.2);
     color: white;
-    padding: 3px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
 }
 
 /* Navigation Menu */
 .nav-menu {
     flex: 1;
-    padding: 20px 0;
+    padding: 15px 0;
 }
 
 .nav-menu ul {
@@ -105,27 +110,27 @@ body {
 .menu-link {
     display: flex;
     align-items: center;
-    padding: 14px 20px;
+    padding: 12px 20px;
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     transition: all 0.3s ease;
-    gap: 15px;
+    gap: 12px;
     font-weight: 500;
-    font-size: 15px;
-    border-left: 4px solid transparent;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .menu-link:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     color: white;
-    border-left: 4px solid #FFD700;
-    padding-left: 25px;
+    border-left: 3px solid rgba(255, 255, 255, 0.5);
 }
 
 .menu-item.active > .menu-link {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.2);
     color: white;
-    border-left: 4px solid #FFD700;
+    border-left: 3px solid #FFD700;
     font-weight: 600;
 }
 
@@ -133,16 +138,19 @@ body {
     width: 20px;
     text-align: center;
     font-size: 16px;
+    opacity: 0.9;
 }
 
 .menu-arrow {
     margin-left: auto;
     font-size: 12px;
     transition: transform 0.3s ease;
+    opacity: 0.7;
 }
 
 .menu-item.expanded .menu-arrow {
     transform: rotate(180deg);
+    opacity: 1;
 }
 
 /* Submenu */
@@ -150,20 +158,43 @@ body {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(0, 0, 0, 0.08);
 }
 
 .submenu.expanded {
-    max-height: 500px;
+    max-height: 1000px;
 }
 
 .submenu-item .menu-link {
     padding-left: 50px;
-    font-size: 14px;
+    font-size: 13.5px;
     background: transparent;
 }
 
 .submenu-item .menu-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: 52px;
+}
+
+/* Nested Submenu (untuk System Settings) */
+.nested-submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: rgba(0, 0, 0, 0.05);
+    margin-left: 20px;
+}
+
+.submenu-item.expanded .nested-submenu {
+    max-height: 500px;
+}
+
+.nested-item .menu-link {
+    padding-left: 70px;
+    font-size: 13px;
+}
+
+.nested-item .menu-link:hover {
     background: rgba(255, 255, 255, 0.08);
 }
 
@@ -174,32 +205,33 @@ body {
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.6);
     font-weight: 600;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     margin-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
-/* User Section */
+/* User Section - Warna Sama dengan Sidebar */
 .user-section {
     padding: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     gap: 15px;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.08); /* Lebih transparan tapi tetap kohesif */
 }
 
 .user-avatar {
-    width: 45px;
-    height: 45px;
-    background: rgba(255, 255, 255, 0.1);
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: 20px;
     color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.25);
 }
 
 .user-info {
@@ -210,11 +242,13 @@ body {
     font-weight: 600;
     font-size: 14px;
     color: white;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .user-role {
     font-size: 12px;
     color: rgba(255, 255, 255, 0.7);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .logout-btn {
@@ -245,46 +279,50 @@ body {
 .main-header {
     background: white;
     padding: 20px 35px;
-    border-bottom: 1px solid #e1e8ed;
+    border-bottom: 1px solid #e5e7eb;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     position: sticky;
     top: 0;
     z-index: 100;
 }
 
 .header-left h1 {
-    font-size: 28px;
-    color: #2d3748;
-    font-weight: 700;
-    margin-bottom: 8px;
+    font-size: 24px;
+    color: #374151;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .subtitle {
-    color: #718096;
+    color: #6b7280;
     font-size: 14px;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .date-time {
     text-align: right;
-    font-family: 'Courier New', monospace;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .time {
     display: block;
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 24px;
+    font-weight: 600;
     color: #19BEBB;
     line-height: 1;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .date {
     display: block;
-    color: #666;
-    font-size: 14px;
-    margin-top: 5px;
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 4px;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 /* Content Area */
