@@ -7,18 +7,27 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
     <div class="app-container">
-        <!-- Sidebar STATIS (tidak diload via JS) -->
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <div class="logo-brand">
-                    <h2><i class="fas fa-boxes"></i> StockMint</h2>
-                    <span class="pro-badge">Pro</span>
-                </div>
-                <div class="logo-tagline">
-                    Precision Inventory & Profit Tracking
+                <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
+                     alt="StockMint Logo" 
+                     class="logo-img"
+                     onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='flex';">
+                
+                <div class="logo-text">
+                    <h2>StockMint <span class="pro-badge">Pro</span></h2>
+                    <div class="logo-tagline">Precision Inventory & Profit Tracking</div>
                 </div>
             </div>
             
@@ -31,6 +40,14 @@
                     <li><a href="entities/warehouses.html"><i class="fas fa-warehouse"></i> Warehouses</a></li>
                     <li><a href="entities/suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
                     <li><a href="entities/customers.html"><i class="fas fa-users"></i> Customers</a></li>
+                    <li class="nav-subheader">OPERATIONS</li>
+                    <li><a href="products.html"><i class="fas fa-boxes"></i> Products</a></li>
+                    <li><a href="purchases.html"><i class="fas fa-shopping-cart"></i> Purchases</a></li>
+                    <li><a href="sales.html"><i class="fas fa-chart-line"></i> Sales</a></li>
+                    <li class="nav-subheader">TOOLS</li>
+                    <li><a href="calculator.html"><i class="fas fa-calculator"></i> Price Calculator</a></li>
+                    <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
                 </ul>
             </nav>
             
@@ -48,13 +65,9 @@
             </div>
         </aside>
 
-        <!-- Mobile Toggle -->
-        <button class="mobile-menu-toggle" id="mobileMenuToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Header -->
             <header class="main-header">
                 <div class="header-left">
                     <h1>Dashboard</h1>
@@ -62,21 +75,226 @@
                 </div>
                 <div class="header-right">
                     <div class="date-time">
-                        <span class="time" id="currentTime">14:07</span>
+                        <span class="time" id="currentTime">15:31</span>
                         <span class="date" id="currentDate">26/12/2025</span>
                     </div>
                 </div>
             </header>
 
+            <!-- Content Area -->
             <div class="content-area">
-                <!-- Dashboard content -->
-                <div class="dashboard-content">
-                    <h2>Selamat Datang!</h2>
+                <!-- Welcome Section -->
+                <div class="dashboard-welcome">
+                    <h2>Selamat Datang, Admin Joko! 👋</h2>
+                    <p>Monitor performa bisnis Anda dengan real-time analytics dan insights yang powerful. Semua yang Anda butuhkan untuk mengelola inventory dan profit dalam satu dashboard.</p>
+                    <button class="btn-refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh Data
+                    </button>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Products</h3>
+                            <p class="stat-number">1,247</p>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12.5% from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Monthly Sales</h3>
+                            <p class="stat-number">Rp 456.8M</p>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>8.3% from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Purchases</h3>
+                            <p class="stat-number">Rp 123.5M</p>
+                            <div class="stat-change negative">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>3.2% from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Net Profit</h3>
+                            <p class="stat-number">Rp 333.3M</p>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>15.7% from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Sales Overview</h3>
+                            <div class="chart-options">
+                                <button class="chart-btn active">Monthly</button>
+                                <button class="chart-btn">Quarterly</button>
+                                <button class="chart-btn">Yearly</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-bar fa-3x" style="color: #19BEBB;"></i>
+                                <span style="margin-left: 15px;">Sales Chart Will Appear Here</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Inventory Status</h3>
+                            <div class="chart-options">
+                                <button class="chart-btn active">Stock</button>
+                                <button class="chart-btn">Value</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-pie fa-3x" style="color: #19BEBB;"></i>
+                                <span style="margin-left: 15px;">Inventory Chart Will Appear Here</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <div class="activity-header">
+                        <h3>Recent Activity</h3>
+                        <a href="#" class="view-all">
+                            View All
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">New Product Added - "Premium Widget Pro"</div>
+                                <div class="activity-time">Just now • By Admin Joko</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Purchase Order #PO-2023-00123 Completed</div>
+                                <div class="activity-time">2 hours ago • From Supplier ABC</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Monthly Sales Target Achieved 120%</div>
+                                <div class="activity-time">Today, 10:30 AM • Sales Department</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">New Customer Registered - "PT Maju Jaya"</div>
+                                <div class="activity-time">Yesterday, 15:45 PM • Sales Team</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
     <script src="js/common.js"></script>
+    <script>
+        // Update waktu setiap detik
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('id-ID', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            const dateString = now.toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            
+            document.getElementById('currentTime').textContent = timeString;
+            document.getElementById('currentDate').textContent = dateString;
+        }
+        
+        // Update segera dan setiap detik
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // Refresh data button
+        document.querySelector('.btn-refresh').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
+            this.disabled = true;
+            
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh Data';
+                this.disabled = false;
+                
+                // Simulasi update stats
+                const stats = document.querySelectorAll('.stat-number');
+                const randomIncrease = Math.floor(Math.random() * 50) + 1;
+                
+                stats.forEach(stat => {
+                    const current = parseFloat(stat.textContent.replace(/[^0-9.]/g, ''));
+                    if (!isNaN(current)) {
+                        const newValue = current + (current * randomIncrease / 1000);
+                        if (stat.textContent.includes('Rp')) {
+                            stat.textContent = `Rp ${(newValue / 1000000).toFixed(1)}M`;
+                        } else {
+                            stat.textContent = Math.round(newValue).toLocaleString();
+                        }
+                    }
+                });
+                
+                // Notification
+                alert('Dashboard data has been refreshed successfully!');
+            }, 1500);
+        });
+    </script>
 </body>
 </html>
