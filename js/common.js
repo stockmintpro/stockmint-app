@@ -1,6 +1,146 @@
 // File: js/common.js
 // Fungsi-fungsi yang digunakan di semua halaman
 
+// Base Path untuk semua link
+const BASE_PATH = window.location.hostname.includes('github.io') ? '/stockmint-app' : '';
+
+// Load sidebar dan navbar langsung dari string HTML
+function loadCommonElements() {
+    // SIDEBAR HTML - PERBAIKI SEMUA LINK
+    const sidebarHTML = `
+        <!-- Hamburger Menu -->
+        <button class="hamburger-menu" id="hamburgerBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Overlay untuk menutup sidebar di HP -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <!-- Logo Section -->
+            <div class="logo-container">
+                <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
+                     alt="StockMint Logo" 
+                     class="logo"
+                     id="mainLogo"
+                     onerror="this.style.display='none'; document.getElementById('fallbackLogo').style.display='flex';">
+                
+                <div class="logo-fallback" id="fallbackLogo" style="display: none;">
+                    SM
+                </div>
+                
+                <div class="logo-text">
+                    <div class="logo-title">StockMint</div>
+                    <div class="logo-subtitle">Precision Inventory &<br>Profit Tracking</div>
+                </div>
+            </div>
+
+            <!-- Menu -->
+            <div class="menu">
+                <!-- PERBAIKI SEMUA LINK DENGAN BASE_PATH -->
+                <a href="${BASE_PATH}/dashboard.html" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                
+                <a href="${BASE_PATH}/masterdata.html" class="menu-item">
+                    <i class="fas fa-database"></i>
+                    <span class="menu-text">Master Data</span>
+                </a>
+                
+                <!-- Business Entities Group (Collapsible) -->
+                <div class="menu-group">
+                    <div class="menu-group-title">
+                        BUSINESS ENTITIES
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="submenu-items">
+                        <a href="${BASE_PATH}/entities/company.html" class="menu-item submenu-item">
+                            <i class="fas fa-building"></i>
+                            <span class="menu-text">Company</span>
+                        </a>
+                        <a href="${BASE_PATH}/entities/warehouses.html" class="menu-item submenu-item">
+                            <i class="fas fa-warehouse"></i>
+                            <span class="menu-text">Warehouses</span>
+                        </a>
+                        <a href="${BASE_PATH}/entities/suppliers.html" class="menu-item submenu-item">
+                            <i class="fas fa-truck-loading"></i>
+                            <span class="menu-text">Suppliers</span>
+                        </a>
+                        <a href="${BASE_PATH}/entities/customers.html" class="menu-item submenu-item">
+                            <i class="fas fa-users"></i>
+                            <span class="menu-text">Customers</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Lanjutkan perbaikan untuk semua link lainnya... -->
+                <a href="${BASE_PATH}/products.html" class="menu-item">
+                    <i class="fas fa-boxes"></i>
+                    <span class="menu-text">Products</span>
+                </a>
+                
+                <a href="${BASE_PATH}/purchases.html" class="menu-item">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="menu-text">Purchases</span>
+                </a>
+                
+                <a href="${BASE_PATH}/sales.html" class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="menu-text">Sales</span>
+                </a>
+                
+                <a href="${BASE_PATH}/calculator.html" class="menu-item">
+                    <i class="fas fa-calculator"></i>
+                    <span class="menu-text">Price Calculator</span>
+                </a>
+                
+                <a href="${BASE_PATH}/reports.html" class="menu-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="menu-text">Reports</span>
+                </a>
+                
+                <a href="${BASE_PATH}/settings.html" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span class="menu-text">Settings</span>
+                </a>
+                
+                <a href="${BASE_PATH}/help.html" class="menu-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="menu-text">Help</span>
+                </a>
+            </div>
+
+            <!-- User Section -->
+            <div class="user-section">
+                <div class="user-avatar">AJ</div>
+                <div class="user-info">
+                    <h4>Admin Joko</h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // NAVBAR HTML - PERBAIKI LOGOUT
+    const navbarHTML = `
+        <!-- Top Navbar -->
+        <div class="top-navbar" id="topNavbar">
+            <div class="top-navbar-content">
+                <img id="userAvatar" src="" alt="User">
+                <div class="user-info-nav">
+                    <div class="user-name" id="userName">Admin Joko</div>
+                    <div class="user-package" id="userPackage">Pro</div>
+                </div>
+            </div>
+            <button id="logoutBtn" class="btn" style="background: #dc3545; color: white; padding: 8px 16px;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    `;   
+ }
+
 // Load sidebar dan navbar langsung dari string HTML
 function loadCommonElements() {
     // SIDEBAR HTML
