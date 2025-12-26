@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
@@ -16,59 +15,172 @@
             <i class="fas fa-bars"></i>
         </button>
 
-        <!-- Sidebar Statis -->
+        <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-container">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <div class="logo-circle">
                     <img src="https://i.ibb.co.com/XxvfRDyV/logo-stockmint-png.png" 
                          alt="StockMint Logo" 
                          class="logo-img"
                          onerror="this.src='images/logo-stockmint.png'; this.onerror=null;">
-                    <div class="logo-text">
-                        <h1>StockMint <span class="pro-badge">Pro</span></h1>
-                        <div class="logo-tagline">Precision Inventory & Profit Tracking</div>
-                    </div>
                 </div>
+                <div class="app-name">StockMint</div>
+                <div class="app-tagline">Precision Inventory & Profit Tracking</div>
+                <div class="pro-badge">Pro</div>
             </div>
             
+            <!-- Navigation Menu -->
             <nav class="nav-menu">
                 <ul>
-                    <li class="active"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="masterdata.html"><i class="fas fa-database"></i> Master Data</a></li>
+                    <!-- Dashboard -->
+                    <li class="menu-item active">
+                        <a href="dashboard.html" class="menu-link">
+                            <i class="menu-icon fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
                     
-                    <!-- Business Entities (Hidden in Dashboard) -->
-                    <div class="nav-subheader collapsed" id="businessEntitiesToggle">
-                        BUSINESS ENTITIES
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="entities-submenu" id="businessEntitiesMenu" style="max-height: 0; overflow: hidden;">
-                        <li><a href="entities/company.html"><i class="fas fa-building"></i> Company</a></li>
-                        <li><a href="entities/warehouses.html"><i class="fas fa-warehouse"></i> Warehouses</a></li>
-                        <li><a href="entities/suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
-                        <li><a href="entities/customers.html"><i class="fas fa-users"></i> Customers</a></li>
-                    </div>
+                    <!-- Master Data -->
+                    <li class="menu-item">
+                        <a href="masterdata.html" class="menu-link">
+                            <i class="menu-icon fas fa-database"></i>
+                            <span>Master Data</span>
+                        </a>
+                    </li>
                     
-                    <li><a href="products.html"><i class="fas fa-boxes"></i> Products</a></li>
-                    <li><a href="purchases.html"><i class="fas fa-shopping-cart"></i> Purchases</a></li>
-                    <li><a href="sales.html"><i class="fas fa-chart-line"></i> Sales</a></li>
+                    <!-- Business Entities (Collapsible) -->
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-toggle="business-entities">
+                            <i class="menu-icon fas fa-building"></i>
+                            <span>Business Entities</span>
+                            <i class="menu-arrow fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="submenu" id="businessEntitiesMenu">
+                            <li class="menu-item submenu-item">
+                                <a href="entities/company.html" class="menu-link">
+                                    <i class="menu-icon fas fa-landmark"></i>
+                                    <span>Company</span>
+                                </a>
+                            </li>
+                            <li class="menu-item submenu-item">
+                                <a href="entities/warehouses.html" class="menu-link">
+                                    <i class="menu-icon fas fa-warehouse"></i>
+                                    <span>Warehouses</span>
+                                </a>
+                            </li>
+                            <li class="menu-item submenu-item">
+                                <a href="entities/suppliers.html" class="menu-link">
+                                    <i class="menu-icon fas fa-truck"></i>
+                                    <span>Suppliers</span>
+                                </a>
+                            </li>
+                            <li class="menu-item submenu-item">
+                                <a href="entities/customers.html" class="menu-link">
+                                    <i class="menu-icon fas fa-users"></i>
+                                    <span>Customers</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     
-                    <div class="nav-subheader">TOOLS</div>
-                    <li><a href="calculator.html"><i class="fas fa-calculator"></i> Price Calculator</a></li>
-                    <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <!-- Business Operations (Collapsible) -->
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-toggle="business-ops">
+                            <i class="menu-icon fas fa-cogs"></i>
+                            <span>Business Operations</span>
+                            <i class="menu-arrow fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="submenu" id="businessOpsMenu">
+                            <li class="menu-item submenu-item">
+                                <a href="products.html" class="menu-link">
+                                    <i class="menu-icon fas fa-boxes"></i>
+                                    <span>Products</span>
+                                </a>
+                            </li>
+                            <li class="menu-item submenu-item">
+                                <a href="purchases.html" class="menu-link">
+                                    <i class="menu-icon fas fa-shopping-cart"></i>
+                                    <span>Purchases</span>
+                                </a>
+                            </li>
+                            <li class="menu-item submenu-item">
+                                <a href="sales.html" class="menu-link">
+                                    <i class="menu-icon fas fa-chart-line"></i>
+                                    <span>Sales</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     
-                    <div class="nav-subheader">SETTINGS</div>
-                    <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
-                    <li><a href="contacts.html"><i class="fas fa-address-book"></i> Contacts</a></li>
+                    <!-- Tools (Collapsible) -->
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-toggle="tools">
+                            <i class="menu-icon fas fa-tools"></i>
+                            <span>Tools</span>
+                            <i class="menu-arrow fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="submenu" id="toolsMenu">
+                            <li class="menu-item submenu-item">
+                                <a href="calculator.html" class="menu-link">
+                                    <i class="menu-icon fas fa-calculator"></i>
+                                    <span>Price Calculator</span>
+                                </a>
+                            </li>
+                            <li class="menu-item submenu-item">
+                                <a href="reports.html" class="menu-link">
+                                    <i class="menu-icon fas fa-chart-bar"></i>
+                                    <span>Reports</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Settings (Collapsible) -->
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-toggle="settings">
+                            <i class="menu-icon fas fa-cog"></i>
+                            <span>Settings</span>
+                            <i class="menu-arrow fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="submenu" id="settingsMenu">
+                            <li class="menu-item submenu-item">
+                                <a href="settings.html" class="menu-link">
+                                    <i class="menu-icon fas fa-sliders-h"></i>
+                                    <span>System Settings</span>
+                                </a>
+                            </li>
+                            <li class="menu-item submenu-item">
+                                <a href="contacts.html" class="menu-link">
+                                    <i class="menu-icon fas fa-address-book"></i>
+                                    <span>Contacts</span>
+                                </a>
+                            </li>
+                            <li class="menu-item submenu-item">
+                                <a href="help.html" class="menu-link">
+                                    <i class="menu-icon fas fa-question-circle"></i>
+                                    <span>Help & Guide</span>
+                                </a>
+                            </li>
+                            <li class="menu-item submenu-item">
+                                <a href="marketplace-fee.html" class="menu-link">
+                                    <i class="menu-icon fas fa-percentage"></i>
+                                    <span>Marketplace Fee</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
             
-            <div class="user-profile">
+            <!-- User Section -->
+            <div class="user-section">
                 <div class="user-avatar">
                     <i class="fas fa-user-circle"></i>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">Admin Joko</span>
-                    <span class="user-role">Administrator</span>
+                    <div class="user-name">Admin Joko</div>
+                    <div class="user-role">Administrator</div>
                 </div>
                 <a href="index.html" class="logout-btn" title="Logout">
                     <i class="fas fa-sign-out-alt"></i>
@@ -78,6 +190,7 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Header -->
             <header class="main-header">
                 <div class="header-left">
                     <h1>Dashboard</h1>
@@ -91,26 +204,157 @@
                 </div>
             </header>
 
+            <!-- Content Area -->
             <div class="content-area">
-                <!-- Dashboard content akan diisi oleh dashboard.js -->
+                <!-- Welcome Section -->
                 <div class="dashboard-welcome">
-                    <h2>Selamat Datang, Admin Joko! 👋</h2>
+                    <h2>Selamat Datang, Admin Joko!</h2>
                     <p>Monitor performa bisnis Anda dengan real-time analytics dan insights yang powerful. Semua yang Anda butuhkan untuk mengelola inventory dan profit dalam satu dashboard.</p>
-                    <button class="btn-refresh">
+                    <button class="btn-refresh" id="refreshBtn">
                         <i class="fas fa-sync-alt"></i> Refresh Data
                     </button>
                 </div>
                 
-                <!-- Stats akan dimuat di sini -->
-                <div id="dashboard-stats"></div>
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: #19BEBB;">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div class="stat-title">Total Products</div>
+                        </div>
+                        <div class="stat-value">142</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>12% from last month</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: #ef4444;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-title">Low Stock Alert</div>
+                        </div>
+                        <div class="stat-value">8 Items</div>
+                        <div class="stat-action">
+                            <button class="btn-action">
+                                <i class="fas fa-shopping-cart"></i> Need Restock
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: #10b981;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-title">Today's Sales</div>
+                        </div>
+                        <div class="stat-value">Rp 3.250.000</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>8% from yesterday</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: #f59e0b;">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-title">Monthly Profit</div>
+                        </div>
+                        <div class="stat-value">Rp 48.500.000</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>15% from last month</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <div class="activity-header">
+                        <h3>Recent Activity</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: #19BEBB;">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">New product added - "Premium Widget Pro"</div>
+                                <div class="activity-time">Just now • By Admin Joko</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: #667eea;">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Purchase Order #PO-2023-00123 completed</div>
+                                <div class="activity-time">2 hours ago • From Supplier ABC</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: #10b981;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Monthly sales target achieved 120%</div>
+                                <div class="activity-time">Today, 10:30 AM • Sales Department</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
     <script src="js/common.js"></script>
-    <script src="js/dashboard.js"></script>
     <script>
-        // Update waktu real-time
+        // Refresh button functionality
+        document.getElementById('refreshBtn').addEventListener('click', function() {
+            const btn = this;
+            const originalHTML = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
+            btn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Update stats with random values
+                const statValues = document.querySelectorAll('.stat-value');
+                statValues.forEach(stat => {
+                    const text = stat.textContent;
+                    if (text.includes('Rp')) {
+                        const current = parseInt(text.replace(/[^0-9]/g, ''));
+                        const newValue = current + Math.floor(Math.random() * 1000000);
+                        stat.textContent = 'Rp ' + newValue.toLocaleString('id-ID');
+                    } else if (text.includes('Items')) {
+                        const current = parseInt(text.replace(/[^0-9]/g, ''));
+                        const newValue = Math.max(1, current + Math.floor(Math.random() * 5) - 2);
+                        stat.textContent = newValue + ' Items';
+                    } else {
+                        const current = parseInt(text.replace(/[^0-9]/g, ''));
+                        const newValue = current + Math.floor(Math.random() * 20) - 5;
+                        stat.textContent = Math.max(1, newValue);
+                    }
+                });
+                
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+                
+                // Show notification
+                alert('Dashboard data has been refreshed!');
+            }, 1500);
+        });
+        
+        // Update time every second
         function updateTime() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('id-ID', { 
