@@ -1,85 +1,17 @@
-/* Dashboard Specific Styles */
-.content-area {
-    padding: 35px;
-}
-
-.dashboard-welcome {
-    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
-    border-radius: 20px;
-    padding: 40px;
-    color: white;
-    margin-bottom: 35px;
-    box-shadow: 0 10px 30px rgba(25, 190, 187, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-.dashboard-welcome::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 1%, transparent 20%);
-    opacity: 0.3;
-}
-
-.dashboard-welcome h2 {
-    font-size: 36px;
-    font-weight: 800;
-    margin-bottom: 15px;
-    position: relative;
-    z-index: 1;
-}
-
-.dashboard-welcome p {
-    font-size: 18px;
-    opacity: 0.95;
-    margin-bottom: 25px;
-    position: relative;
-    z-index: 1;
-    max-width: 600px;
-}
-
-.btn-refresh {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    padding: 14px 28px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 16px;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
-    backdrop-filter: blur(10px);
-}
-
-.btn-refresh:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-/* Stats Grid */
+/* dashboard.css */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
     margin-bottom: 35px;
 }
 
 .stat-card {
     background: white;
-    border-radius: 18px;
+    border-radius: 20px;
     padding: 30px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e9ecef;
+    border: 2px solid #e2e8f0;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -98,25 +30,25 @@
     left: 0;
     width: 6px;
     height: 100%;
-    background: linear-gradient(to bottom, #19BEBB, #14a5a3);
+    background: linear-gradient(to bottom, #19BEBB, #0D8C8A);
 }
 
 .stat-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 15px;
+    width: 65px;
+    height: 65px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 28px;
     color: white;
     margin-bottom: 20px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 .stat-content h3 {
-    font-size: 15px;
-    color: #718096;
+    font-size: 14px;
+    color: #64748b;
     font-weight: 600;
     margin-bottom: 12px;
     text-transform: uppercase;
@@ -126,10 +58,10 @@
 .stat-number {
     font-size: 42px;
     font-weight: 800;
-    color: #2d3748;
+    color: #1e293b;
     line-height: 1;
     margin-bottom: 10px;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .stat-change {
@@ -148,87 +80,29 @@
     color: #ef4444;
 }
 
-.stat-change i {
-    font-size: 12px;
-}
-
-/* Charts Grid */
-.charts-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 25px;
-    margin-bottom: 35px;
-}
-
-.chart-card {
-    background: white;
-    border-radius: 18px;
-    padding: 30px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e9ecef;
-}
-
-.chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.chart-header h3 {
-    font-size: 20px;
-    color: #2d3748;
-    font-weight: 700;
-}
-
-.chart-options {
-    display: flex;
-    gap: 10px;
-}
-
-.chart-btn {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+.btn-restock {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border: none;
     padding: 8px 16px;
     border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
-.chart-btn.active {
-    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
-    color: white;
-    border-color: #19BEBB;
+.btn-restock:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
 }
 
-.chart-container {
-    height: 300px;
-    position: relative;
-}
-
-.chart-placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #94a3b8;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-/* Recent Activity */
 .recent-activity {
     background: white;
-    border-radius: 18px;
+    border-radius: 20px;
     padding: 30px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e9ecef;
+    border: 2px solid #e2e8f0;
 }
 
 .activity-header {
@@ -236,11 +110,13 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
 }
 
 .activity-header h3 {
-    font-size: 20px;
-    color: #2d3748;
+    font-size: 22px;
+    color: #1e293b;
     font-weight: 700;
 }
 
@@ -256,7 +132,7 @@
 }
 
 .view-all:hover {
-    color: #14a5a3;
+    color: #0D8C8A;
     gap: 12px;
 }
 
@@ -301,8 +177,9 @@
 
 .activity-title {
     font-weight: 600;
-    color: #2d3748;
+    color: #1e293b;
     margin-bottom: 5px;
+    font-size: 15px;
 }
 
 .activity-time {
@@ -311,27 +188,9 @@
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 @media (max-width: 768px) {
     .stats-grid {
         grid-template-columns: 1fr;
-    }
-    
-    .dashboard-welcome {
-        padding: 25px;
-    }
-    
-    .dashboard-welcome h2 {
-        font-size: 28px;
     }
     
     .stat-card {
