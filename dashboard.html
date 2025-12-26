@@ -3,282 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockMint - Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Dashboard - StockMint Pro</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* Additional styles for dashboard */
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .dashboard-header h1 {
-            margin: 0;
-            color: #1a5f7a;
-            font-size: 28px;
-        }
-        
-        .welcome-card {
-            background: linear-gradient(135deg, var(--mint-green) 0%, var(--mint-dark) 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-        }
-        
-        .welcome-card h2 {
-            color: white;
-            margin-top: 0;
-            border-bottom: none;
-        }
-        
-        .recent-activities {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        
-        .activity-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-        }
-        
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-        
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            background: #f0f9ff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: var(--mint-green);
-        }
-        
-        .activity-content {
-            flex: 1;
-        }
-        
-        .activity-time {
-            font-size: 12px;
-            color: #888;
-        }
-    </style>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Sidebar dan Navbar akan diload via common.js -->
-    
-    <!-- Main Content -->
-    <div class="content" id="content-area">
-        <div class="dashboard-header">
-            <h1>Dashboard Overview</h1>
-            <button class="btn btn-primary" id="refreshBtn">
-                <i class="fas fa-sync-alt"></i> Refresh Data
-            </button>
-        </div>
-        
-        <div class="demo-banner" id="demoBanner" style="display: none;">
-            <i class="fas fa-flask"></i>
-            <div>
-                <strong>Mode Demo Aktif</strong> - Anda sedang mencoba fitur StockMint dalam mode demo.
-                Untuk akses penuh, login dengan akun Google.
-            </div>
-        </div>
-        
-        <div class="welcome-card">
-            <h2>Selamat datang di <strong>StockMint</strong></h2>
-            <p>Sistem pelacakan inventaris dan profit dengan presisi tinggi untuk bisnis Anda.</p>
-        </div>
-        
-        <h2>Quick Stats</h2>
-        <div class="stats-container">
-            <div class="stat-card">
-                <h3>Total Products</h3>
-                <div class="stat-value" id="totalProducts">142</div>
-                <div class="stat-change">↑ 12% from last month</div>
-            </div>
-            <div class="stat-card">
-                <h3>Today's Sales</h3>
-                <div class="stat-value" id="todaySales">Rp 3.250.000</div>
-                <div class="stat-change">↑ 8% from yesterday</div>
-            </div>
-            <div class="stat-card">
-                <h3>Low Stock Alert</h3>
-                <div class="stat-value" id="lowStock">8 Items</div>
-                <div class="stat-change danger">⚠️ Need restock</div>
-            </div>
-            <div class="stat-card">
-                <h3>Monthly Profit</h3>
-                <div class="stat-value" id="monthlyProfit">Rp 48.500.000</div>
-                <div class="stat-change">↑ 15% from last month</div>
-            </div>
-        </div>
-        
-        <h2>Recent Activities</h2>
-        <div class="recent-activities">
-            <div class="activity-item">
-                <div class="activity-icon">
-                    <i class="fas fa-check-circle"></i>
+    <div class="app-container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-brand">
+                    <h2><i class="fas fa-boxes"></i> StockMint</h2>
+                    <span class="pro-badge">Pro</span>
                 </div>
-                <div class="activity-content">
-                    <strong>Product "Kopi Arabica Premium" added to inventory</strong>
-                    <div class="activity-time">Today, 10:30 AM</div>
+                <div class="logo-tagline">
+                    Precision Inventory & Profit Tracking
                 </div>
             </div>
             
-            <div class="activity-item">
-                <div class="activity-icon">
-                    <i class="fas fa-money-bill-wave"></i>
-                </div>
-                <div class="activity-content">
-                    <strong>Sale completed - Rp 2.450.000</strong>
-                    <div class="activity-time">2 hours ago</div>
-                </div>
-            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li class="active"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="masterdata.html"><i class="fas fa-database"></i> Master Data</a></li>
+                    <li class="nav-subheader">BUSINESS ENTITIES</li>
+                    <li><a href="entities/company.html"><i class="fas fa-building"></i> Company</a></li>
+                    <li><a href="entities/warehouses.html"><i class="fas fa-warehouse"></i> Warehouses</a></li>
+                    <li><a href="entities/suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
+                    <li><a href="entities/customers.html"><i class="fas fa-users"></i> Customers</li>
+                    <li class="nav-subheader">OPERATIONS</li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="purchases.html"><i class="fas fa-shopping-cart"></i> Purchases</a></li>
+                    <li><a href="sales.html"><i class="fas fa-chart-line"></i> Sales</a></li>
+                </ul>
+            </nav>
             
-            <div class="activity-item">
-                <div class="activity-icon">
-                    <i class="fas fa-chart-bar"></i>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
                 </div>
-                <div class="activity-content">
-                    <strong>Monthly report generated for October 2023</strong>
-                    <div class="activity-time">2 days ago</div>
+                <div class="user-info">
+                    <span class="user-name">Admin Joko</span>
+                    <span class="user-role">Administrator</span>
+                </div>
+                <a href="login.html" class="logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <h1>Dashboard</h1>
+                    <p class="subtitle">Overview sistem dan performa bisnis</p>
+                </div>
+                <div class="header-right">
+                    <div class="date-time">
+                        <span class="time" id="currentTime">14:07</span>
+                        <span class="date" id="currentDate">26/12/2025</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Dashboard content here -->
+                <div class="dashboard-welcome">
+                    <h2>Selamat Datang, Admin Joko!</h2>
+                    <p>Sistem StockMint Pro siap membantu mengelola inventori dan profit Anda.</p>
+                    <button class="btn-refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh Data
+                    </button>
                 </div>
             </div>
-            
-            <div class="activity-item">
-                <div class="activity-icon">
-                    <i class="fas fa-box"></i>
-                </div>
-                <div class="activity-content">
-                    <strong>Low stock alert for "Teh Hijau"</strong>
-                    <div class="activity-time">3 days ago</div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <script src="js/common.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', async function() {
-        console.log('Dashboard loaded');
-        
-        // CEK AUTENTIKASI DULU SEBELUM APA-APA
-        if (!checkAuth()) {
-            // checkAuth() sudah redirect ke index.html jika gagal
-            return;
-        }
-        
-        // Load common elements (sidebar & navbar) - PASTIKAN SETELAH CEK AUTH
-        try {
-            await loadCommonElements();
-            console.log('Common elements loaded');
-            
-            // Ambil user data lagi setelah common elements loaded
-            const user = JSON.parse(localStorage.getItem('stockmint_user') || '{}');
-            
-            // Show demo banner jika dalam mode demo
-            if (user.isDemo) {
-                document.getElementById('demoBanner').style.display = 'flex';
-                loadDemoData();
-            } else {
-                loadRealData();
-            }
-            
-            // Event listeners
-            document.getElementById('refreshBtn').addEventListener('click', function() {
-                const icon = this.querySelector('i');
-                const originalClass = icon.className;
-                
-                icon.className = 'fas fa-spinner loading';
-                this.disabled = true;
-                
-                setTimeout(() => {
-                    icon.className = originalClass;
-                    this.disabled = false;
-                    
-                    if (user.isDemo) {
-                        loadDemoData();
-                    } else {
-                        loadRealData();
-                    }
-                    
-                    // Tambah activity baru
-                    const activities = document.querySelector('.recent-activities');
-                    const newActivity = document.createElement('div');
-                    newActivity.className = 'activity-item';
-                    newActivity.innerHTML = `
-                        <div class="activity-icon">
-                            <i class="fas fa-sync-alt"></i>
-                        </div>
-                        <div class="activity-content">
-                            <strong>Dashboard data refreshed</strong>
-                            <div class="activity-time">Just now</div>
-                        </div>
-                    `;
-                    if (activities) {
-                        activities.insertBefore(newActivity, activities.firstChild);
-                    }
-                    
-                    alert('Data diperbarui!');
-                }, 1000);
-            });
-            
-        } catch (error) {
-            console.error('Error initializing dashboard:', error);
-            alert('Error loading page. Please check console for details.');
-        }
-    });
-    
-    function loadDemoData() {
-        // Demo data - angka dummy seperti di HTML
-        document.getElementById('totalProducts').textContent = '142';
-        document.getElementById('todaySales').textContent = 'Rp 3.250.000';
-        document.getElementById('lowStock').textContent = '8 Items';
-        document.getElementById('monthlyProfit').textContent = 'Rp 48.500.000';
-    }
-    
-    function loadRealData() {
-        // Load real data from localStorage - KOSONGKAN JIKA BELUM ADA DATA
-        const masterData = JSON.parse(localStorage.getItem('stockmint_master_data') || '{}');
-        const productCount = masterData.products?.length || 0;
-        
-        // TAMPILKAN 0 JIKA BELUM ADA DATA
-        document.getElementById('totalProducts').textContent = productCount;
-        document.getElementById('todaySales').textContent = 'Rp 0';
-        document.getElementById('lowStock').textContent = productCount > 0 ? '0 Items' : '0 Items';
-        document.getElementById('monthlyProfit').textContent = 'Rp 0';
-        
-        // Jika belum ada data sama sekali, ubah recent activities
-        if (productCount === 0) {
-            const activities = document.querySelector('.recent-activities');
-            if (activities) {
-                activities.innerHTML = `
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-info-circle"></i>
-                        </div>
-                        <div class="activity-content">
-                            <strong>Belum ada data</strong>
-                            <div class="activity-time">Silakan isi data master terlebih dahulu</div>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-    }
-    </script>
 </body>
 </html>
