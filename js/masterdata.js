@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-
+});
 
 // Master Data Functions
 document.addEventListener('DOMContentLoaded', function() {
