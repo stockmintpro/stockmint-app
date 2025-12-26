@@ -475,3 +475,57 @@ body {
         font-size: 24px;
     }
 }
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.notification.success {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.notification.error {
+    background: linear-gradient(135deg, #F44336, #d32f2f);
+}
+
+.notification.warning {
+    background: linear-gradient(135deg, #FF9800, #f57c00);
+}
+
+.notification i {
+    font-size: 20px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
