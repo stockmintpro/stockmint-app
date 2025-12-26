@@ -3,38 +3,39 @@
 
 // Load sidebar dan navbar
 function loadCommonElements() {
-    return new Promise((resolve, reject) => {
-        // Load sidebar
-        fetch('includes/sidebar.html')
-            .then(response => response.text())
-            .then(html => {
-                const sidebarDiv = document.createElement('div');
-                sidebarDiv.innerHTML = html;
-                document.body.insertBefore(sidebarDiv.firstChild, document.body.firstChild);
-                
-                // Load navbar setelah sidebar
-                return fetch('includes/navbar.html');
-            })
-            .then(response => response.text())
-            .then(html => {
-                const navbarDiv = document.createElement('div');
-                navbarDiv.innerHTML = html;
-                document.body.insertBefore(navbarDiv.firstChild, document.body.firstChild);
-                
-                initCommon();
-                resolve();
-            })
-            .catch(error => {
-                console.error('Error loading common elements:', error);
-                reject(error);
-            });
+    return Promise.all([
+        fetch('includes/sidebar.html').then(res => res.text()),
+        fetch('includes/navbar.html').then(res => res.text())
+    ])
+    .then(([sidebarHTML, navbarHTML]) => {
+        // Insert sidebar first
+        const sidebarContainer = document.createElement('div');
+        sidebarContainer.innerHTML = sidebarHTML;
+        document.body.insertBefore(sidebarContainer.firstChild, document.body.firstChild);
+        
+        // Insert navbar after sidebar
+        const navbarContainer = document.createElement('div');
+        navbarContainer.innerHTML = navbarHTML;
+        document.body.insertBefore(navbarContainer.firstChild, document.body.firstChild);
+        
+        // Initialize after elements are added
+        setTimeout(() => {
+            initSidebar();
+            initNavbar();
+            setActiveMenu();
+        }, 100);
+    })
+    .catch(error => {
+        console.error('Error loading common elements:', error);
+        // Fallback: show error message
+        const errorDiv = document.createElement('div');
+        errorDiv.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; right: 0; background: #f8d7da; color: #721c24; padding: 10px; text-align: center; z-index: 9999;">
+                Error loading page elements. Please check if includes/sidebar.html and includes/navbar.html exist.
+            </div>
+        `;
+        document.body.insertBefore(errorDiv, document.body.firstChild);
     });
-}
-
-function initCommon() {
-    initSidebar();
-    initNavbar();
-    setActiveMenu();
 }
 
 // Inisialisasi sidebar
@@ -42,6 +43,11 @@ function initSidebar() {
     const sidebar = document.getElementById('sidebar');
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
+    
+    if (!sidebar) {
+        console.error('Sidebar element not found!');
+        return;
+    }
     
     if (hamburgerBtn) {
         hamburgerBtn.addEventListener('click', () => {
@@ -96,7 +102,13 @@ function initNavbar() {
     
     if (userName) userName.textContent = user.name || user.email;
     if (userPackage) userPackage.textContent = user.package || 'Pro';
-    if (userAvatar && user.picture) userAvatar.src = user.picture;
+    if (userAvatar) {
+        if (user.picture) {
+            userAvatar.src = user.picture;
+        } else {
+            userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=19BEBB&color=fff`;
+        }
+    }
     
     // Logout button
     const logoutBtn = document.getElementById('logoutBtn');
@@ -115,18 +127,23 @@ function setActiveMenu() {
     const currentPath = window.location.pathname;
     const currentPage = currentPath.split('/').pop();
     
-    // Remove active class from all menu items
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Set active class for current page
-    document.querySelectorAll('.menu-item').forEach(item => {
-        const href = item.getAttribute('href');
-        if (href === currentPage || (currentPage === '' && href === 'dashboard.html')) {
-            item.classList.add('active');
-        }
-    });
+    setTimeout(() => {
+        const menuItems = document.querySelectorAll('.menu-item');
+        if (menuItems.length === 0) return;
+        
+        // Remove active class from all menu items
+        menuItems.forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Set active class for current page
+        menuItems.forEach(item => {
+            const href = item.getAttribute('href');
+            if (href === currentPage || (currentPage === '' && href === 'dashboard.html')) {
+                item.classList.add('active');
+            }
+        });
+    }, 200);
 }
 
 // Cek autentikasi
