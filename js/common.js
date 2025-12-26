@@ -239,3 +239,44 @@ function checkAuth() {
     }
     return true;
 }
+
+// Add these functions to your existing common.js file
+
+// Function to handle logout
+function logout() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'login.html';
+}
+
+// Function to update date and time display
+function updateDateTime() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('id-ID', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    const dateString = now.toLocaleDateString('id-ID', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    
+    // Update all date-time elements
+    document.querySelectorAll('.time').forEach(el => el.textContent = timeString);
+    document.querySelectorAll('.date').forEach(el => el.textContent = dateString);
+}
+
+// Initialize date time and update every minute
+if (document.querySelector('.time')) {
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+}
+
+// Add click event for logout button
+document.querySelectorAll('.logout-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        logout();
+    });
+});
