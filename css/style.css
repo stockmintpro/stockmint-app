@@ -122,6 +122,13 @@ body {
 /* ===== SUB-MENU IN SIDEBAR ===== */
 .menu-group {
     margin-bottom: 10px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    max-height: 0;
+}
+
+.menu-group.expanded {
+    max-height: 500px;
 }
 
 .menu-group-title {
@@ -131,6 +138,20 @@ body {
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.6);
     margin-top: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-group-title i {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+    width: auto;
+}
+
+.menu-group.expanded .menu-group-title i {
+    transform: rotate(90deg);
 }
 
 .submenu-items {
@@ -147,33 +168,6 @@ body {
 .submenu-item i {
     font-size: 14px;
     width: 20px;
-}
-
-/* ===== HAMBURGER MENU ===== */
-.hamburger-menu {
-    display: none;
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1100;
-    background: var(--mint-green);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    width: 45px;
-    height: 45px;
-    font-size: 22px;
-    cursor: pointer;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-}
-
-/* ===== MAIN CONTENT ===== */
-.content {
-    flex: 1;
-    padding: 30px;
-    margin-left: 260px;
-    transition: margin-left 0.3s ease;
-    margin-top: 0;
 }
 
 /* ===== TOP NAVBAR ===== */
@@ -220,40 +214,77 @@ body {
     color: #666;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .sidebar {
-        transform: translateX(-100%);
-    }
-    
-    .sidebar.active {
-        transform: translateX(0);
-    }
-    
-    .hamburger-menu {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .content {
-        margin-left: 0;
-        padding: 20px;
-        padding-top: 90px;
-    }
-    
-    .top-navbar {
-        left: 0;
-        height: 60px;
-    }
+/* ===== HAMBURGER MENU ===== */
+.hamburger-menu {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background: var(--mint-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
-/* Tambahkan ke css/style.css */
+/* ===== MAIN CONTENT ===== */
+.content {
+    flex: 1;
+    padding: 30px;
+    margin-left: 260px;
+    transition: margin-left 0.3s ease;
+    margin-top: 70px;
+}
 
-/* ===== IMPROVED DASHBOARD ===== */
-.content h1 {
+/* ===== SIDEBAR OVERLAY ===== */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 998;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* ===== DASHBOARD STYLES ===== */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.dashboard-header h1 {
+    margin: 0;
     color: #1a5f7a;
-    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, var(--mint-green) 0%, var(--mint-dark) 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.welcome-card h2 {
+    color: white;
+    margin-top: 0;
+    border-bottom: none;
 }
 
 .content h2 {
@@ -314,6 +345,45 @@ body {
     color: #dc3545;
 }
 
+.recent-activities {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.activity-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    background: #f0f9ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: var(--mint-green);
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-time {
+    font-size: 12px;
+    color: #888;
+}
+
 .demo-banner {
     background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
     color: #333;
@@ -329,45 +399,70 @@ body {
     font-size: 24px;
 }
 
-/* ===== SUBMENU COLLAPSIBLE ===== */
-.menu-group {
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    max-height: 0;
-}
-
-.menu-group.expanded {
-    max-height: 500px;
-}
-
-.menu-group-title {
-    padding: 10px 16px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.6);
-    margin-top: 15px;
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
     cursor: pointer;
-    display: flex;
-    justify-content: space-between;
+    transition: all 0.3s ease;
+    display: inline-flex;
     align-items: center;
+    gap: 8px;
 }
 
-.menu-group-title i {
-    transition: transform 0.3s ease;
-    font-size: 12px;
+.btn-primary {
+    background-color: var(--mint-green);
+    color: white;
 }
 
-.menu-group.expanded .menu-group-title i {
-    transform: rotate(90deg);
+.btn-primary:hover {
+    background-color: var(--mint-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(25, 190, 187, 0.2);
 }
 
-.submenu-items {
-    padding-left: 10px;
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
 }
 
-/* Responsive untuk mobile */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .hamburger-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .content {
+        margin-left: 0;
+        padding: 20px;
+        padding-top: 90px;
+    }
+    
+    .top-navbar {
+        left: 0;
+        height: 60px;
+    }
+    
     .stats-container {
         grid-template-columns: 1fr;
     }
@@ -380,5 +475,3 @@ body {
         font-size: 24px;
     }
 }
-/* Tambahkan semua style lainnya dari file sebelumnya */
-/* ... (paste semua CSS yang ada sebelumnya) ... */
