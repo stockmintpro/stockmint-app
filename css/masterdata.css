@@ -1,7 +1,7 @@
 /* Master Data Specific Styles */
 .content-area {
-    padding: 30px;
-    max-width: 1400px;
+    padding: 35px;
+    max-width: 1600px;
     margin: 0 auto;
     width: 100%;
 }
@@ -9,96 +9,127 @@
 .masterdata-actions {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 30px;
+    gap: 35px;
     max-width: 100%;
 }
 
 .action-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 25px;
 }
 
 .action-card {
     background: white;
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
-    border: 1px solid #eaeaea;
+    border: 2px solid #e9ecef;
     text-align: center;
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
 
 .action-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(25, 190, 187, 0.15);
+    border-color: #19BEBB;
+}
+
+.action-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #19BEBB 0%, #14a5a3 100%);
 }
 
 .action-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 20px;
-    margin: 0 auto 20px;
+    width: 85px;
+    height: 85px;
+    border-radius: 22px;
+    margin: 0 auto 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 32px;
+    font-size: 36px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .action-card h3 {
     margin: 10px 0;
-    color: #333;
-    font-size: 22px;
-    font-weight: 600;
+    color: #2d3748;
+    font-size: 24px;
+    font-weight: 700;
 }
 
 .action-card p {
-    color: #666;
-    font-size: 15px;
+    color: #64748b;
+    font-size: 16px;
     line-height: 1.6;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     flex: 1;
 }
 
-/* ACTION BUTTON - WARNA HIJAU MINT */
+/* ACTION BUTTON - WARNA HIJAU BRAND */
 .action-btn {
-    background: linear-gradient(135deg, #00d2b8 0%, #00a8a8 100%);
+    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
     color: white;
     border: none;
-    padding: 14px 24px;
-    border-radius: 10px;
+    padding: 16px 28px;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 15px;
+    font-weight: 700;
+    font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     margin: 0 auto;
     transition: all 0.3s ease;
     width: 100%;
-    max-width: 200px;
+    max-width: 220px;
+    box-shadow: 0 5px 20px rgba(25, 190, 187, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
 .action-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0, 210, 184, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(25, 190, 187, 0.5);
+}
+
+.action-btn:active {
+    transform: translateY(-1px);
 }
 
 /* Info Panel */
 .info-panel {
     background: white;
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    border: 1px solid #eaeaea;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: 2px solid #e9ecef;
     height: fit-content;
     position: sticky;
-    top: 120px;
+    top: 140px;
+}
+
+.info-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #19BEBB 0%, #14a5a3 100%);
 }
 
 .info-header {
@@ -107,41 +138,48 @@
     gap: 15px;
     margin-bottom: 25px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #f0f0f0;
+    border-bottom: 2px solid #f1f5f9;
 }
 
 .info-header i {
-    color: #00a8a8;
-    font-size: 28px;
+    color: #19BEBB;
+    font-size: 32px;
 }
 
 .info-header h3 {
     margin: 0;
-    color: #333;
-    font-size: 20px;
-    font-weight: 600;
+    color: #2d3748;
+    font-size: 22px;
+    font-weight: 700;
 }
 
 .info-content p {
-    font-weight: 600;
-    color: #444;
+    font-weight: 700;
+    color: #2d3748;
     margin-bottom: 20px;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .info-content ul {
     list-style: none;
     padding: 0;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
 }
 
 .info-content li {
-    padding: 12px 0;
-    border-bottom: 1px solid #f5f5f5;
+    padding: 16px 0;
+    border-bottom: 1px solid #f1f5f9;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 15px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.info-content li:hover {
+    background: #f8fafc;
+    padding-left: 15px;
+    border-radius: 8px;
 }
 
 .info-content li:last-child {
@@ -149,37 +187,39 @@
 }
 
 .info-content li span {
-    font-weight: 600;
-    color: #00a8a8;
-    background: rgba(0, 168, 168, 0.1);
-    padding: 4px 12px;
+    font-weight: 700;
+    color: #19BEBB;
+    background: rgba(25, 190, 187, 0.1);
+    padding: 8px 16px;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 15px;
+    min-width: 70px;
+    text-align: center;
 }
 
 .last-backup {
-    background: #f8f9fa;
-    padding: 18px;
-    border-radius: 12px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 20px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    color: #666;
-    font-size: 15px;
-    border-left: 4px solid #FF9800;
+    gap: 15px;
+    color: #475569;
+    font-size: 16px;
+    border-left: 5px solid #19BEBB;
 }
 
 .last-backup i {
-    color: #FF9800;
-    font-size: 20px;
+    color: #19BEBB;
+    font-size: 22px;
 }
 
 #last-backup-date {
-    font-weight: 600;
-    color: #333;
+    font-weight: 700;
+    color: #2d3748;
 }
 
-/* Modal Styles */
+/* Modal Styles - WARNA HIJAU BRAND */
 .modal {
     display: none;
     position: fixed;
@@ -187,26 +227,28 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.6);
     z-index: 10000;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
 }
 
 .modal-content {
     background: white;
-    border-radius: 16px;
+    border-radius: 20px;
     width: 90%;
-    max-width: 500px;
-    animation: modalSlideIn 0.3s ease;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    max-width: 550px;
+    animation: modalSlideIn 0.4s ease;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+    border: 2px solid #19BEBB;
+    overflow: hidden;
 }
 
 @keyframes modalSlideIn {
     from {
         opacity: 0;
-        transform: translateY(-30px) scale(0.95);
+        transform: translateY(-40px) scale(0.95);
     }
     to {
         opacity: 1;
@@ -218,113 +260,151 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 25px;
-    border-bottom: 1px solid #eee;
+    padding: 30px;
+    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
+    color: white;
 }
 
 .modal-header h3 {
     margin: 0;
-    color: #333;
-    font-size: 22px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 700;
 }
 
 .modal-close {
-    background: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
     border: none;
-    font-size: 28px;
+    font-size: 30px;
     cursor: pointer;
-    color: #666;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: background 0.3s ease;
-}
-
-.modal-close:hover {
-    background: #f5f5f5;
-}
-
-.modal-body {
-    padding: 25px;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #555;
-}
-
-.modal-footer {
-    padding: 25px;
-    border-top: 1px solid #eee;
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-}
-
-/* MODAL BUTTON - WARNA HIJAU MINT */
-.btn-primary {
-    background: linear-gradient(135deg, #00d2b8 0%, #00a8a8 100%);
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 15px;
     transition: all 0.3s ease;
 }
 
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 30px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #475569;
+}
+
+.modal-footer {
+    padding: 30px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+/* MODAL BUTTON - WARNA HIJAU BRAND */
+.btn-primary {
+    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(25, 190, 187, 0.3);
+}
+
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 210, 184, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(25, 190, 187, 0.5);
 }
 
 .btn-secondary {
-    background: #6c757d;
+    background: #64748b;
     color: white;
     border: none;
-    padding: 12px 28px;
-    border-radius: 8px;
+    padding: 14px 32px;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 15px;
+    font-weight: 700;
+    font-size: 16px;
     transition: all 0.3s ease;
 }
 
 .btn-secondary:hover {
-    background: #5a6268;
-    transform: translateY(-2px);
+    background: #475569;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(100, 116, 139, 0.3);
 }
 
-/* PROGRESS BAR - WARNA HIJAU MINT */
+/* PROGRESS BAR - WARNA HIJAU BRAND */
 .progress-bar {
     width: 100%;
-    height: 12px;
-    background: #e0e0e0;
-    border-radius: 6px;
+    height: 14px;
+    background: #e2e8f0;
+    border-radius: 7px;
     overflow: hidden;
-    margin: 25px 0;
+    margin: 30px 0;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(135deg, #00d2b8 0%, #00a8a8 100%);
+    background: linear-gradient(135deg, #19BEBB 0%, #14a5a3 100%);
     width: 0%;
-    transition: width 0.5s ease;
-    border-radius: 6px;
+    transition: width 0.6s ease;
+    border-radius: 7px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+    );
+    z-index: 1;
+    background-size: 50px 50px;
+    animation: move 2s linear infinite;
+    border-radius: 7px;
+}
+
+@keyframes move {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
 }
 
 /* Responsive */
 @media (max-width: 1200px) {
     .content-area {
-        padding: 20px;
+        padding: 25px;
     }
     
     .masterdata-actions {
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 25px;
     }
     
     .info-panel {
@@ -332,12 +412,36 @@
     }
 }
 
-@media (max-width: 768px) {
-    .content-area {
-        padding: 15px;
-    }
-    
+@media (max-width: 992px) {
     .action-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-area {
+        padding: 20px;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .action-card {
+        padding: 25px;
+    }
+    
+    .action-icon {
+        width: 75px;
+        height: 75px;
+        font-size: 32px;
+    }
+    
+    .info-panel {
+        padding: 25px;
+    }
+    
+    .modal-content {
+        width: 95%;
     }
 }
