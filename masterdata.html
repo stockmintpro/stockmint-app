@@ -10,11 +10,21 @@
 </head>
 <body>
     <div class="app-container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <h2><i class="fas fa-boxes"></i> StockMint</h2>
-                <span class="pro-badge">Pro</span>
+                <div class="logo-brand">
+                    <h2><i class="fas fa-boxes"></i> StockMint</h2>
+                    <span class="pro-badge">Pro</span>
+                </div>
+                <div class="logo-tagline">
+                    Precision Inventory & Profit Tracking
+                </div>
             </div>
             
             <nav class="nav-menu">
@@ -22,10 +32,10 @@
                     <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li class="active"><a href="masterdata.html"><i class="fas fa-database"></i> Master Data</a></li>
                     <li class="nav-subheader">BUSINESS ENTITIES</li>
-                    <li><a href="company.html"><i class="fas fa-building"></i> Company</a></li>
-                    <li><a href="warehouses.html"><i class="fas fa-warehouse"></i> Warehouses</a></li>
-                    <li><a href="suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
-                    <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+                    <li><a href="entities/company.html"><i class="fas fa-building"></i> Company</a></li>
+                    <li><a href="entities/warehouses.html"><i class="fas fa-warehouse"></i> Warehouses</a></li>
+                    <li><a href="entities/suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
+                    <li><a href="entities/customers.html"><i class="fas fa-users"></i> Customers</a></li>
                 </ul>
             </nav>
             
@@ -43,11 +53,6 @@
             </div>
         </aside>
 
-        <!-- Mobile Menu Toggle -->
-        <button class="mobile-menu-toggle" id="mobileMenuToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        
         <!-- Main Content -->
         <main class="main-content">
             <!-- Header -->
@@ -58,8 +63,8 @@
                 </div>
                 <div class="header-right">
                     <div class="date-time">
-                        <span class="time">14:07</span>
-                        <span class="date">26/12/2025</span>
+                        <span class="time" id="currentTime">14:07</span>
+                        <span class="date" id="currentDate">26/12/2025</span>
                     </div>
                 </div>
             </header>
@@ -70,7 +75,7 @@
                     <div class="action-grid">
                         <!-- Mulai Baru -->
                         <div class="action-card" id="action-new">
-                            <div class="action-icon" style="background-color: #4CAF50;">
+                            <div class="action-icon" style="background-color: #00a8a8;">
                                 <i class="fas fa-plus-circle"></i>
                             </div>
                             <h3>Mulai Baru</h3>
@@ -143,7 +148,7 @@
         </main>
     </div>
 
-    <!-- Confirmation Modal -->
+    <!-- Modal -->
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -160,7 +165,6 @@
         </div>
     </div>
 
-    <!-- Progress Modal -->
     <div id="progressModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
